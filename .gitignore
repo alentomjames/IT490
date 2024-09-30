@@ -1,2 +1,3 @@
 # ignore environmental variables
 .env
+db_config.env
