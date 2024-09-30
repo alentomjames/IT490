@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
 	<nav class="navbar">
@@ -15,10 +16,10 @@
         </ul>
     </nav>
     <div class="modal">
-        <form method="post" action="/login_chk.php">
+        <form name="loginForm" method="post" action="../php/login_chk.php" onsubmit="return validateLoginForm()">
             <h2>Login</h2>
             <div>
-                <label for="user_id">ID </label>
+                <label for="user_id">Username </label>
                 <input type="text" name="user_id" required/>
             </div>
             <div>

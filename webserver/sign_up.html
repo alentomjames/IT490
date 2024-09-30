@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up Page</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
     <nav class="navbar">
@@ -16,15 +17,19 @@
     </nav>
                 
     <div class="modal">
-        <form action="./sign_up.php" method="post">
+        <form name="signupForm" action="../php/sign_up.php" method="post" onsubmit="return validateSignupForm()">
             <h2>Sign Up</h2>
             <div>
-                <label for="user_id">ID </label>
-                <input type="text" name="user_id" required/>
+                <label for="user_id">Username </label>
+                <input type="text" name="user_id" id="user_id" required/>
             </div>
             <div>
                 <label for="user_pwd">Password </label>
-                <input type="password" name="user_pwd" required/>
+                <input type="password" name="user_pwd" id="user_pwd" required/>
+            </div>
+            <div>
+                <label for="user_pwd_confirm">Confirm Password </label>
+                <input type="password" name="user_pwd_confirm" id="user_pwd_confirm" required/>
             </div>
             <div class="button">
                 <input type="submit" value="Sign Up">
