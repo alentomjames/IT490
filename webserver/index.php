@@ -1,7 +1,18 @@
 <?php
 // Start the session
 session_start();
-$_SESSION["favcolor"] = "yellow";
+$_SESSION["userID"] = "1";
+
+// Check if the user is logged in by checking if they have a user id stored in the session storage 
+// Check if the user is logged in by checking if they have a user id stored in the session storage 
+if (isset($_SESSION['userID'])) {
+    echo $_SESSION['userID'];
+  }  else {
+    echo['NOT WORKING']
+  }
+// If they aren't logged in then display the buttons for login or sign up on the navbar
+
+// If they are logged in then display a "Welcome [user]" text at the top where the buttons would usually be 
 
 ?>
 
