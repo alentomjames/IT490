@@ -1,6 +1,8 @@
 <?php
 // Start the session
 session_start();
+$_SESSION["favcolor"] = "yellow";
+
 ?>
 
 <!DOCTYPE html>
@@ -14,15 +16,14 @@ session_start();
 </head>
 <body>
 	<nav class="navbar">
-		<a href="index.html" class="nav-title">BreadWinners</a>
+		<a href="index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
-            <li><button onclick="location.href='login.html'">Login</button></li>
-            <li><button onclick="location.href='sign_up.html'">Sign Up</button></li>
+            <li><button onclick="location.href='login.php'">Login</button></li>
+            <li><button onclick="location.href='sign_up.php'">Sign Up</button></li>
         </ul>
     </nav>
 
 <?php
-    $_SESSION["favcolor"] = "yellow";
     print_r($_SESSION);
 ?>
 
