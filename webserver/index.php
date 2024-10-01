@@ -1,3 +1,8 @@
+<?php
+// Start the session
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +21,10 @@
         </ul>
     </nav>
 
-    
+<?php
+    $_SESSION["favcolor"] = "yellow";
+    print_r($_SESSION);
+?>
 
 </body>
 </html>
