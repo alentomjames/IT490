@@ -3,8 +3,10 @@
 session_start();
 
 // Check if the user is logged in by checking if they have a user id stored in the session storage 
-
 // If they are logged in then redirect them to the index.php page 
+if (isset($_SESSION['userID'])) {   
+    header("Location: index.php");
+}  
 ?>
 
 <!DOCTYPE html>

@@ -1,21 +1,20 @@
 <?php
 // Start the session
 session_start();
-$_SESSION["userID"] = "1";
+$_SESSION["userID"] = "Alen";
 // Check if the user is logged in by checking if they have a session token stored in the session storage 
 $loggedIn = isset($_SESSION['userID']);
 
-// If they aren't logged in then display the buttons for login or sign up on the navbar
+// 
 
-// If they are logged in then display a "Welcome [user]" text at the top where the buttons would usually be 
+//  
 
-// Add a logout button if the user is logged in to delete the session token
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BreadWinners</title>
@@ -28,9 +27,13 @@ $loggedIn = isset($_SESSION['userID']);
 		<a href="index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
-                <p class="nav-title">Welcome, <?php echo $_SESSION['user_id']; ?>!</p>
+                <!-- If they are logged in then display a "Welcome [user]" text at the top where the buttons would usually be and a logout button --->
+                <p class="nav-title">Welcome, <?php echo $_SESSION['userID']; ?>!</p>
+                <!-- Logout button that calls logout.php to delete the userID from session and redirects them to the login page ---> 
                 <li><button onclick="location.href='logout.php'">Logout</button></li>
             <?php else: ?>
+                <!-- If they aren't logged in then display the buttons for login or sign up on the navbar --->
+
             <li><button onclick="location.href='login.php'">Login</button></li>
             <li><button onclick="location.href='sign_up.php'">Sign Up</button></li>
             <?php endif; ?>
