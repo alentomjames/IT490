@@ -34,11 +34,11 @@ if (isset($_SESSION['userID'])) {
             <h2>Login</h2>
             <div>
                 <label for="user_id">Username </label>
-                <input type="text" name="user_id" required/>
+                <input type="text" name="username" required/>
             </div>
             <div>
                 <label for="user_pwd">Password </label>
-                <input type="password" name="user_pwd" required/>
+                <input type="password" name="password" required/>
             </div>
             <div class="button">
                 <button type="submit">Login</button>

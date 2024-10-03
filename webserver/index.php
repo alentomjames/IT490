@@ -4,12 +4,6 @@ session_start();
 $_SESSION["userID"] = "Alen";
 // Check if the user is logged in by checking if they have a session token stored in the session storage 
 $loggedIn = isset($_SESSION['userID']);
-
-// 
-
-//  
-
-
 ?>
 
 <!DOCTYPE html>
