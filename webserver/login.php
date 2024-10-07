@@ -30,7 +30,7 @@ if (isset($_SESSION['userID'])) {
         </ul>
     </nav>
     <div class="modal">
-        <form name="loginForm" method="post" action="../php/login_chk.php" onsubmit="return validateLoginForm()">
+        <form name="loginForm" method="post" action="login_chk.php" onsubmit="return validateLoginForm()">
             <h2>Login</h2>
             <div>
                 <label for="user_id">Username </label>
