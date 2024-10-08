@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     list($connection, $channel) = getRabbit();
 
     // Declaring the channel its being sent on
-    $channel->queue_declare('frontendQueue', false, false, false, false);
+    $channel->queue_declare('frontend', false, false, false, false);
 
     $data = json_encode([
         'username' => $username,
@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Send the message to the queue with username and password, delivery mode 2 means the message will be saved ot the disk 
     // meaning it won't be lost from the queue even if RabbitMQ restarts
     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
-    $channel->basic_publish($msg, 'directExchange', 'frontendQueue');
+    $channel->basic_publish($msg, 'directExchange', 'frontend');
 
     //Close the connection and channel to RabbitMQ using rabbitmq_connection.php
     closeRabbit($connection, $channel);
@@ -59,7 +59,7 @@ function receiveRabbitMQResponse(){
     };
     // Use basic_consume to access the queue and call $callback for success or failure
     // https://www.rabbitmq.com/tutorials/tutorial-six-php 
-    $channel->basic_consume('frontendQueue', '', false, false, false, false, $callback);
+    $channel->basic_consume('frontend', '', false, false, false, false, $callback);
 
       // Wait for the response
       while ($channel->is_consuming()) {
