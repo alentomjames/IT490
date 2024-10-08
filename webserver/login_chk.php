@@ -10,7 +10,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
-
+    $type = 'login';
     // Hash the password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $channel->queue_declare('frontend', false, false, false, false);
 
     $data = json_encode([
+        'type'     => $type,
         'username' => $username,
         'password' => $hashed_password
     ]);
@@ -32,9 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //Close the connection and channel to RabbitMQ using rabbitmq_connection.php
     closeRabbit($connection, $channel);
-
     // Waits for a response from RabbitMQ (sucess + userID or failure) 
-    receiveRabbitMQResponse();
+    //receiveRabbitMQResponse();
 }
 
 function receiveRabbitMQResponse(){
