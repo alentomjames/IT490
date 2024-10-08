@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Send the message to the queue with username and password, delivery mode 2 means the message will be saved ot the disk 
     // meaning it won't be lost from the queue even if RabbitMQ restarts
     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
-    $channel->basic_publish($msg, '', 'frontendQueue');
+    $channel->basic_publish($msg, 'directExchange', 'frontendQueue');
 
     //Close the connection and channel to RabbitMQ using rabbitmq_connection.php
     closeRabbit($connection, $channel);
@@ -39,7 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 function receiveRabbitMQResponse(){
     list($connection, $channel) = getRabbit();
-
     // Declare the response channel 
     $channel->queue_declare('responseQueue', false, false, false, false);
 

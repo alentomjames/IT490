@@ -7,7 +7,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 function getRabbit(){
     // Connect to RABBITMQ HERE and add better error handling
-    $connection = new AMQPStreamConnection('ip address', portnumber, 'guest', 'guest'); 
+    $connection = new AMQPStreamConnection('172.29.4.30', 5672, 'admin', 'admin', 'IT490_Host'); 
     $channel = $connection->channel();
 
     return [$connection, $channel];
