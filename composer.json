@@ -1,5 +1,15 @@
 {
-  "require": {
-      "php-amqplib"/php-amqplib": "^3.2"
-  }
+    "name": "ppetroski/it490",
+    "type": "project",
+    "license": "none",
+    "authors": [
+        {
+            "name": "Petar Petroski",
+            "email": "petar.petroski2003@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php-amqplib/php-amqplib": "^3.7"
+    }
 }
