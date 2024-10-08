@@ -28,19 +28,23 @@ if (isset($_SESSION['userID'])) {
     </nav>
                 
     <div class="modal">
-        <form name="signupForm" action="../php/sign_up.php" method="post" onsubmit="return validateSignupForm()">
+        <form name="signupForm" action="sign_up_chk.php" method="post" onsubmit="return validateSignupForm()">
             <h2>Sign Up</h2>
             <div>
+                <label for="user_id">First Name </label>
+                <input type="text" name="name" id="name" required/>
+            </div>
+            <div>
                 <label for="user_id">Username </label>
-                <input type="text" name="user_id" id="user_id" required/>
+                <input type="text" name="username" id="username" required/>
             </div>
             <div>
                 <label for="user_pwd">Password </label>
-                <input type="password" name="user_pwd" id="user_pwd" required/>
+                <input type="password" name="password" id="password" required/>
             </div>
             <div>
                 <label for="user_pwd_confirm">Confirm Password </label>
-                <input type="password" name="user_pwd_confirm" id="user_pwd_confirm" required/>
+                <input type="password" name="passwordConfirm" id="passwordConfirm" required/>
             </div>
             <div class="button">
                 <input type="submit" value="Sign Up">
