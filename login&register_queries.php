@@ -4,13 +4,14 @@ require_once 'db_connection.php'; // Include the DB connection (adjust if needed
 require_once 'rmq_connection.php'; // Include the RabbitMQ connection (getRabbit, closeRabbit)
 require_once __DIR__ . '/vendor/autoload.php';
 
+use PhpAmpqLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 // Get RabbitMQ connection from rabbitmq_connection.php
 list($connection, $channel) = getRabbit();
 
 // Declare the queue to consume the login/register requests from
-$channel->queue_declare('databaseQueue', false, false, false, false);
+$channel->queue_declare('databaseQueue', false, true, false, false);
 
 // Function to process login or register requests from the queue
 $callback = function ($msg) use ($channel) {
