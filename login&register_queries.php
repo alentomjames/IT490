@@ -91,7 +91,7 @@ $callback = function ($msg) use ($channel) {
 
     // Send the response back to the frontend/backend VM
     $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
-    $channel->basic_publish($responseMsg, '', 'dbResponseQueue'); // Send to responseQueue
+    $channel->basic_publish($responseMsg, 'directExchange', 'dbResponseQueue'); // Send to responseQueue
 
     // Close database connection
     $stmt->close();
