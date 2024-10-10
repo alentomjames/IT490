@@ -16,6 +16,11 @@ iptables  -A  OUTPUT  -j  ACCEPT
 
 #FORWARD'S RULES WE WISH 
 
+
+#ETH0 = Connects to the Router
+#ETH1 = Connects to the DMZ
+#ETH2 = Connects to the Local Server?
+
 # LET'S ALL TRAFFIC GO FROM ETH0 TO ETH1 
 
 iptables  -A  FORWARD  -i  eth0  -o  eth1  -s  state  --state  NEW, ESTABLISHED, RELATED  -j  ACCEPT
@@ -34,16 +39,17 @@ iptables  -A  FORWARD  -i  eth1  , or  eth2  -s  state  --state  ESTABLISHED, RE
 
 #PRIORITIZE REDIRECTIONS FROM THE OUTSIDE TO THE DMZ
 
-# REDUCTED POINTS 53 AND 80
-
 #IPS FICTICS THAT ARE WITHIN THE ETH1 RANGE
 
-#PUT 53, TCP AND UDP
+#TCP Port 1414, Connect to the Message Router (may or may not work)
 
-iptables  -t  nat  -A  PREROUTING  -i  eth0  -p  tcp  --dport  53  -j  DNAT  --to  192.168.2.4: 53
+iptables  -t  nat  -A  PREROUTING  -i  eth0  -p  tcp  --dport  53  -j  DNAT  --to  192.168.2.4: 1414
 
-iptables  -t  nat  -A  PREROUTING  -i  eth0  -p  udp  --dport  53  -j  DNAT  --to  192.168.2.4: 53
 
-#PUERTO 80 TCP: WEB
+#alternative prerouting lines
 
-iptables  -t  nat  -A  PREROUTING  -i  eth0  -p  tcp  --dport  80  -j  DNAT  --to  192.168.2.5: 80
+#sudo iptables -t nat -A PREROUTING -p $LAN_IFACE -d ???.???.???.? (Data source IP address) \ -j DNAT --to-destination 172.29.4.30
+
+
+#sudo iptables -t nat -A PREROUTING -p tcp --dport 1414 -j ACCEPT
+#sudo iptables -t nat -A PREROUTING -p tcp --dport ?? (Data source port) -j ACCEPT
