@@ -64,7 +64,9 @@ function receiveRabbitMQResponse(){
 
       // Wait for the response
       while ($channel->is_consuming()) {
+        set_time_limit(30);
         $channel->wait();
+        
     }
         // Close the channel and connection
         closeRabbit($connection, $channel);
