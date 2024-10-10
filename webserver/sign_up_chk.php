@@ -12,6 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $type = 'register';
 
     // Hash the password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -23,6 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $channel->queue_declare('frontend', false, false, false, false);
 
     $data = json_encode([
+        'type'     => $type,
         'name'     => $name,
         'username' => $username,
         'password' => $hashed_password
@@ -43,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 function receiveRabbitMQResponse(){
     list($connection, $channel) = getRabbit();
     // Declare the response channel 
-    $channel->queue_declare('responseQueue', false, false, false, false);
+    $channel->queue_declare('frontendResponseQueue', false, false, false, false);
 
     // Function waiting for the response from RabbitMQ 
     $callback = function($msg) {
@@ -62,7 +64,7 @@ function receiveRabbitMQResponse(){
     };
     // Use basic_consume to access the queue and call $callback for success or failure
     // https://www.rabbitmq.com/tutorials/tutorial-six-php 
-    $channel->basic_consume('frontend', '', false, false, false, false, $callback);
+    $channel->basic_consume('frontendResponseQueue', '', false, false, false, false, $callback);
 
       // Wait for the response
       while ($channel->is_consuming()) {

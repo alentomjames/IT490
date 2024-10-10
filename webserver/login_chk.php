@@ -40,15 +40,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 function receiveRabbitMQResponse(){
     list($connection, $channel) = getRabbit();
     // Declare the response channel 
-    $channel->queue_declare('responseQueue', false, false, false, false);
+    $channel->queue_declare('frontendResponseQueue', false, false, false, false);
 
     // Function waiting for the response from RabbitMQ 
     $callback = function($msg) {
         $response = json_decode($msg->body, true);
 
         // Checks the status variable in the message to see if it's a success or failure 
-        if ($response['status'] === 'success'){
+        if ($response['type'] === 'success'){
             // Retrieves the userID from the $msg and stores it in the sessionID to login user 
+            $_SESSION['name'] = $response['name'];
             $_SESSION['userID'] = $response['userID'];
             header("Location: index.php");
             exit();
@@ -59,7 +60,7 @@ function receiveRabbitMQResponse(){
     };
     // Use basic_consume to access the queue and call $callback for success or failure
     // https://www.rabbitmq.com/tutorials/tutorial-six-php 
-    $channel->basic_consume('frontend', '', false, false, false, false, $callback);
+    $channel->basic_consume('frontendResponseQueue', '', false, false, false, false, $callback);
 
       // Wait for the response
       while ($channel->is_consuming()) {
