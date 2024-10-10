@@ -1,7 +1,7 @@
 <?php
 
 require_once 'db_connection.php'; // Include the DB connection (adjust if needed)
-require_once 'rabbitmq_connection.php'; // Include the RabbitMQ connection (getRabbit, closeRabbit)
+require_once 'rmq_connection.php'; // Include the RabbitMQ connection (getRabbit, closeRabbit)
 require_once __DIR__ . '/vendor/autoload.php';
 
 use PhpAmqpLib\Message\AMQPMessage;
