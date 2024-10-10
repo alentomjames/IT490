@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //Close the connection and channel to RabbitMQ using rabbitmq_connection.php
     closeRabbit($connection, $channel);
     // Waits for a response from RabbitMQ (sucess + userID or failure) 
-    //receiveRabbitMQResponse();
+    receiveRabbitMQResponse();
 }
 
 function receiveRabbitMQResponse(){
