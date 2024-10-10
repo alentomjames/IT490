@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     list($connection, $channel) = getRabbit();
 
     // Declaring the channel its being sent on
-    $channel->queue_declare('frontendQueue', false, true, false, false);
+    $channel->queue_declare('frontendQueue', false, false, false, false);
 
     $data = json_encode([
         'type'     => $type,
@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 function receiveRabbitMQResponse(){
     list($connection, $channel) = getRabbit();
     // Declare the response channel 
-    $channel->queue_declare('frontendResponseQueue', false, true, false, false);
+    $channel->queue_declare('frontendResponseQueue', false, false, false, false);
 
     // Function waiting for the response from RabbitMQ 
     $callback = function($msg) {
@@ -60,7 +60,7 @@ function receiveRabbitMQResponse(){
     };
     // Use basic_consume to access the queue and call $callback for success or failure
     // https://www.rabbitmq.com/tutorials/tutorial-six-php 
-    $channel->basic_consume('frontendResponseQueue', '', false, true, false, false, $callback);
+    $channel->basic_consume('frontendResponseQueue', '', false, false, false, false, $callback);
 
       // Wait for the response
       while ($channel->is_consuming()) {
