@@ -45,13 +45,16 @@ $callback = function ($msg) use ($channel) {
                     'name' => $username,
                     'userID' => $userID
                 ]);
+                echo "Login successful for user: $username\n";
             } else {
                 // If password doesn't match
                 $response = json_encode(['status' => 'failure']);
+                echo "Login failed for user: $username\n";
             }
         } else {
             // No such user exists
             $response = json_encode(['status' => 'failure']);
+            echo "User not found: $username\n";
         }
     } elseif ($type === 'register') {
         // Handle register request
@@ -69,6 +72,7 @@ $callback = function ($msg) use ($channel) {
         if ($stmt->num_rows > 0) {
             // Username already exists
             $response = json_encode(['status' => 'failure', 'reason' => 'User already exists']);
+            echo "Username already exists: $username\n";
         } else {
             // Insert new user into the database
             $insertQuery = "INSERT INTO users (username, user_pwd, name) VALUES (?, ?, ?)";
@@ -82,9 +86,11 @@ $callback = function ($msg) use ($channel) {
                     'status' => 'success',
                     'userID' => $userID
                 ]);
+                echo "New user registered: $username\n";
             } else {
                 // Registration failed due to some database error
                 $response = json_encode(['status' => 'failure', 'reason' => 'Database error']);
+                echo "Failed to register user: $username\n";
             }
         }
     }
