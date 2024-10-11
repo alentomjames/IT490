@@ -16,16 +16,13 @@ function processFrontendQueue($messageBody) {
     // Check if the type is set
     if (isset($data['type'])) {
         $type = $data['type'];
-
         // Handle "login" type
         if ($type === 'login') {
             if (isset($data['username']) && isset($data['password'])) {
                 $username = $data['username'];
                 $password = $data['password'];
-
                 echo "Processing login request from frontend queue: \n";
                 print_r($data);
-
                 // Forward the message to the DB queue for further processing
                 sendMessageToDBQueue(json_encode($data));
             } else {
@@ -44,21 +41,27 @@ function processFrontendQueue($messageBody) {
 
                 // Forward the message to the DB queue for further processing
                 sendMessageToDBQueue(json_encode($data));
-            } else {
+           
+        }  else {
                 echo "Invalid data for registration: name, username, or password missing.\n";
             }
+	} elseif ($type === 'api') {
+             echo "Processing register request from frontend queue: \n";
+             print_r($data);
 
-        } else {
+                // Forward the message to the DB queue for further processing
+             sendMessageToDMZQueue(json_encode($data));
+	}else {
             echo "Unknown request type received.\n";
         }
     } else {
         echo "Invalid data received: 'type' field missing.\n";
     }
 }
-// Function to simulate processing and forward to DMZ queue
+
 function processDBQueue($messageBody) {
     echo "Processing message from dbQueue: $messageBody\n";
-    // sendMessageToDMZQueue($messageBody); // Forward to DMZ
+    
     sendMessageToFrontendResponseQueue($messageBody); // Forward to frontendResponse
     
 }
