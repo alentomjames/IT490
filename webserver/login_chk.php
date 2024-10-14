@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $type = 'login';
     // Hash the password
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    //$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Get RabbitMQ connection from rabbitmq_connection.php
     list($connection, $channel) = getRabbit();
@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $data = json_encode([
         'type'     => $type,
         'username' => $username,
-        'password' => $hashed_password
+        'password' => $password
     ]);
 
     // Send the message to the queue with username and password, delivery mode 2 means the message will be saved ot the disk 
