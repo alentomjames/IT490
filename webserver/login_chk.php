@@ -38,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 function receiveRabbitMQResponse(){
-    echo " STARTED RECIEVE FUNCTION ";
     list($connection, $channel) = getRabbit();
     // Declare the response channel 
     $channel->queue_declare('frontendResponseQueue', false, true, false, false);

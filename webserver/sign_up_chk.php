@@ -14,9 +14,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $type = 'register';
 
-    // Hash the password
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
     // Get RabbitMQ connection from rabbitmq_connection.php
     list($connection, $channel) = getRabbit();
 
@@ -27,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'type'     => $type,
         'name'     => $name,
         'username' => $username,
-        'password' => $hashed_password
+        'password' => $password
     ]);
 
     // Send the message to the queue with username and password, delivery mode 2 means the message will be saved ot the disk 
@@ -52,9 +49,10 @@ function receiveRabbitMQResponse(){
         $response = json_decode($msg->body, true);
 
         // Checks the status variable in the message to see if it's a success or failure 
-        if ($response['status'] === 'success'){
+        if ($response['type'] === 'success'){
             // Retrieves the userID from the $msg and stores it in the sessionID to login user 
             $_SESSION['userID'] = $response['userID'];
+            $_SESSION['name'] = $response['name'];
             header("Location: index.php");
             exit();
         } else {

@@ -1,7 +1,6 @@
 <?php
 // Start the session
 session_start();
-$_SESSION["userID"] = "Alen";
 // Check if the user is logged in by checking if they have a session token stored in the session storage 
 $loggedIn = isset($_SESSION['userID']);
 ?>
@@ -22,7 +21,7 @@ $loggedIn = isset($_SESSION['userID']);
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
                 <!-- If they are logged in then display a "Welcome [user]" text at the top where the buttons would usually be and a logout button --->
-                <p class="nav-title">Welcome, <?php echo $_SESSION['userID']; ?>!</p>
+                <p class="nav-title">Welcome, <?php echo $_SESSION['name']; ?>!</p>
                 <!-- Logout button that calls logout.php to delete the userID from session and redirects them to the login page ---> 
                 <li><button onclick="location.href='logout.php'">Logout</button></li>
             <?php else: ?>
