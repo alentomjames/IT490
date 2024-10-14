@@ -24,46 +24,45 @@ $callback = function ($msg) use ($channel) {
     if ($type === 'login') {
         // Handle login request
         $username = $data['username'];
-        $inputPassword = $data['password']; // Hashed on frontend
+        $inputPassword = $data['password']; // Received in plaintext now
 
-        // Query to fetch user data for login (replace this query with your actual column/table names)
+        // Query to fetch user data for login
         $query = "SELECT userID, user_pwd FROM users WHERE username = ?";
         $stmt = $dbConnection->prepare($query);
         $stmt->bind_param('s', $username);
         $stmt->execute();
         $stmt->store_result();
 
-        // If a user exists, verify the password
         if ($stmt->num_rows > 0) {
             $stmt->bind_result($userID, $storedHash);
             $stmt->fetch();
 
-            // Verify if the hashed password matches
+            // Verify the plaintext password against the stored hash
             if (password_verify($inputPassword, $storedHash)) {
                 // If password is correct, send a success response with userID
                 $response = json_encode([
-                    'status' => 'success',
-                    'name' => $username,
+                    'type' => 'success',
+                    'name'   => $username,
                     'userID' => $userID
                 ]);
                 echo "Login successful for user: $username\n";
             } else {
-                // If password doesn't match
-                $response = json_encode(['status' => 'failure']);
+                // Password doesn't match
+                $response = json_encode(['type' => 'failure']);
                 echo "Login failed for user: $username\n";
             }
         } else {
-            // No such user exists
-            $response = json_encode(['status' => 'failure']);
+            // No user found
+            $response = json_encode(['type' => 'failure']);
             echo "User not found: $username\n";
         }
     } elseif ($type === 'register') {
         // Handle register request
         $username = $data['username'];
-        $inputPassword = $data['password']; // Already hashed
-        $name = $data['name']; // New user's name
+        $inputPassword = $data['password']; // Received in plaintext now
+        $name = $data['name'];
 
-        // Check if the username already exists
+        // Check if username already exists
         $checkQuery = "SELECT username FROM users WHERE username = ?";
         $stmt = $dbConnection->prepare($checkQuery);
         $stmt->bind_param('s', $username);
@@ -72,25 +71,28 @@ $callback = function ($msg) use ($channel) {
 
         if ($stmt->num_rows > 0) {
             // Username already exists
-            $response = json_encode(['status' => 'failure', 'reason' => 'User already exists']);
+            $response = json_encode(['type' => 'failure', 'reason' => 'User already exists']);
             echo "Username already exists: $username\n";
         } else {
+            // Hash the password before storing
+            $hashedPassword = password_hash($inputPassword, PASSWORD_DEFAULT);
+
             // Insert new user into the database
             $insertQuery = "INSERT INTO users (username, user_pwd, name) VALUES (?, ?, ?)";
             $stmt = $dbConnection->prepare($insertQuery);
-            $stmt->bind_param('sss', $username, $inputPassword, $name);
+            $stmt->bind_param('sss', $username, $hashedPassword, $name);
 
             if ($stmt->execute()) {
-                // If registration is successful, send a success response
+                // Registration successful
                 $userID = $stmt->insert_id; // Get the new user's ID
                 $response = json_encode([
-                    'status' => 'success',
+                    'type' => 'success',
                     'userID' => $userID
                 ]);
                 echo "New user registered: $username\n";
             } else {
-                // Registration failed due to some database error
-                $response = json_encode(['status' => 'failure', 'reason' => 'Database error']);
+                // Registration failed due to a database error
+                $response = json_encode(['type' => 'failure', 'reason' => 'Database error']);
                 echo "Failed to register user: $username\n";
             }
         }
@@ -98,7 +100,7 @@ $callback = function ($msg) use ($channel) {
 
     // Send the response back to the frontend/backend VM
     $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
-    $channel->basic_publish($responseMsg, 'directExchange', 'dbResponseQueue'); // Send to responseQueue
+    $channel->basic_publish($responseMsg, 'directExchange', 'dbResponseQueue');
 
     // Close database connection
     $stmt->close();
