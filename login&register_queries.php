@@ -30,7 +30,7 @@ $callback = function ($msg) use ($channel) {
         // Query to fetch user data for login
         $query = "SELECT userID, user_pwd, name FROM users WHERE username = ?";
         $stmt = $dbConnection->prepare($query);
-        $stmt->bind_param('ss', $username);
+        $stmt->bind_param('s', $username);
         $stmt->execute();
         $stmt->store_result();
 
