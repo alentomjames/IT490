@@ -24,12 +24,13 @@ $callback = function ($msg) use ($channel) {
     if ($type === 'login') {
         // Handle login request
         $username = $data['username'];
+        $name = $data['name'];
         $inputPassword = $data['password']; // Received in plaintext now
 
         // Query to fetch user data for login
-        $query = "SELECT userID, user_pwd FROM users WHERE username = ?";
+        $query = "SELECT userID, user_pwd, name FROM users WHERE username = ?";
         $stmt = $dbConnection->prepare($query);
-        $stmt->bind_param('s', $username);
+        $stmt->bind_param('ss', $username);
         $stmt->execute();
         $stmt->store_result();
 
@@ -42,7 +43,8 @@ $callback = function ($msg) use ($channel) {
                 // If password is correct, send a success response with userID
                 $response = json_encode([
                     'type' => 'success',
-                    'name'   => $username,
+                    'name'   => $name,
+                    'username' => $username,
                     'userID' => $userID
                 ]);
                 echo "Login successful for user: $username\n";
