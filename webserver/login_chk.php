@@ -34,13 +34,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //Close the connection and channel to RabbitMQ using rabbitmq_connection.php
     closeRabbit($connection, $channel);
     // Waits for a response from RabbitMQ (sucess + userID or failure) 
-    //receiveRabbitMQResponse();
+    receiveRabbitMQResponse();
 }
 
 function receiveRabbitMQResponse(){
+    echo " STARTED RECIEVE FUNCTION ";
     list($connection, $channel) = getRabbit();
     // Declare the response channel 
-    $channel->queue_declare('frontendResponseQueue', false, false, false, false);
+    $channel->queue_declare('frontendResponseQueue', false, true, false, false);
 
     // Function waiting for the response from RabbitMQ 
     $callback = function($msg) {
@@ -65,6 +66,7 @@ function receiveRabbitMQResponse(){
       // Wait for the response
       while ($channel->is_consuming()) {
         $channel->wait();
+        
     }
         // Close the channel and connection
         closeRabbit($connection, $channel);
