@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //Close the connection and channel to RabbitMQ using rabbitmq_connection.php
     closeRabbit($connection, $channel);
     // Waits for a response from RabbitMQ (sucess + userID or failure) 
-    //receiveRabbitMQResponse();
+    receiveRabbitMQResponse();
 }
 
 function receiveRabbitMQResponse(){
@@ -45,7 +45,7 @@ function receiveRabbitMQResponse(){
     // Function waiting for the response from RabbitMQ 
     $callback = function($msg) {
         $response = json_decode($msg->body, true);
-
+        echo 'Starting the recieve function';
         // Checks the status variable in the message to see if it's a success or failure 
         if ($response['type'] === 'success'){
             // Retrieves the userID from the $msg and stores it in the sessionID to login user 
