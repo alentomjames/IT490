@@ -60,12 +60,11 @@ function receiveRabbitMQResponse(){
     };
     // Use basic_consume to access the queue and call $callback for success or failure
     // https://www.rabbitmq.com/tutorials/tutorial-six-php 
-    $channel->basic_consume('frontendResponseQueue', '', false, false, false, false, $callback);
+    $channel->basic_consume('frontendResponseQueue', '', false, true, false, false, $callback);
 
       // Wait for the response
       while ($channel->is_consuming()) {
         $channel->wait();
-        
     }
         // Close the channel and connection
         closeRabbit($connection, $channel);
