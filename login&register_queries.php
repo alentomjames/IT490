@@ -24,7 +24,6 @@ $callback = function ($msg) use ($channel) {
     if ($type === 'login') {
         // Handle login request
         $username = $data['username'];
-        $name = $data['name'];
         $inputPassword = $data['password']; // Received in plaintext now
 
         // Query to fetch user data for login
@@ -35,17 +34,16 @@ $callback = function ($msg) use ($channel) {
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($userID, $storedHash);
+            $stmt->bind_result($userID, $storedHash, $name); // Fetch name from the database as well
             $stmt->fetch();
 
             // Verify the plaintext password against the stored hash
             if (password_verify($inputPassword, $storedHash)) {
-                // If password is correct, send a success response with userID
+                // If password is correct, send a success response with userID and name
                 $response = json_encode([
-                    'type' => 'success',
-                    'name'   => $name,
-                    'username' => $username,
-                    'userID' => $userID
+                    'type'    => 'success',
+                    'name'    => $name,     // Send the user's name
+                    'userID'  => $userID    // Send the user's ID
                 ]);
                 echo "Login successful for user: $username\n";
             } else {
@@ -89,6 +87,7 @@ $callback = function ($msg) use ($channel) {
                 $userID = $stmt->insert_id; // Get the new user's ID
                 $response = json_encode([
                     'type' => 'success',
+                    'name' => $name,
                     'userID' => $userID
                 ]);
                 echo "New user registered: $username\n";
