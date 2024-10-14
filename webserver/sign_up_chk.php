@@ -56,7 +56,8 @@ function receiveRabbitMQResponse(){
             header("Location: index.php");
             exit();
         } else {
-            echo 'Login Failed';
+            echo '<script>alert("Login Failed")</script>';
+            header("Location: index.php");
             exit();
         }
     };

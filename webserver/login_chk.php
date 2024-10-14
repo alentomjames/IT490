@@ -45,7 +45,6 @@ function receiveRabbitMQResponse(){
     // Function waiting for the response from RabbitMQ 
     $callback = function($msg) {
         $response = json_decode($msg->body, true);
-        echo 'Starting the recieve function';
         // Checks the status variable in the message to see if it's a success or failure 
         if ($response['type'] === 'success'){
             // Retrieves the userID from the $msg and stores it in the sessionID to login user 
@@ -54,7 +53,8 @@ function receiveRabbitMQResponse(){
             header("Location: index.php");
             exit();
         } else {
-            echo 'Login Failed';
+            echo '<script>alert("Login Failed")</script>';
+            header("Location: index.php");
             exit();
         }
     };
