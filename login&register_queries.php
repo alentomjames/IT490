@@ -11,7 +11,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 list($connection, $channel) = getRabbit();
 
 // queue where i'll consume login/register requests
-$channel->queue_declare('databaseQueue', false, true, false, false);
+$channel->queue_declare('frontendQueue', false, true, false, false);
 
 // process the login/register requests
 $callback = function ($msg) use ($channel) {
@@ -100,7 +100,7 @@ $callback = function ($msg) use ($channel) {
 
     // send the response back to the client
     $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
-    $channel->basic_publish($responseMsg, 'directExchange', 'dbResponse');
+    $channel->basic_publish($responseMsg, 'directExchange', 'db');
 
     // close the statement and connection
     $stmt->close();
@@ -108,7 +108,7 @@ $callback = function ($msg) use ($channel) {
 };
 
 // consume the messages from the queue
-$channel->basic_consume('databaseQueue', '', false, true, false, false, $callback);
+$channel->basic_consume('frontendQueue', '', false, true, false, false, $callback);
 
 // wait for messages
 while ($channel->is_consuming()) {
