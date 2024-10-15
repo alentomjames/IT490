@@ -1,32 +1,32 @@
 <?php
 
-require_once 'db_connection.php'; // Include the DB connection (adjust if needed)
-require_once 'rmq_connection.php'; // Include the RabbitMQ connection (getRabbit, closeRabbit)
+require_once 'db_connection.php'; // file has db connection
+require_once 'rmq_connection.php'; // how I connect to RabbitMQ
 require_once __DIR__ . '/vendor/autoload.php';
 
 use PhpAmpqLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-// Get RabbitMQ connection from rabbitmq_connection.php
+// get the rabbitmq connection
 list($connection, $channel) = getRabbit();
 
-// Declare the queue to consume the login/register requests from
+// queue where i'll consume login/register requests
 $channel->queue_declare('databaseQueue', false, true, false, false);
 
-// Function to process login or register requests from the queue
+// process the login/register requests
 $callback = function ($msg) use ($channel) {
     $data = json_decode($msg->body, true);
-    $type = $data['type']; // Identify whether it's a login or register request
+    $type = $data['type']; // for now types are: login, register
 
-    // Connect to the MySQL database
+    // we initialize connection to the database
     $dbConnection = getDbConnection(); // from db_connection.php
 
     if ($type === 'login') {
-        // Handle login request
+        // login request
         $username = $data['username'];
-        $inputPassword = $data['password']; // Received in plaintext now
+        $inputPassword = $data['password']; // plaintext password
 
-        // Query to fetch user data for login
+        // query that fetches the user's ID, hashed password and name
         $query = "SELECT userID, user_pwd, name FROM users WHERE username = ?";
         $stmt = $dbConnection->prepare($query);
         $stmt->bind_param('s', $username);
@@ -34,35 +34,35 @@ $callback = function ($msg) use ($channel) {
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($userID, $storedHash, $name); // Fetch name from the database as well
+            $stmt->bind_result($userID, $storedHash, $name); // fetches the results
             $stmt->fetch();
 
-            // Verify the plaintext password against the stored hash
+            // plaintext password is compared to the hashed password
             if (password_verify($inputPassword, $storedHash)) {
-                // If password is correct, send a success response with userID and name
+                // if password = hashed password, login is successful
                 $response = json_encode([
                     'type'    => 'success',
-                    'name'    => $name,     // Send the user's name
-                    'userID'  => $userID    // Send the user's ID
+                    'name'    => $name,
+                    'userID'  => $userID
                 ]);
                 echo "Login successful for user: $username\n";
             } else {
-                // Password doesn't match
+                // when passwords dont match, send failure response
                 $response = json_encode(['type' => 'failure']);
                 echo "Login failed for user: $username\n";
             }
         } else {
-            // No user found
+            // user not found
             $response = json_encode(['type' => 'failure']);
             echo "User not found: $username\n";
         }
     } elseif ($type === 'register') {
-        // Handle register request
+        // register request
         $username = $data['username'];
-        $inputPassword = $data['password']; // Received in plaintext now
+        $inputPassword = $data['password'];
         $name = $data['name'];
 
-        // Check if username already exists
+        // check for existing username
         $checkQuery = "SELECT username FROM users WHERE username = ?";
         $stmt = $dbConnection->prepare($checkQuery);
         $stmt->bind_param('s', $username);
@@ -70,21 +70,20 @@ $callback = function ($msg) use ($channel) {
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            // Username already exists
             $response = json_encode(['type' => 'failure', 'reason' => 'User already exists']);
             echo "Username already exists: $username\n";
         } else {
-            // Hash the password before storing
+            // hash the password
             $hashedPassword = password_hash($inputPassword, PASSWORD_DEFAULT);
 
-            // Insert new user into the database
+            // insert the new user into the database
             $insertQuery = "INSERT INTO users (username, user_pwd, name) VALUES (?, ?, ?)";
             $stmt = $dbConnection->prepare($insertQuery);
             $stmt->bind_param('sss', $username, $hashedPassword, $name);
 
             if ($stmt->execute()) {
-                // Registration successful
-                $userID = $stmt->insert_id; // Get the new user's ID
+                // successful registration
+                $userID = $stmt->insert_id; // insert_id gets the last inserted id
                 $response = json_encode([
                     'type' => 'success',
                     'name' => $name,
@@ -92,29 +91,29 @@ $callback = function ($msg) use ($channel) {
                 ]);
                 echo "New user registered: $username\n";
             } else {
-                // Registration failed due to a database error
+                // failed to register user
                 $response = json_encode(['type' => 'failure', 'reason' => 'Database error']);
                 echo "Failed to register user: $username\n";
             }
         }
     }
 
-    // Send the response back to the frontend/backend VM
+    // send the response back to the client
     $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
     $channel->basic_publish($responseMsg, 'directExchange', 'dbResponse');
 
-    // Close database connection
+    // close the statement and connection
     $stmt->close();
     $dbConnection->close();
 };
 
-// Consume the login/register queue
+// consume the messages from the queue
 $channel->basic_consume('databaseQueue', '', false, true, false, false, $callback);
 
-// Wait for messages from RabbitMQ
+// wait for messages
 while ($channel->is_consuming()) {
     $channel->wait();
 }
 
-// Close the RabbitMQ connection and channel when done
+// close the rabbitmq connection
 closeRabbit($connection, $channel);
