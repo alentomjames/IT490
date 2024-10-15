@@ -117,3 +117,5 @@ while ($channel->is_consuming()) {
 
 // close the rabbitmq connection
 closeRabbit($connection, $channel);
+
+// userid, sessionID, timestamp
