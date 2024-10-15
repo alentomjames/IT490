@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // meaning it won't be lost from the queue even if RabbitMQ restarts
     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
     $channel->basic_publish($msg, 'directExchange', 'frontendQueue');
-    console.log("Frontend Message Sent");
+    debug_to_console("Frontend Message Sent");
 
 
     //Close the connection and channel to RabbitMQ using rabbitmq_connection.php
@@ -60,7 +60,7 @@ function receiveRabbitMQResponse(){
     // Use basic_consume to access the queue and call $callback for success or failure
     // https://www.rabbitmq.com/tutorials/tutorial-six-php 
     $channel->basic_consume('databaseQueue', '', false, true, false, false, $callback);
-    console.log("Waiting for response");
+    debug_to_console("Waiting for response");
 
 
       // Wait for the response
@@ -68,10 +68,19 @@ function receiveRabbitMQResponse(){
         $channel->wait();
         
     }
-    console.log("Response Recieved");
+    debug_to_console("Response Recieved");
 
         // Close the channel and connection
         closeRabbit($connection, $channel);
     
 }
+
+function debug_to_console($data) {
+    $output = $data;
+    if (is_array($output))
+        $output = implode(',', $output);
+
+    echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
+}
+
 ?>
