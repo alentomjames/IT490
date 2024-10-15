@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     list($connection, $channel) = getRabbit();
 
     // Declaring the channel its being sent on
-    $channel->queue_declare('frontendQueue', false, false, false, false);
+    $channel->queue_declare('frontendQueue', false, true, false, false);
 
     $data = json_encode([
         'type'     => $type,
