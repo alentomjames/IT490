@@ -116,6 +116,133 @@ body {
     }
 }
 
+/* Movie Page */
+.movie-page {
+    display: flex;
+    padding: 20px;
+    margin: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.movie-poster {
+    flex: 1;
+    padding-right: 20px;
+}
+
+.movie-poster img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+.movie-details {
+    flex: 2;
+    padding-left: 20px;
+}
+
+.movie-details h1 {
+    font-size: 2.5rem;
+    color: #333;
+}
+
+.movie-details p {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.movie-details strong {
+    color: #007BFF;
+}
+
+.vote-average {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #FFD700; 
+    margin-left: 10px;
+    background-color: #007BFF;
+    padding: 5px 10px;
+    border-radius: 8px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.vote-average .fa-star {
+    color: #FFD700; 
+    margin-left: 5px;
+    font-size: 1.3rem;
+}
+
+/* Carousel styling */
+.recommendations {
+    margin: 40px 20px;
+}
+
+.recommendations h2 {
+    font-size: 2rem;
+    color: #007BFF;
+    margin-bottom: 20px;
+}
+.carousel-container {
+    position: relative;
+    max-width: 100%;
+    margin: 40px auto;
+    overflow: hidden;
+}
+
+.recommendation-carousel {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+    min-width: 200px;
+    text-align: center;
+    margin-right: 20px;
+}
+
+.carousel-item img {
+    width: 100%;
+    border-radius: 10px;
+    display: block;
+}
+
+/* Carousel button styling */
+.carousel-button {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    height:81%;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.carousel-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    display: block;
+}
+
+
+.carousel-button.prev {
+    left: 0;
+    z-index: 1;
+}
+
+.carousel-button.next {
+    right: 0;
+}
+
+
 /* Responsive Design */
 @media screen and (max-width: 768px) {
     .navbar {
