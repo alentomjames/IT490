@@ -56,11 +56,9 @@ function register(
     if ($stmt->num_rows > 0) {
         $response = json_encode(['type' => 'failure', 'reason' => 'User already exists']);
         echo "Username already exists: $username\n";
-        return $response;
     } else {
         // hash the password
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
         // insert the new user into the database
         $insertQuery = "INSERT INTO users (username, user_pwd, name) VALUES (?, ?, ?)";
         $stmt = $dbConnection->prepare($insertQuery);
@@ -75,14 +73,13 @@ function register(
                 'userID' => $userID
             ]);
             echo "New user registered: $username\n";
-            return $response;
         } else {
             // failed to register user
             $response = json_encode(['type' => 'failure', 'reason' => 'Database error']);
             echo "Failed to register user: $username\n";
-            return $response;
         }
     }
     $stmt->close();
     $dbConnection->close();
+    return $response;
 }

@@ -52,19 +52,17 @@ function login(string $username, string $password)
                 'userID'  => $userID
             ]);
             echo "Login successful for user: $username\n";
-            return $response;
         } else {
             // when passwords dont match, send failure response
             $response = json_encode(['type' => 'failure']);
             echo "Login failed for user: $username\n";
-            return $response;
         }
     } else {
         // user not found
         $response = json_encode(['type' => 'failure']);
         echo "User not found: $username\n";
-        return $response;
     }
     $stmt->close();
     $dbConnection->close();
+    return $response;
 }
