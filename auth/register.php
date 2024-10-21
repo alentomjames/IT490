@@ -5,7 +5,7 @@ require_once './db_connection.php'; // file has db connection
 require_once './rmq_connection.php'; // how I connect to RabbitMQ
 require_once 'constraints.php';
 
-// use Ramsey\Uuid\Uuid;  Eventually used to generate random ID
+use Ramsey\Uuid\Uuid;  // used to generate random ID
 
 function register(
     string $name,
@@ -14,7 +14,7 @@ function register(
 ) {
     global $TYPES, $USERNAME_MAX_LENGTH, $USERNAME_MIN_LENGTH, $USERNAME_PATTERN, $NAME_MAX_LENGTH, $NAME_MIN_LENGTH, $NAME_PATTERN, $PASSWORD_MAX_LENGTH, $PASSWORD_MIN_LENGTH;
 
-    // $id = UUid::uuid4()->toString();
+    $id = UUid::uuid4()->toString();
     $type = 'register';
 
     if (strlen($name) > strlen($NAME_MAX_LENGTH) || strlen($name) < strlen($NAME_MIN_LENGTH)) {
@@ -60,17 +60,17 @@ function register(
         // hash the password
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         // insert the new user into the database
-        $insertQuery = "INSERT INTO users (username, user_pwd, name) VALUES (?, ?, ?)";
+        $insertQuery = "INSERT INTO users (id, name, username, password) VALUES (?, ?, ?, ?)";
         $stmt = $dbConnection->prepare($insertQuery);
-        $stmt->bind_param('sss', $username, $hashedPassword, $name);
+        $stmt->bind_param('ssss', $id, $name, $username, $hashedPassword);
 
         if ($stmt->execute()) {
             // successful registration
-            $userID = $stmt->insert_id; // insert_id gets the last inserted id
+            // $id = $stmt->insert_id; // insert_id gets the last inserted id
             $response = json_encode([
                 'type' => 'success',
                 'name' => $name,
-                'userID' => $userID
+                'userID' => $id
             ]);
             echo "New user registered: $username\n";
         } else {

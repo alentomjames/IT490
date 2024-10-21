@@ -26,7 +26,7 @@ function login(string $username, string $password)
     $dbConnection = getDbConnection();
 
     // query that fetches the user's ID, hashed password and name
-    $query = "SELECT userID, user_pwd, name FROM users WHERE username = ?";
+    $query = "SELECT id, name, password FROM users WHERE username = ?";
     $stmt = $dbConnection->prepare($query);
     $stmt->bind_param('s', $username);
     try {
@@ -40,7 +40,7 @@ function login(string $username, string $password)
     $stmt->store_result();
 
     if ($stmt->num_rows > 0) {
-        $stmt->bind_result($userID, $storedHash, $name); // fetches the results
+        $stmt->bind_result($id, $name, $storedHash); // fetches the results
         $stmt->fetch();
 
         // plaintext password is compared to the hashed password
@@ -49,7 +49,7 @@ function login(string $username, string $password)
             $response = json_encode([
                 'type'    => 'success',
                 'name'    => $name,
-                'userID'  => $userID
+                'userID'  => $id
             ]);
             echo "Login successful for user: $username\n";
         } else {
