@@ -23,8 +23,6 @@ function getDbConnection()
 	return $mydb;
 }
 
-getDbConnection();
-
 // $query = "select * from users;";
 
 // $response = $mydb->query($query);
