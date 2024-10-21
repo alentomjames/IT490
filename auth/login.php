@@ -1,9 +1,9 @@
 <?php
 
-require_once 'db_connection.php'; // file has db connection
-require_once 'rmq_connection.php'; // how I connect to RabbitMQ
+require_once './vendor/autoload.php';
+require_once './db_connection.php'; // file has db connection
+require_once './rmq_connection.php'; // how I connect to RabbitMQ
 require_once 'constraints.php';
-require_once __DIR__ . '/vendor/autoload.php';
 
 function login(string $username, string $password)
 {

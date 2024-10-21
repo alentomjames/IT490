@@ -7,8 +7,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 use PhpAmpqLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-require_once 'login.php';
-require_once 'register.php';
+require_once 'auth/login.php';
+require_once 'auth/register.php';
 
 // get the rabbitmq connection
 list($connection, $channel) = getRabbit();
