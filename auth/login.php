@@ -1,9 +1,9 @@
 <?php
 
-require_once 'db_connection.php'; // file has db connection
-require_once 'rmq_connection.php'; // how I connect to RabbitMQ
+require_once './vendor/autoload.php';
+require_once './db_connection.php'; // file has db connection
+require_once './rmq_connection.php'; // how I connect to RabbitMQ
 require_once 'constraints.php';
-require_once __DIR__ . '/vendor/autoload.php';
 
 function login(string $username, string $password)
 {
@@ -12,15 +12,15 @@ function login(string $username, string $password)
     $type = 'login';
 
     if (strlen($username) > $USERNAME_MAX_LENGTH || strlen($username) < $USERNAME_MIN_LENGTH) {
-        echo "Invalid username length\n";
+        return json_encode(['type' => 'failure', 'reason' => 'Invalid username length']);
     }
 
     if (!preg_match($USERNAME_PATTERN, $username)) {
-        echo "Invalid username format\n";
+        return json_encode(['type' => 'failure', 'reason' => 'Invalid username pattern']);
     }
 
     if (strlen($password) > $PASSWORD_MAX_LENGTH || strlen($password) < $PASSWORD_MIN_LENGTH) {
-        echo "Invalid password length\n";
+        return json_encode(['type' => 'failure', 'reason' => 'Invalid password length']);
     }
 
     $dbConnection = getDbConnection();
@@ -52,19 +52,17 @@ function login(string $username, string $password)
                 'userID'  => $userID
             ]);
             echo "Login successful for user: $username\n";
-            return $response;
         } else {
             // when passwords dont match, send failure response
             $response = json_encode(['type' => 'failure']);
             echo "Login failed for user: $username\n";
-            return $response;
         }
     } else {
         // user not found
         $response = json_encode(['type' => 'failure']);
         echo "User not found: $username\n";
-        return $response;
     }
     $stmt->close();
     $dbConnection->close();
+    return $response;
 }

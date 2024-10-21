@@ -1,9 +1,9 @@
 <?php
 
-require_once 'db_connection.php'; // file has db connection
-require_once 'rmq_connection.php'; // how I connect to RabbitMQ
+require_once './vendor/autoload.php';
+require_once './db_connection.php'; // file has db connection
+require_once './rmq_connection.php'; // how I connect to RabbitMQ
 require_once 'constraints.php';
-require_once __DIR__ . '/vendor/autoload.php';
 
 // use Ramsey\Uuid\Uuid;  Eventually used to generate random ID
 
@@ -18,23 +18,23 @@ function register(
     $type = 'register';
 
     if (strlen($name) > strlen($NAME_MAX_LENGTH) || strlen($name) < strlen($NAME_MIN_LENGTH)) {
-        echo "Invalid name length\n";
+        return json_encode(['type' => 'failure', 'reason' => 'Invalid name length']);
     }
 
     if (!preg_match($NAME_PATTERN, $name)) {
-        echo "Invalid name format\n";
+        return json_encode(['type' => 'failure', 'reason' => 'Invalid name pattern']);
     }
 
     if (strlen($username) > $USERNAME_MAX_LENGTH || strlen($username) < $USERNAME_MIN_LENGTH) {
-        echo "Invalid username length\n";
+        return json_encode(['type' => 'failure', 'reason' => 'Invalid username length']);
     }
 
     if (!preg_match($USERNAME_PATTERN, $username)) {
-        echo "Invalid username format\n";
+        return json_encode(['type' => 'failure', 'reason' => 'Invalid username pattern']);
     }
 
     if (strlen($password) > $PASSWORD_MAX_LENGTH || strlen($password) < $PASSWORD_MIN_LENGTH) {
-        echo "Invalid password length\n";
+        return json_encode(['type' => 'failure', 'reason' => 'Invalid password length']);
     }
 
     $dbConnection = getDbConnection();
@@ -56,11 +56,9 @@ function register(
     if ($stmt->num_rows > 0) {
         $response = json_encode(['type' => 'failure', 'reason' => 'User already exists']);
         echo "Username already exists: $username\n";
-        return $response;
     } else {
         // hash the password
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
         // insert the new user into the database
         $insertQuery = "INSERT INTO users (username, user_pwd, name) VALUES (?, ?, ?)";
         $stmt = $dbConnection->prepare($insertQuery);
@@ -75,14 +73,13 @@ function register(
                 'userID' => $userID
             ]);
             echo "New user registered: $username\n";
-            return $response;
         } else {
             // failed to register user
             $response = json_encode(['type' => 'failure', 'reason' => 'Database error']);
             echo "Failed to register user: $username\n";
-            return $response;
         }
     }
     $stmt->close();
     $dbConnection->close();
+    return $response;
 }

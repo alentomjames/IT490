@@ -7,8 +7,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 use PhpAmpqLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-require_once 'login.php';
-require_once 'register.php';
+require_once 'auth/login.php';
+require_once 'auth/register.php';
 
 // get the rabbitmq connection
 list($connection, $channel) = getRabbit();
@@ -20,19 +20,15 @@ $channel->queue_declare('frontendQueue', false, true, false, false);
 $callback = function ($msg) use ($channel) {
     $data = json_decode($msg->body, true);
     $type = $data['type']; // for now types are: login, register
+    $username = $data['username'];
+    $password = $data['password'];
 
     if ($type === 'login') {
-        $username = $data['username'];
-        $password = $data['password'];
-
         // calling login function
         $response = login($username, $password);
     } elseif ($type === 'register') {
         // register request
-        $username = $data['username'];
-        $password = $data['password'];
         $name = $data['name'];
-
         $response = register($name, $username, $password);
     }
     // send the response back to the client
