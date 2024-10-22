@@ -17,25 +17,25 @@ function register(
     $id = UUid::uuid4()->toString();
     $type = 'register';
 
-    if (strlen($name) > $NAME_MAX_LENGTH || strlen($name) < $NAME_MIN_LENGTH) {
-        return json_encode(['type' => 'failure', 'reason' => 'Invalid name length']);
-    }
+    // if (strlen($name) > $NAME_MAX_LENGTH || strlen($name) < $NAME_MIN_LENGTH) {
+    //     return json_encode(['type' => 'failure', 'reason' => 'Invalid name length']);
+    // }
 
-    if (!preg_match($NAME_PATTERN, $name)) {
-        return json_encode(['type' => 'failure', 'reason' => 'Invalid name pattern']);
-    }
+    // if (!preg_match($NAME_PATTERN, $name)) {
+    //     return json_encode(['type' => 'failure', 'reason' => 'Invalid name pattern']);
+    // }
 
-    if (strlen($username) > $USERNAME_MAX_LENGTH || strlen($username) < $USERNAME_MIN_LENGTH) {
-        return json_encode(['type' => 'failure', 'reason' => 'Invalid username length']);
-    }
+    // if (strlen($username) > $USERNAME_MAX_LENGTH || strlen($username) < $USERNAME_MIN_LENGTH) {
+    //     return json_encode(['type' => 'failure', 'reason' => 'Invalid username length']);
+    // }
 
-    if (!preg_match($USERNAME_PATTERN, $username)) {
-        return json_encode(['type' => 'failure', 'reason' => 'Invalid username pattern']);
-    }
+    // if (!preg_match($USERNAME_PATTERN, $username)) {
+    //     return json_encode(['type' => 'failure', 'reason' => 'Invalid username pattern']);
+    // }
 
-    if (strlen($password) > $PASSWORD_MAX_LENGTH || strlen($password) < $PASSWORD_MIN_LENGTH) {
-        return json_encode(['type' => 'failure', 'reason' => 'Invalid password length']);
-    }
+    // if (strlen($password) > $PASSWORD_MAX_LENGTH || strlen($password) < $PASSWORD_MIN_LENGTH) {
+    //     return json_encode(['type' => 'failure', 'reason' => 'Invalid password length']);
+    // }
 
     $dbConnection = getDbConnection();
 
