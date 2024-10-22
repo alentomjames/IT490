@@ -81,5 +81,6 @@ function register(
     }
     $stmt->close();
     $dbConnection->close();
+    echo "Closed Connection on register";
     return $response;
 }
