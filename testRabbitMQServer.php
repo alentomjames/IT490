@@ -128,7 +128,7 @@ $channel = $connection->channel();
 $channel->queue_declare('frontendQueue', false, true, false, false);
 $channel->queue_declare('databaseQueue', false, true, false, false);
 $channel->queue_declare('dmzQueue', false, true, false, false);
-$channel->queue_declare('frontendResponseQueue', true, false, false, false);
+$channel->queue_declare('frontendResponseQueue', false, true, false, false);
 $channel->queue_declare('dbResponseQueue', false, true, false, false);
 
 
