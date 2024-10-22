@@ -41,6 +41,7 @@ function sessionCreate(string $userId)
     $stmt->execute();
     $stmt->close();
     $dbConnection->close();
+    echo "New session started for user $userId.\n";
     // returning normal sessionId because of the pass-the-hash problem 
     // https://security.stackexchange.com/questions/221841/hashing-session-id
     return $sessionId;
