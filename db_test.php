@@ -2,6 +2,7 @@
 <?php
 require_once 'db_connection.php';
 require_once 'auth/register.php';
+require_once 'auth/login.php';
 // $dbConnection = getDbConnection();
 
 // $stmt = $dbConnection->prepare("INSERT INTO users (username, user_pwd, name) VALUES (?, ?, ?)");
