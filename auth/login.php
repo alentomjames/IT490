@@ -54,12 +54,7 @@ function login(string $username, string $password)
                 'userID'  => $id,
                 //'sessionID' => $sessionId
             ]);
-            $stmt->close();
-            $dbConnection->close();
-            echo "Closed connection\n";
             echo "Login successful for user: $username\n";
-            echo $response . "\n";
-            return $response;
         } else {
             // when passwords dont match, send failure response
             $response = json_encode(['type' => 'failure']);
@@ -72,6 +67,6 @@ function login(string $username, string $password)
     }
     $stmt->close();
     $dbConnection->close();
-    echo "Closed connection";
+    echo "Closed connection\n";
     return $response;
 }
