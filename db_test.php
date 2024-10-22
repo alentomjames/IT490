@@ -28,5 +28,6 @@ require_once 'auth/register.php';
 // $dbConnection->close();
 
 register('john', 'man1234', 'password');
+login('man1234', 'password');
 
 ?>
