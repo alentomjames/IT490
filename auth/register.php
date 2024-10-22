@@ -64,6 +64,7 @@ function register(
         $stmt->bind_param('ssss', $id, $name, $username, $hashedPassword);
 
         if ($stmt->execute()) {
+            $id = $stmt->insert_id;
             // successful registration
             // $id = $stmt->insert_id; // insert_id gets the last inserted id
             $response = json_encode([
