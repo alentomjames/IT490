@@ -14,7 +14,7 @@ function register(
 ) {
     global $TYPES, $USERNAME_MAX_LENGTH, $USERNAME_MIN_LENGTH, $USERNAME_PATTERN, $NAME_MAX_LENGTH, $NAME_MIN_LENGTH, $NAME_PATTERN, $PASSWORD_MAX_LENGTH, $PASSWORD_MIN_LENGTH;
 
-    $id = UUid::uuid4()->toString();
+    //$id = UUid::uuid4()->toString();
     $type = 'register';
 
     // if (strlen($name) > $NAME_MAX_LENGTH || strlen($name) < $NAME_MIN_LENGTH) {
