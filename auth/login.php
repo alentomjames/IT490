@@ -45,11 +45,13 @@ function login(string $username, string $password)
 
         // plaintext password is compared to the hashed password
         if (password_verify($password, $storedHash)) {
+            $sessionId = sessionCreate($id);
             // if password = hashed password, login is successful
             $response = json_encode([
                 'type'    => 'success',
                 'name'    => $name,
-                'userID'  => $id
+                'userID'  => $id,
+                'sessionID' => $sessionId
             ]);
             echo "Login successful for user: $username\n";
         } else {
