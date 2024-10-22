@@ -68,5 +68,6 @@ function login(string $username, string $password)
     $stmt->close();
     $dbConnection->close();
     echo "Closed connection\n";
+    echo $response . "\n";
     return $response;
 }
