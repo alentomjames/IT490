@@ -17,7 +17,7 @@ function register(
     $id = UUid::uuid4()->toString();
     $type = 'register';
 
-    if (strlen($name) > strlen($NAME_MAX_LENGTH) || strlen($name) < strlen($NAME_MIN_LENGTH)) {
+    if (strlen($name) > $NAME_MAX_LENGTH || strlen($name) < $NAME_MIN_LENGTH) {
         return json_encode(['type' => 'failure', 'reason' => 'Invalid name length']);
     }
 
@@ -52,7 +52,6 @@ function register(
     }
 
     $stmt->store_result();
-
     if ($stmt->num_rows > 0) {
         $response = json_encode(['type' => 'failure', 'reason' => 'User already exists']);
         echo "Username already exists: $username\n";
