@@ -46,7 +46,7 @@ iptables  -A  OUTPUT  -j  ACCEPT
 
 #TCP Port 1414, Connect to the Message Router (may or may not work)
 
-sudo iptables  -t  nat  -A  PREROUTING  -i  eth0  -p  tcp  --dport  53  -j  DNAT  --to  192.168.2.4: 1414
+sudo iptables  -t  nat  -A  PREROUTING  -i  eth0  -p  tcp  --dport  53  -j  DNAT  --to  172.168.4.30: 1414
 
 
 #alternative prerouting lines
