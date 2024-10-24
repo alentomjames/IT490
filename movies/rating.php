@@ -16,14 +16,14 @@ function rateMovie(string $movieId, int $userId, int $rating)
 
     $query = ('INSERT INTO rating (movie_id, user_id, rating) VALUES (?, ?, ?)');
     $stmt = $dbConnection->prepare($query);
-    $stmt->bind_param("sii", $movieId, $userId, $rating);
+    $stmt->bind_param("iii", $movieId, $userId, $rating);
     $stmt->execute();
     $stmt->store_result();
 
     if ($stmt->affected_rows == 0) {
         $query = 'UPDATE rating SET rating = ? WHERE movie_id = ? AND user_id = ?';
         $stmt = $dbConnection->prepare($query);
-        $stmt->bind_param("sii", $movieId, $userId, $rating);
+        $stmt->bind_param("iii", $movieId, $userId, $rating);
         $stmt->execute();
         $stmt->store_result();
     }
