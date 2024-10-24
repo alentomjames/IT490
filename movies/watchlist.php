@@ -64,11 +64,11 @@ function getFromWatchlist(int $userId)
     return $watchlist;
 }
 
-// addToWatchlist('movie1', 1);
-// addToWatchlist('movie2', 1);
-// addToWatchlist('movie3', 1);
-// addToWatchlist('movie3', 2);
-// addToWatchlist('movie1', 2);
+addToWatchlist('movie1', 1);
+addToWatchlist(222, 1);
+addToWatchlist(333, 1);
+addToWatchlist(333, 2);
+addToWatchlist(333, 2);
 
 //removeFromWatchlist('movie1', 1);
 
