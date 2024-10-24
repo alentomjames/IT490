@@ -6,7 +6,7 @@ require_once 'rmq_connection.php'; // how I connect to RabbitMQ
 
 $dbConnection = getDbConnection();
 
-function rateMovie(string $movieId, int $userId, int $rating)
+function rateMovie(int $movieId, int $userId, int $rating)
 {
     global $dbConnection;
 
