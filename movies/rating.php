@@ -14,14 +14,14 @@ function rateMovie(int $movieId, int $userId, int $rating)
         return json_encode(['type' => 'failure', 'reason' => 'Invalid rating value\n']);
     }
 
-    $query = ('INSERT INTO rating (movie_id, user_id, rating) VALUES (?, ?, ?)');
+    $query = ('INSERT INTO ratings (movie_id, user_id, rating) VALUES (?, ?, ?)');
     $stmt = $dbConnection->prepare($query);
     $stmt->bind_param("iii", $movieId, $userId, $rating);
     $stmt->execute();
     $stmt->store_result();
 
     if ($stmt->affected_rows == 0) {
-        $query = 'UPDATE rating SET rating = ? WHERE movie_id = ? AND user_id = ?';
+        $query = 'UPDATE ratings SET rating = ? WHERE movie_id = ? AND user_id = ?';
         $stmt = $dbConnection->prepare($query);
         $stmt->bind_param("iii", $movieId, $userId, $rating);
         $stmt->execute();
