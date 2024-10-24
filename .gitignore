@@ -1,1 +1,6 @@
 /vendor/
+/*.ini
+*.inc
+*.log
+*.monit
+*.conf
