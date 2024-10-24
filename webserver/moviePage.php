@@ -4,7 +4,7 @@ session_start();
 // Check if the user is logged in by checking if they have a session token stored in the session storage 
 $loggedIn = isset($_SESSION['userID']);
 
-require_once('/vendor/autoload.php');
+require_once('vendor/autoload.php');
 
 // Get the movie ID from the URL
 $movie_id = isset($_GET['id']) ? $_GET['id'] : null;
@@ -18,6 +18,7 @@ if ($movie_id) {
           'accept' => 'application/json',
         ],
     ]);
+
 
     // Decode the JSON response
     $movie = json_decode($response->getBody(), true);
