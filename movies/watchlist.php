@@ -13,7 +13,7 @@ function addToWatchlist(string $movieId, int $userId)
 
     $query = ('INSERT INTO watchlist (movie_id, user_id) VALUES (?, ?)');
     $stmt = $dbConnection->prepare($query);
-    $stmt->bind_param("ss", $movieId, $userId);
+    $stmt->bind_param("ii", $movieId, $userId);
     $stmt->execute();
     $stmt->store_result();
 
@@ -29,7 +29,7 @@ function removeFromWatchlist(string $movieId, int $userId)
 
     $query = ('DELETE FROM watchlist WHERE movie_id = ? AND user_id = ?');
     $stmt = $dbConnection->prepare($query);
-    $stmt->bind_param("ss", $movieId, $userId);
+    $stmt->bind_param("ii", $movieId, $userId);
     $stmt->execute();
     $stmt->store_result();
 
