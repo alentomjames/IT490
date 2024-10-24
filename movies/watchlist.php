@@ -14,7 +14,14 @@ function addToWatchlist(int $movieId, int $userId)
     $query = ('INSERT INTO watchlist (movie_id, user_id) VALUES (?, ?)');
     $stmt = $dbConnection->prepare($query);
     $stmt->bind_param("ii", $movieId, $userId);
-    $stmt->execute();
+    try {
+        //code...
+        $stmt->execute();
+    } catch (\Throwable $th) {
+        //throw $th;
+        echo "Wrong movie_id format\n";
+    }
+
     $stmt->store_result();
 
     if ($stmt->num_rows() > 0) {
