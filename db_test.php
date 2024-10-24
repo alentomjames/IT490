@@ -28,7 +28,7 @@ require_once 'auth/login.php';
 // $stmt->close();
 // $dbConnection->close();
 
-register('john', 'man1234', 'password');
-login('man1234', 'password');
+//register('bill', 'billsworld', 'password');
+login('billsworld', 'password');
 
 ?>
