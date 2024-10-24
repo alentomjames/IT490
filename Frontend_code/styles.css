@@ -1,0 +1,244 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #007BFF;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-title {
+    text-decoration: none;
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.nav-title:hover {
+    color: #beddfe;
+}
+
+.navbar .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.navbar .nav-links button {
+    background-color: #fff;
+    color: #007BFF;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .nav-links button:hover {
+    background-color: #0056b3;
+    color: #fff;
+}
+
+/* Overlay Effect */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 200;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay.active {
+    display: flex;
+}
+/* Pagination Controls */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.pagination-controls button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-controls button:hover {
+    background-color: #0056b3;
+}
+
+.pagination-controls span {
+    font-size: 1.2rem;
+    color: #333;
+}
+/* Filters and Search Bar */
+.filters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+#search-bar {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 300px;
+}
+
+#genre-filter {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Favorite Movies Selection */
+.favorites-selection {
+    padding: 20px;
+    text-align: center;
+}
+
+.favorites-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.favorite-item {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.favorite-item.selected {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.favorite-item:hover {
+    transform: scale(1.05);
+}
+
+.favorite-item img {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.favorite-item p {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #333;
+}
+
+/* User's Favorite Movies */
+.user-favorites {
+    padding: 20px;
+    text-align: center;
+}
+
+.user-favorites ul {
+    list-style: none;
+    padding: 0;
+}
+
+.user-favorites li {
+    font-size: 1.2rem;
+    color: #007BFF;
+    margin: 10px 0;
+}
+
+/* Recommendations */
+.recommendations {
+    padding: 20px;
+    text-align: center;
+}
+
+.recommendations h2 {
+    font-size: 2rem;
+    color: #007BFF;
+    margin-bottom: 20px;
+}
+
+.recommendation-item {
+    display: inline-block;
+    margin: 10px;
+    text-align: center;
+}
+
+.recommendation-item img {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.recommendation-item p {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #333;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .navbar {
+        padding: 10px 20px;
+    }
+
+    .navbar .nav-title {
+        font-size: 1.5rem;
+    }
+
+    .navbar .nav-links button {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+
+    .favorites-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .modal {
+        width: 90%;
+        padding: 20px;
+    }
+}
