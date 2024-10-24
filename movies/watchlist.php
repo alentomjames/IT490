@@ -7,7 +7,7 @@ require_once 'rmq_connection.php'; // how I connect to RabbitMQ
 $dbConnection = getDbConnection();
 
 // add to watchlist paramter movie id user id
-function addToWatchlist(string $movieId, int $userId)
+function addToWatchlist(int $movieId, int $userId)
 {
     global $dbConnection;
 
@@ -22,7 +22,7 @@ function addToWatchlist(string $movieId, int $userId)
     }
 }
 
-function removeFromWatchlist(string $movieId, int $userId)
+function removeFromWatchlist(int $movieId, int $userId)
 {
 
     global $dbConnection;
