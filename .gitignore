@@ -2,3 +2,4 @@
 .env
 db_config.env
 auth_test
+schemas.sql
