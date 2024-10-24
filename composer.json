@@ -10,6 +10,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php-amqplib/php-amqplib": "^3.7"
+        "php-amqplib/php-amqplib": "^3.7",
+        "guzzlehttp/guzzle": "^7.9"
     }
 }
