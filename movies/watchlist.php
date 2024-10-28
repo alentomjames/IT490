@@ -79,10 +79,10 @@ function getFromWatchlist(int $userId)
 }
 
 // Example usage and output
-$responseAdd = addToWatchlist(222, 1);
-$responseRemove = removeFromWatchlist(222, 1);
-$responseGet = getFromWatchlist(1);
+// $responseAdd = addToWatchlist(222, 1);
+// $responseRemove = removeFromWatchlist(222, 1);
+// $responseGet = getFromWatchlist(1);
 
-var_dump($responseAdd);
-var_dump($responseRemove);
-var_dump($responseGet);
+// var_dump($responseAdd);
+// var_dump($responseRemove);
+// var_dump($responseGet);
