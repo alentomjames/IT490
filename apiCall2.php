@@ -71,9 +71,16 @@ function helperQueueResponse ($messageBody, $type) {
     'parameter' = $parameter
   });
   
-  $channel->close();
-  $connection->close();
+  // consumes message from queue
+  $channel->basic_consume('frontendQueue', false, true, false, false);
+  
+  // wait for messages
+  while ($channel->is_consuming()) {
+    $channel->wait();
+  }
 
+  // closes the rabbitmq connection
+  closeRabbit($connection, $channel);
   
   sendMessage('Hello, Frontend Queue! Here are the ', $type); 
 }
