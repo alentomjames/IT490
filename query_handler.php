@@ -20,29 +20,33 @@ $channel->queue_declare('frontendQueue', false, true, false, false);
 // process the login/register requests
 $callback = function ($msg) use ($channel) {
     $data = json_decode($msg->body, true);
-    $type = $data['type'] ?? null;
-    $username = $data['username'] ?? null;
-    $password = $data['password'] ?? null;
-    $movieId = $data['movie_id'] ?? null;
-    $userId = $data['user_id'] ?? null;
-    $response = null;
+    $type = $data['type']; // for now types are: login, register
+    $username = $data['username'];
+    $password = $data['password'];
+    $movieId = $data['movie_id'];
+    $userId = $data['user_id'];
 
-    if ($type === 'login' && $username && $password) {
+    if ($type === 'login') {
+        // calling login function
         $response = login($username, $password);
-    } elseif ($type === 'register' && isset($data['name'], $username, $password)) {
+    } elseif ($type === 'register') {
+        // register request
         $name = $data['name'];
         $response = register($name, $username, $password);
-    } elseif ($type === "add_to_watchlist" && $movieId && $userId) {
+    } elseif ($type === "add_to_watchlist") {
+        // add to watchlist
         $response = addToWatchlist($movieId, $userId);
-    } elseif ($type === "remove_from_watchlist" && $movieId && $userId) {
+    } elseif ($type === "remove_from_watchlist") {
+        // remove from watchlist
         $response = removeFromWatchlist($movieId, $userId);
-    } elseif ($type === "get_watchlist" && $userId) {
+    } elseif ($type === "get_watchlist") {
+        // get all watchlist
         $response = getFromWatchlist($userId);
-    } else {
-        echo "Received unknown command or missing required data fields\n";
-        $response = json_encode(["error" => "Invalid request type or missing parameters"]);
     }
-
+    // else {
+    //     echo "Command not for us\n";
+    // }
+    // send the response back to the client
     $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
     $channel->basic_publish($responseMsg, 'directExchange', 'databaseQueue');
 };
