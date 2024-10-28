@@ -19,10 +19,10 @@ $callback = function ($msg) use ($channel) {
     $data = json_decode($msg->body, true);
     $type = $data['type']; // for now types are: movie_details
     $parameter = $data['parameter'];
-
+    echo($parameter);
     switch ($type) {
         case 'movie_details':
-            $url = "https://api.themoviedb.org/3/movie/{$parameter}?language=en-US";
+            $url = "https://api.themoviedb.org/3/movie/121?language=en-US";
             $response = fetchDetails($type, $parameter, $url);
             break;
         case 'person_details':
@@ -52,6 +52,7 @@ closeRabbit($connection, $channel);
 
 function fetchDetails ($type, $parameter, $url) {
     // Call the API to get a response 
+    $client = new \GuzzleHttp\Client();
     $response = $client->request('GET', $url, [
         'headers' => [
           'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTE3NDI3NS44MTA5NTUsInN1YiI6IjY3MTExYThiY2Y4ZGU4NzdiNDlmY2JlMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.3wTZmroEtn8GSIHD92r7p-3G4iAjPMHZa3aojxycDIM',
@@ -60,6 +61,7 @@ function fetchDetails ($type, $parameter, $url) {
       ]);
 
       $responseBody = json_decode($response->getBody(), true);
+
       //send back to RabbitMQ
 
       return $responseBody;
