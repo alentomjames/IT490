@@ -51,6 +51,8 @@ closeRabbit($connection, $channel);
 // userid, sessionID, timestamp
 
 function fetchDetails ($type, $parameter, $url) {
+    $client = new \GuzzleHttp\Client();
+
     // Call the API to get a response 
     $response = $client->request('GET', $url, [
         'headers' => [
@@ -66,5 +68,4 @@ function fetchDetails ($type, $parameter, $url) {
         'data' => $responseBody,
     ]);
     
-      return $responseBody;
 }
