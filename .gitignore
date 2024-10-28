@@ -1,1 +1,6 @@
-/webserver/vendor
+/vendor/
+/*.ini
+*.inc
+*.log
+*.monit
+*.conf
