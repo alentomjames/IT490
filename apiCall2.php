@@ -5,18 +5,21 @@ require_once('vendor/autoload.php');
 
 $client = new \GuzzleHttp\Client();
 
-function fetchDetails ($type, $parameter) {
+function fetchDetails ($type, $parameter, $messageBody) {
     $url = '';
 
     switch ($type) {
         case 'movie_details':
             $url = "https://api.themoviedb.org/3/movie/{$parameter['movie_id']}?language=en-US";
+            helperQueueResponse ($messageBody, 'movie_details');
             break;
         case 'person_details':
             $url = "https://api.themoviedb.org/3/person/{$parameter['person_id']}?language=en-US";
+            helperQueueResponse ($messageBody, 'person_details');
             break;
         case 'review_details':
             $url = "https://api.themoviedb.org/3/review/{$parameter['review_id']}?language=en-US";
+            helperQueueResponse ($messageBody, 'review_details');
             break;
         default:
             throw new Exception('Invalid type provided');
@@ -39,7 +42,7 @@ function fetchDetails ($type, $parameter) {
 }
 
 
-function HelperQueueResponse ($messageBody, $type) {
+function helperQueueResponse ($messageBody, $type) {
   // DMZ Queue server details
   $host = 172.29.2.108;
   $port = 5672;
@@ -55,7 +58,7 @@ function HelperQueueResponse ($messageBody, $type) {
   // create a message
   $message = new AMQPMessage($messageBody);
 
-  // publish message to specific queue using routing key
+  // publish message to specific queue using routing keys
   $channel->basic_publish($message, $exchange, $queue);
 
   echo "Message sent to queue '$queue': $messageBody\n";
