@@ -1,4 +1,6 @@
 <?php
+
+// This is the first version of the APICall, now deprecated
 session_start();
 
 $loggedIn = isset($_SESSION['userID']);
@@ -10,9 +12,9 @@ $url = 'RequiredLink';
 $data = [
     'collection'  => 'RequiredAPI'
 ];
-  
-$curl = curl_init($url);
 
+$client = new \GuzzleHttp\Client();
+// removed curl, since we're using guzzle
  
 #Function references geeksforgeeks (https://www.geeksforgeeks.org/how-to-add-api-function-to-a-simple-php-page/)
 /*
@@ -52,19 +54,13 @@ function APIcall($method, $url, $data) {
 
 function fetchDetails ($type, $parameter) {
     $url = '';
-    $client = new \GuzzleHttp\Client();
 
     switch ($type) {
         case 'movie_details':
             $url = "https://api.themoviedb.org/3/movie/{movie_id}";
-            $response = $client->request('GET', 'https://api.themoviedb.org/3/movie/movie_id?language=en-US', [
-                'headers' => [
-                  'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTE3NDI3NS44MTA5NTUsInN1YiI6IjY3MTExYThiY2Y4ZGU4NzdiNDlmY2JlMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.3wTZmroEtn8GSIHD92r7p-3G4iAjPMHZa3aojxycDIM',
-                  'accept' => 'application/json',
-                ],
-              ]);
+            break;
             //send back to RabbitMQ
-            return $response;
+            break;
         case 'person_details':
             $url = "https://api.themoviedb.org/3/person/{person_id}";
             $response = $client->request('GET', 'https://api.themoviedb.org/3/person/person_id?language=en-US', [
@@ -85,27 +81,12 @@ function fetchDetails ($type, $parameter) {
         default:
             throw new Exception('Invalid type provided');
     }
-    $ch = curl_init();
 
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-    $response = curl_exec($ch);
-
-    if (curl_errno($ch)) {
-        throw new Exception('Error fetching data ' . curl_error($ch));
-    }
-
-    curl_close($ch);
-
+    // Call the API to get a response
+    return $response;
     return json_decode($response, true);
 }
 
-/*
-function HelperQueueResponse (){
-
-}
-*/
 
 try {
     $movieData = fetchDetails('movie_details', '123');
@@ -144,7 +125,33 @@ catch (Exception $e) {
 
 */
 
+/*
+// look at Alen's send.php file
+function HelperQueueResponse ($type, $messageBody){
+    // DMZ Queue server details
+    $host = 172.29.2.108;
+    $port = 5672;
+    $user = admin;
+    $vhost = 'IT490_HOST';
+    // connection creation
+    $connection = new AMQPStreamConnection($host, $port, $user, $password, $vhost);
+    $channel = $connection->channel();
 
+    // define direct exchange
+    $exchange = 'directExchange';
+
+    // create a message
+    $message = new AMQPMessage($messageBody);
+
+    // publish message to specific queue using routing key
+    $channel->basic_publish($message, $exchange, $queue);
+
+    echo "Message sent to queue '$queue': $messageBody\n";
+    
+    $channel->close();
+    $connection->close();
+}
+*/
 // From Petar's testRabbitMQServer.php
 /*
 
