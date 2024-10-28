@@ -2,7 +2,7 @@
 session_start();
 $loggedIn = isset($_SESSION['userID']);
 
-require_once('../vendor/autoload.php');
+require_once('vendor/autoload.php');
 
 $client = new \GuzzleHttp\Client();
 
@@ -13,7 +13,7 @@ $response = $client->request('GET', 'https://api.themoviedb.org/3/discover/movie
     ],
 ]);
 
-$movies = json_decode($response->getBody(), true)['results'];
+$movies = json_decode($response->getBody(), true)['results']; 
 ?>
 
 <!DOCTYPE html>

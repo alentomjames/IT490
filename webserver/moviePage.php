@@ -15,9 +15,12 @@ $movie_id = isset($_GET['id']) ? $_GET['id'] : null;
 
 if ($movie_id) {
     $type = 'movie_details';
+    //Sends request to rabbitMQ_connection.php to call API 
     sendRequest($type, $movie_id);
 
+    //Sends request to rabbitMQ_connection.php to recieve API movie data
     $movie = recieveDMZ();
+
     // Movie data
     if ($movie){
     $title = $movie['title'];
@@ -67,7 +70,16 @@ if ($movie_id) {
             <img src="<?php echo $poster; ?>" alt="<?php echo $title; ?> Poster">
         </div>
         <div class="movie-details">
-            <h1><?php echo $title; ?> <span class="vote-average"> <?php echo $vote_average; ?> <i class="fa fa-star"></i> </span> </h1>
+            <!-- Add to Watchlist Button -->
+            <h1>
+                <?php echo $title; ?>
+                <span
+                    class="vote-average"> <?php echo $vote_average; ?> <i class="fa fa-star"></i>
+                </span>
+                <button
+                    onclick="addToWatchlist(<?php echo $movie_id; ?>)" class="watchlist-button">Add to Watchlist <i class="fa-solid fa-check"></i>
+                </button>
+            </h1>
             <p><strong>Overview:</strong> <?php echo $overview; ?></p>
             <p><strong>Genres:</strong> <?php echo $genres; ?></p>
             <p><strong>Spoken Languages:</strong> <?php echo $languages; ?></p>
