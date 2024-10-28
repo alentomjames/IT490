@@ -1,0 +1,88 @@
+/* Watchlist Container */
+.watchlist-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.watchlist-item {
+    width: 200px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.watchlist-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.watchlist-item img {
+    width: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.watchlist-item p {
+    font-size: 1.2rem;
+    color: #333;
+    padding: 15px 10px;
+    font-weight: bold;
+}
+
+/* Remove Button */
+.remove-button {
+    background: linear-gradient(135deg, #d9534f, #c9302c);
+    color: #fff;
+    padding: 10px 15px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.remove-button:hover {
+    background: linear-gradient(135deg, #c9302c, #a72820);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.remove-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.watchlist-button {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #FFD700;
+    background: linear-gradient(135deg, #007BFF, #0056b3);
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.watchlist-button:hover {
+    background: linear-gradient(135deg, #0056b3, #003e82);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.watchlist-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
