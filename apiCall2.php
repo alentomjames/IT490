@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-require_once('vendor/autoload.php');
-
+require_once '/webserver/vendor/autoload.php';
+require_once '/webserver/rabbitmq_connection.php';  
 $client = new \GuzzleHttp\Client();
 
 function fetchDetails ($type, $parameter, $messageBody) {
@@ -43,14 +43,7 @@ function fetchDetails ($type, $parameter, $messageBody) {
 
 
 function helperQueueResponse ($messageBody, $type) {
-  // DMZ Queue server details
-  $host = 172.29.2.108;
-  $port = 5672;
-  $user = admin;
-  $vhost = 'IT490_HOST';
-  // connection creation
-  $connection = new AMQPStreamConnection($host, $port, $user, $password, $vhost);
-  $channel = $connection->channel();
+  list($connection, $channel) = getRabbit();
 
   // define direct exchange
   $exchange = 'directExchange';
@@ -59,17 +52,17 @@ function helperQueueResponse ($messageBody, $type) {
   $message = new AMQPMessage($messageBody);
 
   // publish message to specific queue using routing keys
-  $channel->basic_publish($message, $exchange, $queue);
+  $channel->basic_publish($message, $exchange, 'dmzQueue');
 
-  echo "Message sent to queue '$queue': $messageBody\n";
+  echo "Message sent to queue 'dmzQueue': $messageBody\n";
   
   // communicates through the RabbitMQ to contact the front end, sends the type and parameter
 
   $channel->queue_declare('frontendQueue', false, true, false, false);
-  data = json_encode({
-    'type' = $type
-    'parameter' = $parameter
-  });
+  $data = json_encode([
+    'type' => $type,
+    'parameter' => $parameter
+  ]);
   
   // consumes message from queue
   $channel->basic_consume('frontendQueue', false, true, false, false);
