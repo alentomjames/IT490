@@ -2,7 +2,7 @@
 session_start();
 $loggedIn = isset($_SESSION['userID']);
 
-require_once('vendor/autoload.php');
+require_once 'vendor/autoload.php';  
 
 $client = new \GuzzleHttp\Client();
 

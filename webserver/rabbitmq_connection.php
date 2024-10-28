@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . 'vendor/autoload.php';  
+require_once 'vendor/autoload.php';  
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -47,7 +47,7 @@ function recieveDMZ(){
     $callback = function($msg) {
         $response = json_decode($msg->body, true);
         // Checks the status variable in the message to see if it's a success or failure 
-        $data = $response['data'];
+        $data = $response;
 
     };
     
