@@ -1,39 +1,42 @@
 <?php
-// Start the session
 session_start();
-// Check if the user is logged in by checking if they have a session token stored in the session storage 
 $loggedIn = isset($_SESSION['userID']);
 
-require_once('/vendor/autoload.php');
+if (!$loggedIn) {
+    header('Location: login.php');
+    exit();
+}
 
-// Get the movie ID from the URL
-$movie_id = isset($_GET['id']) ? $_GET['id'] : null;
+require_once('../vendor/autoload.php');
+require_once 'rabbitmq_connection.php';
 
-if ($movie_id) {
-    $client = new \GuzzleHttp\Client();
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+
+$client = new \GuzzleHttp\Client();
+
+if (isset($_GET['id'])) {
+    $movie_id = $_GET['id'];
 
     $response = $client->request('GET', 'https://api.themoviedb.org/3/movie/' . $movie_id . '?language=en-US', [
         'headers' => [
-          'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
-          'accept' => 'application/json',
+            'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
+            'accept' => 'application/json',
         ],
     ]);
 
-    // Decode the JSON response
     $movie = json_decode($response->getBody(), true);
 
-    // Fetch recommendations using movieID
     $recommendationResponse = $client->request('GET', 'https://api.themoviedb.org/3/movie/' . $movie_id . '/recommendations?language=en-US&page=1', [
         'headers' => [
-          'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
-          'accept' => 'application/json',
+            'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
+            'accept' => 'application/json',
         ],
     ]);
     $recommendations = json_decode($recommendationResponse->getBody(), true)['results'];
-    
-    // Movie data
+
     $title = $movie['title'];
-    $vote_average = round($movie['vote_average'] / 2, 1); 
+    $vote_average = round($movie['vote_average'] / 2, 1);
     $overview = $movie['overview'];
     $poster = 'https://image.tmdb.org/t/p/w500' . $movie['poster_path'];
     $genres = implode(', ', array_column($movie['genres'], 'name'));
@@ -43,33 +46,68 @@ if ($movie_id) {
     echo '<p>No movie ID provided!</p>';
     exit;
 }
+
+function sendMessageToQueue($data) {
+    list($connection, $channel) = getRabbit();
+
+    $channel->queue_declare('frontendQueue', false, true, false, false);
+
+    $msg = new AMQPMessage(json_encode($data), ['delivery_mode' => 2]);
+    $channel->basic_publish($msg, 'directExchange', 'frontendQueue');
+
+    closeRabbit($connection, $channel);
+
+    receiveRabbitMQResponse();
+}
+
+function receiveRabbitMQResponse(){
+    list($connection, $channel) = getRabbit();
+    $channel->queue_declare('databaseQueue', false, true, false, false);
+
+    $callback = function($msg) {
+        $response = json_decode($msg->body, true);
+
+        if ($response['type'] === 'success'){
+            echo json_encode(['type' => 'success']);
+        } else {
+            echo json_encode(['type' => 'failure']);
+        }
+    };
+
+    $channel->basic_consume('databaseQueue', '', false, true, false, false, $callback);
+
+    while ($channel->is_consuming()) {
+        $channel->wait();
+    }
+
+    closeRabbit($connection, $channel);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $data = json_decode(file_get_contents('php://input'), true);
+    sendMessageToQueue($data);
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<head> 
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $title; ?> - BreadWinners</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="script.js" defer></script>
 </head>
 <body>
     <nav class="navbar">
         <a href="index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
-            <?php if ($loggedIn): ?>
-                <p class="nav-title">Welcome, <?php echo $_SESSION['name']; ?>!</p>
-                <li><button onclick="location.href='logout.php'">Logout</button></li>
-            <?php else: ?>
-                <li><button onclick="location.href='login.php'">Login</button></li>
-                <li><button onclick="location.href='sign_up.php'">Sign Up</button></li>
-            <?php endif; ?>
+            <p class="nav-title">Welcome, <?php echo $_SESSION['name']; ?>!</p>
+            <li><button onclick="location.href='logout.php'">Logout</button></li>
         </ul>
     </nav>
 
-    <!-- Movie Content -->
     <div class="movie-page">
         <div class="movie-poster">
             <img src="<?php echo $poster; ?>" alt="<?php echo $title; ?> Poster">
@@ -80,26 +118,96 @@ if ($movie_id) {
             <p><strong>Genres:</strong> <?php echo $genres; ?></p>
             <p><strong>Spoken Languages:</strong> <?php echo $languages; ?></p>
             <p><strong>Production Companies:</strong> <?php echo $production_companies; ?></p>
+
+            <button onclick="addToWatchlist(<?php echo $movie_id; ?>)">Add to Watchlist</button>
+            <button onclick="removeFromWatchlist(<?php echo $movie_id; ?>)">Remove from Watchlist</button>
+
+            <div class="rating-buttons">
+                <p>Rate this movie:</p>
+                <?php for ($i = 1; $i <= 5; $i++): ?>
+                    <button onclick="rateMovie(<?php echo $movie_id; ?>, <?php echo $i; ?>)"><?php echo $i; ?></button>
+                <?php endfor; ?>
+            </div>
         </div>
     </div>
 
-    <!-- Recommended Movies -->
     <div class="recommendations">
-        <h2>Recommended Movies</h2>
-        <div class="carousel-container">
-            <button class="carousel-button prev" onclick="moveCarousel(-1)">&#10094;</button>
-            <div class="recommendation-carousel">
-                <?php foreach ($recommendations as $recMovie): ?>
-                    <div class="carousel-item">
-                        <a href="moviePage.php?id=<?php echo $recMovie['id']; ?>">
-                            <img src="https://image.tmdb.org/t/p/w200<?php echo $recMovie['poster_path']; ?>" alt="<?php echo $recMovie['title']; ?> Poster">
-                        </a>
-                        <p><?php echo $recMovie['title']; ?></p>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-            <button class="carousel-button next" onclick="moveCarousel(1)">&#10095;</button>
+        <h2>Recommendations</h2>
+        <div class="recommendation-list">
+            <?php foreach ($recommendations as $recommendation): ?>
+                <div class="recommendation-item">
+                    <a href="MoviePage.php?id=<?php echo $recommendation['id']; ?>">
+                        <img src="https://image.tmdb.org/t/p/w200<?php echo $recommendation['poster_path']; ?>" alt="<?php echo $recommendation['title']; ?> Poster">
+                        <p><?php echo $recommendation['title']; ?></p>
+                    </a>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
+
+    <script>
+        function addToWatchlist(movieId) {
+            const userId = <?php echo $_SESSION['userID']; ?>;
+            const data = { movieId, userId, type: 'add_to_watchlist' };
+
+            fetch('moviePage.php?id=<?php echo $movie_id; ?>', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.type === 'success') {
+                    alert('Movie added to watchlist!');
+                } else {
+                    alert('Failed to add movie to watchlist.');
+                }
+            });
+        }
+
+        function removeFromWatchlist(movieId) {
+            const userId = <?php echo $_SESSION['userID']; ?>;
+            const data = { movieId, userId, type: 'remove_from_watchlist' };
+
+            fetch('moviePage.php?id=<?php echo $movie_id; ?>', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.type === 'success') {
+                    alert('Movie removed from watchlist!');
+                } else {
+                    alert('Failed to remove movie from watchlist.');
+                }
+            });
+        }
+
+        function rateMovie(movieId, rating) {
+            const userId = <?php echo $_SESSION['userID']; ?>;
+            const data = { movieId, userId, rating, type: 'rate_movie' };
+
+            fetch('moviePage.php?id=<?php echo $movie_id; ?>', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.type === 'success') {
+                    alert('Rating submitted!');
+                } else {
+                    alert('Failed to submit rating.');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
