@@ -23,8 +23,8 @@ $callback = function ($msg) use ($channel) {
     $type = $data['type']; // for now types are: login, register
     $username = $data['username'];
     $password = $data['password'];
-    $movieId = $data['movie_id'];
-    $userId = $data['user_id'];
+    //$movieId = $data['movie_id'];
+    //$userId = $data['user_id'];
 
     if ($type === 'login') {
         // calling login function
@@ -33,15 +33,15 @@ $callback = function ($msg) use ($channel) {
         // register request
         $name = $data['name'];
         $response = register($name, $username, $password);
-    } elseif ($type === "add_to_watchlist") {
-        // add to watchlist
-        $response = addToWatchlist($movieId, $userId);
-    } elseif ($type === "remove_from_watchlist") {
-        // remove from watchlist
-        $response = removeFromWatchlist($movieId, $userId);
-    } elseif ($type === "get_watchlist") {
-        // get all watchlist
-        $response = getFromWatchlist($userId);
+        // } elseif ($type === "add_to_watchlist") {
+        //     // add to watchlist
+        //     $response = addToWatchlist($movieId, $userId);
+        // } elseif ($type === "remove_from_watchlist") {
+        //     // remove from watchlist
+        //     $response = removeFromWatchlist($movieId, $userId);
+        // } elseif ($type === "get_watchlist") {
+        //     // get all watchlist
+        //     $response = getFromWatchlist($userId);
     }
     // send the response back to the client
     $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
