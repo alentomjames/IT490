@@ -42,6 +42,8 @@ $callback = function ($msg) use ($channel) {
     } elseif ($type === "get_watchlist") {
         // get all watchlist
         $response = getFromWatchlist($userId);
+    } else {
+        echo "Command not for us\n";
     }
     // send the response back to the client
     $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
