@@ -32,4 +32,41 @@ function fetchDetails ($type, $parameter) {
 }
 
 
+function HelperQueueResponse ($messageBody, $type) {
+  // DMZ Queue server details
+  $host = 172.29.2.108;
+  $port = 5672;
+  $user = admin;
+  $vhost = 'IT490_HOST';
+  // connection creation
+  $connection = new AMQPStreamConnection($host, $port, $user, $password, $vhost);
+  $channel = $connection->channel();
+
+  // define direct exchange
+  $exchange = 'directExchange';
+
+  // create a message
+  $message = new AMQPMessage($messageBody);
+
+  // publish message to specific queue using routing key
+  $channel->basic_publish($message, $exchange, $queue);
+
+  echo "Message sent to queue '$queue': $messageBody\n";
+  
+  // communicates through the RabbitMQ to contact the front end, sends the type and parameter
+
+  $channel->queue_declare('frontendQueue', false, true, false, false);
+  data = json_encode({
+    'type' = $type
+    'parameter' = $parameter
+  });
+  
+  $channel->close();
+  $connection->close();
+
+  
+  sendMessage('Hello, Frontend Queue! Here are the ', $type); 
+}
+
+
 ?> 
