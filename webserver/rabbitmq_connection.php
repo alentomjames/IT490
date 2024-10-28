@@ -47,11 +47,8 @@ function recieveDMZ(){
     $callback = function($msg) {
         $response = json_decode($msg->body, true);
         // Checks the status variable in the message to see if it's a success or failure 
-        if ($response['type'] === 'success'){
-            $data = $response['data'];
-        } else {
-            echo 'Function recieveDMZ failed';
-        }
+        $data = $response['data'];
+
     };
     
     $channel->basic_consume('databaseQueue', '', false, true, false, false, $callback);
