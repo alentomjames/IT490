@@ -1,6 +1,6 @@
 <?php
 
-require './vendor/autoload.php';
+require_once './webserver/vendor/autoload.php';
 require_once 'db_connection.php';
 require_once 'constraints.php';
 
