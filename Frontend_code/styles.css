@@ -216,7 +216,128 @@ body {
     font-size: 1rem;
     color: #333;
 }
+/*Trivia*/
+.trivia-selection {
+    text-align: center;
+    margin: 20px;
+}
 
+.trivia-selection select,
+.trivia-selection button {
+    padding: 10px;
+    font-size: 1rem;
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.trivia-selection button {
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.trivia-selection button:hover {
+    background-color: #0056b3;
+}
+
+.trivia-selection button:active {
+    transform: scale(0.95);
+}
+
+.trivia-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.trivia-question {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 300px;
+}
+
+.trivia-question img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.trivia-question p {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.trivia-question ul {
+    list-style: none;
+    padding: 0;
+}
+
+.trivia-question li {
+    background-color: #f0f2f5;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.trivia-question li:hover {
+    background-color: #007BFF;
+    color: white;
+}
+
+.trivia-question li.selected {
+    background-color: #007BFF;
+    color: white;
+    pointer-events: none;
+}
+
+.score-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.score-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.score-content h2 {
+    margin-bottom: 20px;
+}
+
+.score-content button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.score-content button:hover {
+    background-color: #0056b3;
+}
 /* Responsive Design */
 @media screen and (max-width: 768px) {
     .navbar {
