@@ -12,9 +12,16 @@ function fetchDetails ($type, $parameter) {
         case 'movie_details':
             $url = "https://api.themoviedb.org/3/movie/{$parameter['movie_id']}?language=en-US";
             break;
+        case 'person_details':
+            $url = "https://api.themoviedb.org/3/person/{$parameter['person_id']}?language=en-US";
+            break;
+        case 'review_details':
+            $url = "https://api.themoviedb.org/3/review/{$parameter['review_id']}?language=en-US";
+            break;
         default:
             throw new Exception('Invalid type provided');
     }
+    
 
     // Call the API to get a response 
     $response = $client->request('GET', $url, [
