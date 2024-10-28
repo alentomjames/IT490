@@ -4,35 +4,25 @@ session_start();
 // Check if the user is logged in by checking if they have a session token stored in the session storage 
 $loggedIn = isset($_SESSION['userID']);
 
+require_once 'rabbitmq_connection.php';  
 require_once('vendor/autoload.php');
+
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
 // Get the movie ID from the URL
 $movie_id = isset($_GET['id']) ? $_GET['id'] : null;
 
 if ($movie_id) {
-    $client = new \GuzzleHttp\Client();
+    $type = 'movie_details';
+    //Sends request to rabbitMQ_connection.php to call API 
+    sendRequest($type, $movie_id);
 
-    $response = $client->request('GET', 'https://api.themoviedb.org/3/movie/' . $movie_id . '?language=en-US', [
-        'headers' => [
-          'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
-          'accept' => 'application/json',
-        ],
-    ]);
+    //Sends request to rabbitMQ_connection.php to recieve API movie data
+    $movie = recieveDMZ();
 
-
-    // Decode the JSON response
-    $movie = json_decode($response->getBody(), true);
-
-    // Fetch recommendations using movieID
-    $recommendationResponse = $client->request('GET', 'https://api.themoviedb.org/3/movie/' . $movie_id . '/recommendations?language=en-US&page=1', [
-        'headers' => [
-          'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
-          'accept' => 'application/json',
-        ],
-    ]);
-    $recommendations = json_decode($recommendationResponse->getBody(), true)['results'];
-    
     // Movie data
+    if ($movie){
     $title = $movie['title'];
     $vote_average = round($movie['vote_average'] / 2, 1); 
     $overview = $movie['overview'];
@@ -40,6 +30,10 @@ if ($movie_id) {
     $genres = implode(', ', array_column($movie['genres'], 'name'));
     $languages = implode(', ', array_column($movie['spoken_languages'], 'english_name'));
     $production_companies = implode(', ', array_column($movie['production_companies'], 'name'));
+    } else {
+        echo '<p>Failed to retrieve movie!</p>';
+
+    }
 } else {
     echo '<p>No movie ID provided!</p>';
     exit;
