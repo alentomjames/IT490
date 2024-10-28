@@ -6,7 +6,6 @@ require_once  'webserver/vendor/autoload.php';
 use PhpAmpqLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-$client = new \GuzzleHttp\Client();
 
 // get the rabbitmq connection
 list($connection, $channel) = getRabbit();
@@ -17,8 +16,13 @@ $channel->queue_declare('frontendQueue', false, true, false, false);
 // process the login/register requests
 $callback = function ($msg) use ($channel) {
     $data = json_decode($msg->body, true);
-    $type = $data['type']; // for now types are: movie_details
-    $parameter = $data['parameter'];
+    $type = isset($data['type']) ? $data['type'] : null;
+    $parameter = isset($data['parameter']) ? $data['parameter'] : null;
+    
+    if (!$type || !$parameter) {
+        error_log("Missing 'type' or 'parameter' in the message");
+        return;
+    }
     echo($parameter);
     switch ($type) {
         case 'movie_details':
@@ -51,6 +55,7 @@ closeRabbit($connection, $channel);
 // userid, sessionID, timestamp
 
 function fetchDetails ($type, $parameter, $url) {
+    
     // Call the API to get a response 
     $client = new \GuzzleHttp\Client();
     $response = $client->request('GET', $url, [
