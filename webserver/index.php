@@ -2,12 +2,12 @@
 session_start();
 $loggedIn = isset($_SESSION['userID']);
 
-// if (!$loggedIn) {
-//     header('Location: login.php');
-//     exit();
-// }
+if (!$loggedIn) {
+    header('Location: login.php');
+    exit();
+}
 
-require_once('../vendor/autoload.php');
+require_once('vendor/autoload.php');
 
 $client = new \GuzzleHttp\Client();
 
@@ -49,7 +49,7 @@ $trendingMovies = json_decode($response->getBody(), true)['results'];
     </nav>
 
     <div class="welcome-message">
-        <h1>Hello, Petar!</h1>
+        <h1>Hello, <?php echo $_SESSION['name']; ?></h1>
         <p>Welcome to BreadWinners. Here are the top 10 trending movies:</p>
     </div>
 
