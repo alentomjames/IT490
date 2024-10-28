@@ -51,7 +51,7 @@ function recieveDMZ(){
 
     };
     
-    $channel->basic_consume('databaseQueue', '', false, true, false, false, $callback);
+    $channel->basic_consume('dmzQueue', '', false, true, false, false, $callback);
     debug_to_console("Waiting for response");
 
     // Wait for the response
