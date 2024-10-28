@@ -67,7 +67,10 @@ function fetchDetails ($type, $parameter, $url) {
 
       $responseBody = json_decode($response->getBody(), true);
 
+      return json_encode([
+        'type' => 'success',
+        'data' => $responseBody,
+    ]);
+    
       //send back to RabbitMQ
-
-      return $responseBody;
 }
