@@ -144,7 +144,7 @@ $trendingMovies = json_decode($response->getBody(), true)['results'];
                 movieItem.setAttribute('data-genres', movie.genre_ids.join(','));
 
                 movieItem.innerHTML = `
-                    <a style="text-decoration:none;" href="MoviePage.php?id=${movie.id}">
+                    <a style="text-decoration:none;" href="moviePage.php?id=${movie.id}">
                         <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title} Poster">
                         <p>${movie.title}</p>
                     </a>
