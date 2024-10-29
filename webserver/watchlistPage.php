@@ -31,6 +31,7 @@ function removeFromWatchlist($movieId, $userId)
 }
 
 $userId = $_SESSION['userID'];
+echo "User ID is: $userId \n";
 $watchlist = fetchWatchlist($userId);
 
 function fetchWatchlist($userId)
@@ -40,7 +41,7 @@ function fetchWatchlist($userId)
 
     $data = json_encode([
         'type'   => 'get_watchlist',
-        'user_id' => $userId
+        'userID' => $userId
     ]);
 
     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
