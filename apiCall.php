@@ -56,17 +56,10 @@ function helperQueueResponse ($messageBody, $type) {
   // communicates through the RabbitMQ to contact the front end, sends the type and parameter
 
   $channel->queue_declare('frontendQueue', false, true, false, false);
-<<<<<<< HEAD:apiCall2.php
-  data = json_encode(
-    'type' = $type,
-    'parameter' = $parameter
-  );
-=======
   $data = json_encode([
     'type' => $type,
     'parameter' => $parameter
   ]);
->>>>>>> origin/main:apiCall.php
   
   // consumes message from queue
   $channel->basic_consume('frontendQueue', false, true, false, false);
