@@ -35,6 +35,10 @@ $trendingMovies = json_decode($response->getBody(), true)['results'];
         <a href="index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
+                <li><button onclick="location.href='Reccomend.php'">Reccomended Movies</button></li>
+                <li><button onclick="location.href='MovieTrivia.php'">Movie Trivia</button></li>
+                <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
+                <li><button onclick="location.href='topTen.php'">Top Movies</button></li>
                 <!-- If they are logged in then display a "Welcome [user]" text at the top where the buttons would usually be and a logout button --->
                 <p class="nav-title">Welcome, <?php echo $_SESSION['name']; ?>!</p>
                 <!-- Logout button that calls logout.php to delete the userID from session and redirects them to the login page --->
@@ -56,7 +60,7 @@ $trendingMovies = json_decode($response->getBody(), true)['results'];
     <div class="trending-movies">
         <?php foreach (array_slice($trendingMovies, 0, 10) as $movie): ?>
             <div class="movie-item">
-                <a href="MoviePage.php?id=<?php echo $movie['id']; ?>">
+                <a href="moviePage.php?id=<?php echo $movie['id']; ?>">
                     <img src="https://image.tmdb.org/t/p/w200<?php echo $movie['poster_path']; ?>" alt="<?php echo $movie['title']; ?> Poster">
                     <p><?php echo $movie['title']; ?></p>
                 </a>
