@@ -38,7 +38,13 @@ if ($movie_id) {
     // Adding reccomendations 
     $type = 'reccomendations';
     sendRequest($type, $movie_id, 'frontendForDMZ');
-    $reccomendations = recieveDMZ();
+    $reccomendationsData = recieveDMZ();
+    $recommendations = isset($reccomendationsData['results']) ? 
+    array_slice($reccomendationsData['results'], 0, 10) : 
+    [];
+
+    error_log("Recommendations received: " . print_r($recommendations, true)); // Debug log
+
 
 } else {
     echo '<p>No movie ID provided!</p>';
