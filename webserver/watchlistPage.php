@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once 'rabbitmq_connection.php';
-require_once 'vendor/autoload.php';
+require_once './rmq_connection.php';
+require_once './vendor/autoload.php';
 
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -16,7 +16,6 @@ function removeFromWatchlist($movieId, $userId)
 {
     list($connection, $channel) = getRabbit();
     $channel->queue_declare('frontendForDB', false, true, false, false);
-    $channel->queue_declare('frontendForDB', false, true, false, false);
 
     $data = json_encode([
         'type'     => 'remove_from_watchlist',
@@ -25,7 +24,6 @@ function removeFromWatchlist($movieId, $userId)
     ]);
 
     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
-    $channel->basic_publish($msg, 'directExchange', 'frontendForDB');
     $channel->basic_publish($msg, 'directExchange', 'frontendForDB');
     closeRabbit($connection, $channel);
 
@@ -39,7 +37,6 @@ function fetchWatchlist($userId)
 {
     list($connection, $channel) = getRabbit();
     $channel->queue_declare('frontendForDB', false, true, false, false);
-    $channel->queue_declare('frontendForDB', false, true, false, false);
 
     $data = json_encode([
         'type'   => 'get_watchlist',
@@ -47,7 +44,6 @@ function fetchWatchlist($userId)
     ]);
 
     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
-    $channel->basic_publish($msg, 'directExchange', 'frontendForDB');
     $channel->basic_publish($msg, 'directExchange', 'frontendForDB');
     closeRabbit($connection, $channel);
 
@@ -57,7 +53,7 @@ function fetchWatchlist($userId)
 function receiveRemoveResponse()
 {
     list($connection, $channel) = getRabbit();
-    $channel->queue_declare('databaseForFrontend', false, true, false, false);
+    $channel->queue_declare('databaseQueue', false, true, false, false);
 
     $callback = function ($msg) {
         $response = json_decode($msg->body, true);
@@ -68,7 +64,7 @@ function receiveRemoveResponse()
         }
     };
 
-    $channel->basic_consume('databaseForFrontend', '', false, true, false, false, $callback);
+    $channel->basic_consume('databaseQueue', '', false, true, false, false, $callback);
 
     while ($channel->is_consuming()) {
         $channel->wait();
@@ -81,20 +77,15 @@ function receiveWatchlistResponse()
 {
     list($connection, $channel) = getRabbit();
     $channel->queue_declare('databaseForFrontend', false, true, false, false);
-    $channel->queue_declare('databaseForFrontend', false, true, false, false);
 
     $watchlist = [];
 
     $callback = function ($msg) use (&$watchlist) {
         $response = json_decode($msg->body, true);
-
-        // Check if $response is an array and has the 'type' key
-        if (is_array($response) && isset($response['type'])) {
-            if ($response['type'] === 'success' && isset($response['watchlist'])) {
-                $watchlist = $response['watchlist'];
-            }
+        if (isset($response['type']) && $response['type'] === 'success' && isset($response['watchlist'])) {
+            $watchlist = $response['watchlist'];  // Only IDs
         } else {
-            error_log("Unexpected message structure: " . print_r($response, true));
+            error_log("Failed to retrieve valid watchlist response: " . print_r($response, true));
         }
     };
 
