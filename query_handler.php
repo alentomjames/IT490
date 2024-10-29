@@ -21,32 +21,36 @@ $channel->queue_declare('frontendQueue', false, true, false, false);
 $callback = function ($msg) use ($channel) {
     $data = json_decode($msg->body, true);
     $type = $data['type']; // for now types are: login, register
-    $username = $data['username'];
-    $password = $data['password'];
-    $movieId = $data['movie_id'];
-    $userId = $data['user_id'];
 
     if ($type === 'login') {
         // calling login function
+        $username = $data['username'];
+        $password = $data['password'];
         $response = login($username, $password);
     } elseif ($type === 'register') {
         // register request
+        $username = $data['username'];
+        $password = $data['password'];
         $name = $data['name'];
         $response = register($name, $username, $password);
     } elseif ($type === "add_to_watchlist") {
+        $movieId = $data['movie_id'];
+        $userId = $data['user_id'];
         // add to watchlist
         $response = addToWatchlist($movieId, $userId);
     } elseif ($type === "remove_from_watchlist") {
+        $movieId = $data['movie_id'];
+        $userId = $data['user_id'];
         // remove from watchlist
         $response = removeFromWatchlist($movieId, $userId);
     } elseif ($type === "get_watchlist") {
+        $userId = $data['user_id'];
         // get all watchlist
         $response = getFromWatchlist($userId);
+    } else {
+        echo "Received unknown command or missing required data fields\n";
+        return;
     }
-    // else {
-    //     echo "Command not for us\n";
-    // }
-    // send the response back to the client
     $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
     $channel->basic_publish($responseMsg, 'directExchange', 'databaseQueue');
 };
