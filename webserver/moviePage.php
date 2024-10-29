@@ -32,7 +32,7 @@ if ($movie_id) {
     $production_companies = implode(', ', array_column($movie['production_companies'], 'name'));
     } else {
         echo '<p>Failed to retrieve movie!</p>';
-
+        die('<p>Failed to retrieve movie! Please try again later.</p>');
     }
 } else {
     echo '<p>No movie ID provided!</p>';
