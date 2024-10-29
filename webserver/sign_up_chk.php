@@ -3,7 +3,7 @@
 session_start();
 // Script to conenct to RabbitMQ
 require_once 'rabbitmq_connection.php';  
-require_once __DIR__ . '/vendor/autoload.php';  
+require_once 'vendor/autoload.php';  
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;

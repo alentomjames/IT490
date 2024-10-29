@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';  
+require_once 'vendor/autoload.php';  
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -46,12 +46,15 @@ function recieveDMZ(){
     // Function waiting for the response from RabbitMQ 
     $callback = function($msg) {
         $response = json_decode($msg->body, true);
-        // Checks the status variable in the message to see if it's a success or failure 
-        $data = $response['data'];
-
+        // Check if the response type is 'success' and data is present
+        if (isset($response['type']) && $response['type'] === 'success' && isset($response['data'])) {
+            $data = $response['data'];
+        } else {
+            echo 'Error: Failed to retrieve data or invalid response format received from DMZ.';
+        }
     };
     
-    $channel->basic_consume('databaseQueue', '', false, true, false, false, $callback);
+    $channel->basic_consume('dmzQueue', '', false, true, false, false, $callback);
     debug_to_console("Waiting for response");
 
     // Wait for the response
