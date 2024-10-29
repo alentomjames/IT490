@@ -35,73 +35,73 @@ function removeFromWatchlist($movieId, $userId)
 }
 
 
-// $watchlist = fetchWatchlist($userId);
+$watchlist = fetchWatchlist($userId);
 
-// function fetchWatchlist($userId)
-// {
-//     list($connection, $channel) = getRabbit();
-//     $channel->queue_declare('frontendForDB', false, true, false, false);
+function fetchWatchlist($userId)
+{
+    list($connection, $channel) = getRabbit();
+    $channel->queue_declare('frontendForDB', false, true, false, false);
 
-//     $data = json_encode([
-//         'type'   => 'get_watchlist',
-//         'userID' => $userId
-//     ]);
+    $data = json_encode([
+        'type'   => 'get_watchlist',
+        'userID' => $userId
+    ]);
 
-//     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
-//     $channel->basic_publish($msg, 'directExchange', 'frontendForDB');
-//     closeRabbit($connection, $channel);
+    $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
+    $channel->basic_publish($msg, 'directExchange', 'frontendForDB');
+    closeRabbit($connection, $channel);
 
-//     return receiveWatchlistResponse();
-// }
+    return receiveWatchlistResponse();
+}
 
-// function receiveRemoveResponse()
-// {
-//     list($connection, $channel) = getRabbit();
-//     $channel->queue_declare('databaseForFrontend', false, true, false, false);
+function receiveRemoveResponse()
+{
+    list($connection, $channel) = getRabbit();
+    $channel->queue_declare('databaseForFrontend', false, true, false, false);
 
-//     $callback = function ($msg) {
-//         $response = json_decode($msg->body, true);
-//         if ($response['type'] === 'success') {
-//             echo json_encode(['success' => true, 'message' => 'Movie removed from watchlist']);
-//         } else {
-//             echo json_encode(['success' => false, 'message' => 'Failed to remove movie from watchlist']);
-//         }
-//     };
+    $callback = function ($msg) {
+        $response = json_decode($msg->body, true);
+        if ($response['type'] === 'success') {
+            echo json_encode(['success' => true, 'message' => 'Movie removed from watchlist']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to remove movie from watchlist']);
+        }
+    };
 
-//     $channel->basic_consume('databaseForFrontend', '', false, true, false, false, $callback);
+    $channel->basic_consume('databaseForFrontend', '', false, true, false, false, $callback);
 
-//     while ($channel->is_consuming()) {
-//         $channel->wait();
-//     }
+    while ($channel->is_consuming()) {
+        $channel->wait();
+    }
 
-//     closeRabbit($connection, $channel);
-// }
+    closeRabbit($connection, $channel);
+}
 
-// function receiveWatchlistResponse()
-// {
-//     list($connection, $channel) = getRabbit();
-//     $channel->queue_declare('databaseForFrontend', false, true, false, false);
+function receiveWatchlistResponse()
+{
+    list($connection, $channel) = getRabbit();
+    $channel->queue_declare('databaseForFrontend', false, true, false, false);
 
-//     $watchlist = [];
+    $watchlist = [];
 
-//     $callback = function ($msg) use (&$watchlist) {
-//         $response = json_decode($msg->body, true);
-//         if (isset($response['type']) && $response['type'] === 'success' && isset($response['watchlist'])) {
-//             $watchlist = $response['watchlist'];  // Only IDs
-//         } else {
-//             error_log("Failed to retrieve valid watchlist response: " . print_r($response, true));
-//         }
-//     };
+    $callback = function ($msg) use (&$watchlist) {
+        $response = json_decode($msg->body, true);
+        if (isset($response['type']) && $response['type'] === 'success' && isset($response['watchlist'])) {
+            $watchlist = $response['watchlist'];  // Only IDs
+        } else {
+            error_log("Failed to retrieve valid watchlist response: " . print_r($response, true));
+        }
+    };
 
-//     $channel->basic_consume('databaseForFrontend', '', false, true, false, false, $callback);
+    $channel->basic_consume('databaseForFrontend', '', false, true, false, false, $callback);
 
-//     while ($channel->is_consuming()) {
-//         $channel->wait();
-//     }
+    while ($channel->is_consuming()) {
+        $channel->wait();
+    }
 
-//     closeRabbit($connection, $channel);
-//     return $watchlist;
-// }
+    closeRabbit($connection, $channel);
+    return $watchlist;
+}
 
 ?>
 
