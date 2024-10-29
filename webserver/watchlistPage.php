@@ -9,8 +9,12 @@ use PhpAmqpLib\Message\AMQPMessage;
 //     header('Location: login.php'); // Redirect if the user is not logged in
 //     exit;
 // }
-
+$userId = $_SESSION['userID'];
+echo "User ID is: $userId \n";
 $loggedIn = isset($_SESSION['userID']);
+if ($loggedIn) {
+    error_log($userId);
+}
 
 function removeFromWatchlist($movieId, $userId)
 {
@@ -30,26 +34,25 @@ function removeFromWatchlist($movieId, $userId)
     receiveRemoveResponse();
 }
 
-$userId = $_SESSION['userID'];
-echo "User ID is: $userId \n";
-$watchlist = fetchWatchlist($userId);
 
-function fetchWatchlist($userId)
-{
-    list($connection, $channel) = getRabbit();
-    $channel->queue_declare('frontendForDB', false, true, false, false);
+// $watchlist = fetchWatchlist($userId);
 
-    $data = json_encode([
-        'type'   => 'get_watchlist',
-        'userID' => $userId
-    ]);
+// function fetchWatchlist($userId)
+// {
+//     list($connection, $channel) = getRabbit();
+//     $channel->queue_declare('frontendForDB', false, true, false, false);
 
-    $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
-    $channel->basic_publish($msg, 'directExchange', 'frontendForDB');
-    closeRabbit($connection, $channel);
+//     $data = json_encode([
+//         'type'   => 'get_watchlist',
+//         'userID' => $userId
+//     ]);
 
-    return receiveWatchlistResponse();
-}
+//     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
+//     $channel->basic_publish($msg, 'directExchange', 'frontendForDB');
+//     closeRabbit($connection, $channel);
+
+//     return receiveWatchlistResponse();
+// }
 
 // function receiveRemoveResponse()
 // {
@@ -74,31 +77,31 @@ function fetchWatchlist($userId)
 //     closeRabbit($connection, $channel);
 // }
 
-function receiveWatchlistResponse()
-{
-    list($connection, $channel) = getRabbit();
-    $channel->queue_declare('databaseForFrontend', false, true, false, false);
+// function receiveWatchlistResponse()
+// {
+//     list($connection, $channel) = getRabbit();
+//     $channel->queue_declare('databaseForFrontend', false, true, false, false);
 
-    $watchlist = [];
+//     $watchlist = [];
 
-    $callback = function ($msg) use (&$watchlist) {
-        $response = json_decode($msg->body, true);
-        if (isset($response['type']) && $response['type'] === 'success' && isset($response['watchlist'])) {
-            $watchlist = $response['watchlist'];  // Only IDs
-        } else {
-            error_log("Failed to retrieve valid watchlist response: " . print_r($response, true));
-        }
-    };
+//     $callback = function ($msg) use (&$watchlist) {
+//         $response = json_decode($msg->body, true);
+//         if (isset($response['type']) && $response['type'] === 'success' && isset($response['watchlist'])) {
+//             $watchlist = $response['watchlist'];  // Only IDs
+//         } else {
+//             error_log("Failed to retrieve valid watchlist response: " . print_r($response, true));
+//         }
+//     };
 
-    $channel->basic_consume('databaseForFrontend', '', false, true, false, false, $callback);
+//     $channel->basic_consume('databaseForFrontend', '', false, true, false, false, $callback);
 
-    while ($channel->is_consuming()) {
-        $channel->wait();
-    }
+//     while ($channel->is_consuming()) {
+//         $channel->wait();
+//     }
 
-    closeRabbit($connection, $channel);
-    return $watchlist;
-}
+//     closeRabbit($connection, $channel);
+//     return $watchlist;
+// }
 
 ?>
 
