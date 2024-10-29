@@ -8,6 +8,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 use GuzzleHttp\Exception\RequestException;
 
 // Get the RabbitMQ connection
+
 list($connection, $channel) = getRabbit();
 echo "Connected to RabbitMQ\n";
 
@@ -88,7 +89,6 @@ function fetchDetails($type, $parameter, $url) {
                 'accept' => 'application/json',
             ],
         ]);
-
         echo "API request successful\n";
         $responseBody = json_decode($response->getBody(), true);
         echo "API response body: ";
