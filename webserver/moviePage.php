@@ -85,6 +85,7 @@ if ($movie_id) {
                     class="vote-average"> <?php echo $vote_average; ?> <i class="fa fa-star"></i>
                 </span>
                 <button
+                    addToWatchlist(movie_id;)
                     onclick="addToWatchlist(<?php $movie_id; ?>)" class="watchlist-button">Add to Watchlist <i class="fa-solid fa-check"></i>
                 </button>
             </h1>

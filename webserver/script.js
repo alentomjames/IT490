@@ -64,7 +64,7 @@ function addToWatchlist(movieId) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ movieId: movieId })
+        body: JSON.stringify({ movie_id: movieId })
     })
         .then(response => response.json())
         .then(data => {
