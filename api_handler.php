@@ -43,9 +43,9 @@ $callback = function ($msg) use ($channel) {
             echo "Fetching movie details for URL: $url\n";
             $response = fetchDetails($type, $parameter, $url);
             break;
-        case 'person_details':
-            $url = "https://api.themoviedb.org/3/person/{$parameter}?language=en-US";
-            echo "Fetching person details for URL: $url\n";
+        case 'reccomendations':
+            $url = "https://api.themoviedb.org/3/movie/{$parameter}/recommendations?language=en-US&page=1";
+            echo "Fetching reccomendations: $url\n";
             $response = fetchDetails($type, $parameter, $url);
             break;
         default:

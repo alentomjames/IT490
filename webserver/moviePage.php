@@ -16,7 +16,7 @@ $movie_id = isset($_GET['id']) ? $_GET['id'] : null;
 if ($movie_id) {
     $type = 'movie_details';
     //Sends request to rabbitMQ_connection.php to call API
-    sendRequest($type, $movie_id);
+    sendRequest($type, $movie_id, 'frontendForDMZ');
 
     //Sends request to rabbitMQ_connection.php to recieve API movie data
     $movie = recieveDMZ();
@@ -34,6 +34,12 @@ if ($movie_id) {
         echo '<p>Failed to retrieve movie!</p>';
         die('<p>Failed to retrieve movie! Please try again later.</p>');
     }
+
+    // Adding reccomendations 
+    $type = 'reccomendations';
+    sendRequest($type, $movie_id, 'frontendForDMZ');
+    $reccomendations = recieveDMZ();
+
 } else {
     echo '<p>No movie ID provided!</p>';
     exit;
