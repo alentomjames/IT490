@@ -51,7 +51,7 @@ function fetchWatchlist($userId)
 function receiveRemoveResponse()
 {
     list($connection, $channel) = getRabbit();
-    $channel->queue_declare('databaseQueue', false, true, false, false);
+    $channel->queue_declare('databaseForFrontend', false, true, false, false);
 
     $callback = function ($msg) {
         $response = json_decode($msg->body, true);
@@ -62,7 +62,7 @@ function receiveRemoveResponse()
         }
     };
 
-    $channel->basic_consume('databaseQueue', '', false, true, false, false, $callback);
+    $channel->basic_consume('databaseForFrontend', '', false, true, false, false, $callback);
 
     while ($channel->is_consuming()) {
         $channel->wait();
@@ -80,11 +80,17 @@ function receiveWatchlistResponse()
 
     $callback = function ($msg) use (&$watchlist) {
         $response = json_decode($msg->body, true);
-        if ($response['type'] === 'success') {
-            $watchlist = $response['watchlist'];
+    
+        // Check if $response is an array and has the 'type' key
+        if (is_array($response) && isset($response['type'])) {
+            if ($response['type'] === 'success' && isset($response['watchlist'])) {
+                $watchlist = $response['watchlist'];
+            }
+        } else {
+            error_log("Unexpected message structure: " . print_r($response, true));
         }
     };
-
+    
     $channel->basic_consume('databaseForFrontend', '', false, true, false, false, $callback);
 
     while ($channel->is_consuming()) {
