@@ -1,9 +1,10 @@
 <?php
+ob_start();
 
 session_start();
 // Script to conenct to RabbitMQ
 require_once 'rabbitmq_connection.php';
-require_once __DIR__ . 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -18,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     list($connection, $channel) = getRabbit();
 
     // Declaring the channel its being sent on
-    $channel->queue_declare('frontendQueue', false, true, false, false);
+    $channel->queue_declare('frontendForDB', false, true, false, false);
 
     $data = json_encode([
         'type'     => $type,
@@ -30,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Send the message to the queue with username and password, delivery mode 2 means the message will be saved ot the disk
     // meaning it won't be lost from the queue even if RabbitMQ restarts
     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
-    $channel->basic_publish($msg, 'directExchange', 'frontendQueue');
+    $channel->basic_publish($msg, 'directExchange', 'frontendForDB');
 
     //Close the connection and channel to RabbitMQ using rabbitmq_connection.php
     closeRabbit($connection, $channel);
@@ -57,7 +58,8 @@ function receiveRabbitMQResponse(){
             exit();
         } else {
             echo 'Login Failed';
-            header("Location: index.php");
+            $is_consuming = false;
+            header("Location: login.php");
             exit();
         }
     };

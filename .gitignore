@@ -4,3 +4,5 @@
 *.log
 *.monit
 *.conf
+webserver/vendor
+/vendor

@@ -1,61 +1,126 @@
 <?php
 
-require_once 'db_connection.php'; // file has db connection
-require_once 'webserver/rabbitmq_connection.php'; // how I connect to RabbitMQ
-require_once  'webserver/vendor/autoload.php';
+require_once 'webserver/rabbitmq_connection.php';
+require_once 'webserver/vendor/autoload.php';
 
-use PhpAmpqLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+use GuzzleHttp\Exception\RequestException;
 
-require_once 'apiCall2php';
+// Get the RabbitMQ connection
 
-// get the rabbitmq connection
 list($connection, $channel) = getRabbit();
+echo "Connected to RabbitMQ\n";
 
-// queue where i'll consume login/register requests
-$channel->queue_declare('frontendQueue', false, true, false, false);
+// Declare the queue to listen to
+$channel->queue_declare('frontendForDMZ', false, true, false, false);
+echo "Declared queue 'frontendQueue'\n";
 
-// process the login/register requests
+// Process the login/register requests
 $callback = function ($msg) use ($channel) {
+    echo "Received a message\n";
+    
     $data = json_decode($msg->body, true);
-    $type = $data['type']; // for now types are: login, register
-    $username = $data['username'];
-    $password = $data['password'];
-    $movieId = $data['movie_id'];
-    $userId = $data['user_id'];
+    echo "Decoded message data: ";
+    print_r($data);
+    
+    $type = $data['type'] ?? null;
+    $parameter = $data['parameter'] ?? null;
 
-    if ($type === 'login') {
-        // calling login function
-        $response = login($username, $password);
-    } elseif ($type === 'register') {
-        // register request
-        $name = $data['name'];
-        $response = register($name, $username, $password);
-    } elseif ($type === "add_to_watchlist") {
-        // add to watchlist
-        $response = addToWatchlist($movieId, $userId);
-    } elseif ($type === "remove_from_watchlist") {
-        // remove from watchlist
-        $response = removeFromWatchlist($movieId, $userId);
-    } elseif ($type === "get_watchlist") {
-        // get all watchlist
-        $response = getFromWatchlist($userId);
+    if (!$type || !$parameter) {
+        error_log("Missing 'type' or 'parameter' in the message");
+        echo "Error: Missing 'type' or 'parameter'\n";
+        return;
     }
-    // send the response back to the client
-    $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
-    $channel->basic_publish($responseMsg, 'directExchange', 'databaseQueue');
+
+    echo "Message type: $type\n";
+    echo "Parameter: $parameter\n";
+    
+    $response = null;
+    switch ($type) {
+        case 'movie_details':
+            $url = "https://api.themoviedb.org/3/movie/{$parameter}?language=en-US";
+            echo "Fetching movie details for URL: $url\n";
+            $response = fetchDetails($type, $parameter, $url);
+            break;
+        case 'person_details':
+            $url = "https://api.themoviedb.org/3/person/{$parameter}?language=en-US";
+            echo "Fetching person details for URL: $url\n";
+            $response = fetchDetails($type, $parameter, $url);
+            break;
+        default:
+            echo "Unrecognized type: $type\n";
+            return;
+    }
+    
+    // Send the response back to the client
+    if ($response) {
+        echo "Sending response back to client: $response\n";
+        $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
+        $channel->basic_publish($responseMsg, 'directExchange', 'dmzForFrontend');
+    } else {
+        echo "No response generated to send\n";
+    }
 };
 
+// Consume the messages from the queue
+$channel->basic_consume('frontendForDMZ', '', false, true, false, false, $callback);
+echo "Waiting for messages on 'frontendQueue'\n";
 
-// consume the messages from the queue
-$channel->basic_consume('frontendQueue', '', false, true, false, false, $callback);
-
-// wait for messages
+// Wait for messages
 while ($channel->is_consuming()) {
     $channel->wait();
+    echo "Waiting for the next message...\n";
 }
 
-// close the rabbitmq connection
+// Close the RabbitMQ connection
 closeRabbit($connection, $channel);
+echo "RabbitMQ connection closed\n";
 
-// userid, sessionID, timestamp
+function fetchDetails($type, $parameter, $url) {
+    echo "Starting fetchDetails for $type with parameter $parameter\n";
+    
+    try {
+        // Call the API to get a response
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', $url, [
+            'headers' => [
+                'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTE3NDI3NS44MTA5NTUsInN1YiI6IjY3MTExYThiY2Y4ZGU4NzdiNDlmY2JlMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.3wTZmroEtn8GSIHD92r7p-3G4iAjPMHZa3aojxycDIM',
+                'accept' => 'application/json',
+            ],
+        ]);
+        echo "API request successful\n";
+        $responseBody = json_decode($response->getBody(), true);
+        echo "API response body: ";
+        print_r($responseBody);
+
+        return json_encode([
+            'type' => 'success',
+            'data' => $responseBody,
+        ]);
+
+    } catch (RequestException $e) {
+        // Handle exceptions, especially if the resource is not found (404)
+        echo "API request failed\n";
+        if ($e->hasResponse()) {
+            $statusCode = $e->getResponse()->getStatusCode();
+            echo "HTTP status code: $statusCode\n";
+            if ($statusCode === 404) {
+                echo "Resource not found (404)\n";
+                return json_encode([
+                    'type' => 'failure',
+                    'message' => 'Resource not found',
+                ]);
+            }
+        }
+        
+        // Log other exceptions or handle them accordingly
+        error_log("Error fetching details: " . $e->getMessage());
+        echo "Error message: " . $e->getMessage() . "\n";
+        return json_encode([
+            'type' => 'failure',
+            'message' => 'An error occurred while fetching details',
+        ]);
+    }
+}
+
