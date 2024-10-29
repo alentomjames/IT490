@@ -6,8 +6,6 @@ require_once  'webserver/vendor/autoload.php';
 use PhpAmpqLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-$client = new \GuzzleHttp\Client();
-
 // get the rabbitmq connection
 list($connection, $channel) = getRabbit();
 

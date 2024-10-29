@@ -22,11 +22,10 @@ function closeRabbit($connection, $channel){
     }    
 }
 
-function sendRequest($type, $parameter){ƒ
+function sendRequest($type, $parameter){
     list($connection, $channel) = getRabbit();
     // Declaring the channel its being sent on
     $channel->queue_declare('frontendQueue', false, true, false, false);
-   
     $data = json_encode([
         'type'     => $type,
         'parameter' => $parameter
@@ -43,6 +42,7 @@ function recieveDMZ(){
     $data = null;
     // Declare the response channel 
     $channel->queue_declare('dmzQueue', false, true, false, false);
+
     // Function waiting for the response from RabbitMQ 
     $callback = function($msg) use (&$data) {
         $response = json_decode($msg->body, true);
@@ -58,7 +58,10 @@ function recieveDMZ(){
 
     // Wait for the response
     while ($channel->is_consuming()) {
-        $channel->wait();  
+        $channel->wait(); 
+        if ($data !== null){
+            break;
+        } 
     }
 
     // Close the channel and connection
