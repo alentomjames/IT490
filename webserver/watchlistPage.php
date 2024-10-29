@@ -12,23 +12,23 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 $loggedIn = isset($_SESSION['userID']);
 
-// function removeFromWatchlist($movieId, $userId)
-// {
-//     list($connection, $channel) = getRabbit();
-//     $channel->queue_declare('frontendForDB', false, true, false, false);
+function removeFromWatchlist($movieId, $userId)
+{
+    list($connection, $channel) = getRabbit();
+    $channel->queue_declare('frontendForDB', false, true, false, false);
 
-//     $data = json_encode([
-//         'type'     => 'remove_from_watchlist',
-//         'movie_id' => $movieId,
-//         'user_id'  => $userId
-//     ]);
+    $data = json_encode([
+        'type'     => 'remove_from_watchlist',
+        'movie_id' => $movieId,
+        'user_id'  => $userId
+    ]);
 
-//     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
-//     $channel->basic_publish($msg, 'directExchange', 'frontendForDB');
-//     closeRabbit($connection, $channel);
+    $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
+    $channel->basic_publish($msg, 'directExchange', 'frontendForDB');
+    closeRabbit($connection, $channel);
 
-//     receiveRemoveResponse();
-// }
+    receiveRemoveResponse();
+}
 
 // $userId = $_SESSION['userID'];
 // $watchlist = fetchWatchlist($userId);
