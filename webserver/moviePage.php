@@ -16,7 +16,7 @@ $movie_id = isset($_GET['id']) ? $_GET['id'] : null;
 if ($movie_id) {
     $type = 'movie_details';
     //Sends request to rabbitMQ_connection.php to call API
-    sendRequest($type, $movie_id);
+    sendRequest($type, $movie_id, "frontendForDMZ");
 
     //Sends request to rabbitMQ_connection.php to recieve API movie data
     $movie = recieveDMZ();
