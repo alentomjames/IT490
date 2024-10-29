@@ -1,6 +1,5 @@
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
 require_once 'vendor/autoload.php';
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
@@ -23,31 +22,33 @@ function closeRabbit($connection, $channel){
     }
 }
 
-function sendRequest($type, $parameter){
+function sendRequest($type, $parameter, $queue){
     list($connection, $channel) = getRabbit();
     // Declaring the channel its being sent on
-    $channel->queue_declare('frontendQueue', false, true, false, false);
-
+    $channel->queue_declare('frontendForDMZ', false, true, false, false);
+    $channel->queue_declare('frontendForDB', false, true, false, false);
     $data = json_encode([
         'type'     => $type,
         'parameter' => $parameter
     ]);
 
     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
-    $channel->basic_publish($msg, 'directExchange', 'frontendForDMZ');
+    $channel->basic_publish($msg, 'directExchange', $queue);
     closeRabbit($connection, $channel);
 
 }
 
 function recieveDMZ(){
     list($connection, $channel) = getRabbit();
+    $data = null;
     // Declare the response channel
-    $channel->queue_declare('dmzQueue', false, true, false, false);
+    $channel->queue_declare('dmzForFrontend', false, true, false, false);
+
     // Function waiting for the response from RabbitMQ
-    $callback = function($msg) {
+    $callback = function($msg) use (&$data) {
         $response = json_decode($msg->body, true);
-        // Checks the status variable in the message to see if it's a success or failure
-        if ($response['type'] === 'success'){
+        // Check if the response type is 'success' and data is present
+        if (isset($response['type']) && $response['type'] === 'success') {
             $data = $response['data'];
             error_log("Successfully parsed DMZ response data");
         } else {
@@ -55,14 +56,43 @@ function recieveDMZ(){
         }
     };
 
-    $channel->basic_consume('databaseQueue', '', false, true, false, false, $callback);
-    debug_to_console("Waiting for response");
+    $channel->basic_consume('dmzForFrontend', '', false, true, false, false, $callback);
 
     // Wait for the response
     while ($channel->is_consuming()) {
         $channel->wait();
+        if ($data !== null){
+            break;
+        }
     }
+}
+    function recieveDB(){
+        list($connection, $channel) = getRabbit();
+        $data = null;
+        // Declare the response channel
+        $channel->queue_declare('databaseForFrontend', false, true, false, false);
 
+        // Function waiting for the response from RabbitMQ
+        $callback = function($msg) use (&$data) {
+            $response = json_decode($msg->body, true);
+            // Check if the response type is 'success' and data is present
+            if (isset($response['type']) && $response['type'] === 'success') {
+                $data = $response['data'];
+                error_log("Successfully parsed DB response data");
+            } else {
+                echo 'Error: Failed to retrieve data or invalid response format received from DMZ.';
+            }
+        };
+
+        $channel->basic_consume('databaseForFrontend', '', false, true, false, false, $callback);
+
+        // Wait for the response
+        while ($channel->is_consuming()) {
+            $channel->wait();
+            if ($data !== null){
+                break;
+            }
+        }
     // Close the channel and connection
     closeRabbit($connection, $channel);
 
