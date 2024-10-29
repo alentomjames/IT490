@@ -15,7 +15,7 @@ require_once 'movies/watchlist.php';
 list($connection, $channel) = getRabbit();
 
 // queue where i'll consume login/register requests
-$channel->queue_declare('frontendQueue', false, true, false, false);
+$channel->queue_declare('frontendForDB', false, true, false, false);
 
 // process the login/register requests
 $callback = function ($msg) use ($channel) {
@@ -52,12 +52,12 @@ $callback = function ($msg) use ($channel) {
         return;
     }
     $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
-    $channel->basic_publish($responseMsg, 'directExchange', 'databaseQueue');
+    $channel->basic_publish($responseMsg, 'directExchange', 'databaseForFrontend');
 };
 
 
 // consume the messages from the queue
-$channel->basic_consume('frontendQueue', '', false, true, false, false, $callback);
+$channel->basic_consume('frontendForDB', '', false, true, false, false, $callback);
 
 // wait for messages
 while ($channel->is_consuming()) {
