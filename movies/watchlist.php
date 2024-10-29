@@ -70,6 +70,7 @@ function getFromWatchlist(int $userId)
     $stmt->close();
 
     if (!empty($watchlist)) {
+        var_dump($watchlist);
         $response = json_encode(['type' => 'success', 'watchlist' => $watchlist]);
     } else {
         $response = json_encode(['type' => 'failure', 'message' => 'Watchlist is empty']);
