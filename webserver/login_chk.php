@@ -1,11 +1,10 @@
 <?php
-<?php
 ob_start();
 
 session_start();
 // Script to conenct to RabbitMQ
 require_once 'rabbitmq_connection.php';
-require_once __DIR__ . '/vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -42,8 +41,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 function receiveRabbitMQResponse(){
     list($connection, $channel) = getRabbit();
+
     // Declare the response channel
-    $channel->queue_declare('databaseQueue', false, true, false, false);
+    $channel->queue_declare('databaseForFrontend', false, true, false, false);
+
+    $is_consuming = true;
+
     // Function waiting for the response from RabbitMQ
     $callback = function($msg) {
         $response = json_decode($msg->body, true);
@@ -63,7 +66,7 @@ function receiveRabbitMQResponse(){
     };
     // Use basic_consume to access the queue and call $callback for success or failure
     // https://www.rabbitmq.com/tutorials/tutorial-six-php
-    $channel->basic_consume('databaseQueue', '', false, true, false, false, $callback);
+    $channel->basic_consume('databaseForFrontend', '', false, true, false, false, $callback);
     debug_to_console("Waiting for response");
 
 
