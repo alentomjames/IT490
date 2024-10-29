@@ -83,7 +83,12 @@ function getFromWatchlist(int $userId)
 // $responseAdd = addToWatchlist(222, 1);
 // $responseRemove = removeFromWatchlist(222, 1);
 // $responseGet = getFromWatchlist(1);
-
+// $watchlistArray = json_decode($responseGet, true);
+// if ($watchlistArray['type'] === 'success') {
+//     print_r($watchlistArray['watchlist']);
+// } else {
+//     echo $watchlistArray['message'];
+// }
 // var_dump($responseAdd);
 // var_dump($responseRemove);
 // var_dump($responseGet);
