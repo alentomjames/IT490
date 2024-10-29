@@ -52,7 +52,7 @@ closeRabbit($connection, $channel);
 
 function fetchDetails ($type, $parameter, $url) {
     $client = new \GuzzleHttp\Client();
-
+    
     // Call the API to get a response 
     $response = $client->request('GET', $url, [
         'headers' => [

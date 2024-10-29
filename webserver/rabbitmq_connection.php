@@ -48,7 +48,7 @@ function recieveDMZ(){
     $callback = function($msg) use (&$data) {
         $response = json_decode($msg->body, true);
         // Check if the response type is 'success' and data is present
-        if (isset($response['type']) && $response['type'] === 'success' && isset($response['data'])) {
+        if (isset($response['type']) && $response['type'] === 'success') {
             $data = $response['data'];
         } else {
             echo 'Error: Failed to retrieve data or invalid response format received from DMZ.';

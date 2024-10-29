@@ -1,4 +1,5 @@
 <?php
+ob_start();
 
 session_start();
 // Script to conenct to RabbitMQ
@@ -44,6 +45,8 @@ function receiveRabbitMQResponse(){
     // Declare the response channel 
     $channel->queue_declare('databaseQueue', false, true, false, false);
 
+    $is_consuming = true;
+
     // Function waiting for the response from RabbitMQ 
     $callback = function($msg) {
         $response = json_decode($msg->body, true);
@@ -57,7 +60,8 @@ function receiveRabbitMQResponse(){
             exit();
         } else {
             echo 'Login Failed';
-            header("Location: index.php");
+            $is_consuming = false;
+            header("Location: login.php");
             exit();
         }
     };
