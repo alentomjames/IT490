@@ -1,10 +1,10 @@
 <?php
 // Start the session
 session_start();
-// Check if the user is logged in by checking if they have a session token stored in the session storage 
+// Check if the user is logged in by checking if they have a session token stored in the session storage
 $loggedIn = isset($_SESSION['userID']);
 
-require_once 'rabbitmq_connection.php';  
+require_once 'rabbitmq_connection.php';
 require_once('vendor/autoload.php');
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
@@ -15,7 +15,7 @@ $movie_id = isset($_GET['id']) ? $_GET['id'] : null;
 
 if ($movie_id) {
     $type = 'movie_details';
-    //Sends request to rabbitMQ_connection.php to call API 
+    //Sends request to rabbitMQ_connection.php to call API
     sendRequest($type, $movie_id);
 
     //Sends request to rabbitMQ_connection.php to recieve API movie data
@@ -24,7 +24,7 @@ if ($movie_id) {
     // Movie data
     if ($movie){
     $title = $movie['title'];
-    $vote_average = round($movie['vote_average'] / 2, 1); 
+    $vote_average = round($movie['vote_average'] / 2, 1);
     $overview = $movie['overview'];
     $poster = 'https://image.tmdb.org/t/p/w500' . $movie['poster_path'];
     $genres = implode(', ', array_column($movie['genres'], 'name'));
@@ -42,7 +42,7 @@ if ($movie_id) {
 
 <!DOCTYPE html>
 <html lang="en">
-<head> 
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $title; ?> - BreadWinners</title>
