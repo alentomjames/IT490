@@ -1,6 +1,7 @@
 {
     "require": {
         "php-amqplib/php-amqplib": "^3.7",
-        "ramsey/uuid": "^4.7"
+        "ramsey/uuid": "^4.7",
+        "guzzlehttp/guzzle": "^7.9"
     }
 }

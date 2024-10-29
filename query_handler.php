@@ -46,7 +46,7 @@ $callback = function ($msg) use ($channel) {
         // remove from watchlist
         $response = removeFromWatchlist($movieId, $userId);
     } elseif ($type === "get_watchlist") {
-        $userId = $data['user_id'];
+        $userId = (int) $data['user_id'];
         // get all watchlist
         $response = getFromWatchlist($userId);
     } else {

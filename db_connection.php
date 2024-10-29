@@ -1,4 +1,3 @@
-#!/usr/bin/php
 <?php
 
 $getenv = parse_ini_file('db_config.env');
@@ -13,12 +12,12 @@ function getDbConnection()
 
 	$mydb = new mysqli($host, $username, $password, $database);
 
-	if ($mydb->connect_errno) {
-		echo "Failed to connect to database: " . $mydb->connect_error . PHP_EOL;
-		exit(0);
-	} else {
-		echo "Successfully connected to database" . PHP_EOL;
-	}
+	// if ($mydb->connect_errno) {
+	// 	//echo "Failed to connect to database: " . $mydb->connect_error . PHP_EOL;
+	// 	exit(0);
+	// } else {
+	// 	//echo "Successfully connected to database" . PHP_EOL;
+	// }
 
 	return $mydb;
 }
@@ -32,5 +31,3 @@ function getDbConnection()
 // 	echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
 // 	exit(0);
 // }
-
-?>

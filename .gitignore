@@ -4,3 +4,6 @@ db_config.env
 auth_test
 schemas.sql
 vendor
+composer.json
+composer.lock
+composer.phar
