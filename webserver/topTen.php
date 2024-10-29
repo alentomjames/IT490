@@ -2,10 +2,10 @@
 session_start();
 $loggedIn = isset($_SESSION['userID']);
 
-// if (!$loggedIn) {
-//     header('Location: login.php');
-//     exit();
-// }
+if (!$loggedIn) {
+    header('Location: login.php');
+    exit();
+}
 
 require_once 'rabbitmq_connection.php';
 require_once('vendor/autoload.php');
@@ -13,20 +13,71 @@ require_once('vendor/autoload.php');
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-$type = 'top_rated_movies';
-sendRequest($type, null, "frontendForDB");
+function sendRequest($type, $movie_id) {
+    list($connection, $channel) = getRabbit();
 
-$topMovies = recieveDB();
+    if (!$connection || !$channel) {
+        error_log("Failed to connect to RabbitMQ");
+        echo '<p>Failed to connect to RabbitMQ</p>';
+        return;
+    }
+
+    $channel->queue_declare('frontendQueue', false, true, false, false);
+
+    $data = json_encode([
+        'type' => $type,
+        'movie_id' => $movie_id
+    ]);
+
+    $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
+    $channel->basic_publish($msg, 'directExchange', 'frontendQueue');
+
+    closeRabbit($connection, $channel);
+}
+
+function receiveDMZ() {
+    list($connection, $channel) = getRabbit();
+
+    if (!$connection || !$channel) {
+        error_log("Failed to connect to RabbitMQ");
+        echo '<p>Failed to connect to RabbitMQ</p>';
+        return null;
+    }
+
+    $channel->queue_declare('databaseQueue', false, true, false, false);
+
+    $response = null;
+
+    $callback = function($msg) use (&$response) {
+        $response = json_decode($msg->body, true);
+    };
+
+    $channel->basic_consume('databaseQueue', '', false, true, false, false, $callback);
+
+    while (!$response) {
+        $channel->wait();
+    }
+
+    closeRabbit($connection, $channel);
+
+    return $response;
+}
+
+$type = 'top_rated_movies';
+sendRequest($type, null);
+
+$topMovies = receiveDMZ();
 
 if (!$topMovies) {
     echo '<p>Failed to retrieve top-rated movies!</p>';
+    error_log("Failed to retrieve top-rated movies");
     exit;
 }
 
 function getMovieDetails($movie_id) {
-    $type = 'movie_details';
-    sendRequest($type, $movie_id, "frontendForDMZ");
-    return recieveDMZ();
+    $type = 'moviedetails';
+    sendRequest($type, $movie_id);
+    return receiveDMZ();
 }
 ?>
 
@@ -60,7 +111,14 @@ function getMovieDetails($movie_id) {
 
     <div class="top-movies">
         <?php foreach (array_slice($topMovies, 0, 10) as $movie): ?>
-            <?php $movieDetails = getMovieDetails($movie['id']); ?>
+            <?php
+            $movieDetails = getMovieDetails($movie['id']);
+            if (!$movieDetails) {
+                echo '<p>Failed to retrieve details for movie ID: ' . $movie['id'] . '</p>';
+                error_log("Failed to retrieve details for movie ID: " . $movie['id']);
+                continue;
+            }
+            ?>
             <div class="movie-item">
                 <a href="moviePage.php?id=<?php echo $movie['id']; ?>">
                     <img src="https://image.tmdb.org/t/p/w200<?php echo $movieDetails['poster_path']; ?>" alt="<?php echo $movieDetails['title']; ?> Poster">
