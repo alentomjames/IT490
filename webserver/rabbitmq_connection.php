@@ -66,6 +66,7 @@ function recieveDMZ(){
         }
     }
 }
+
     function recieveDB(){
         list($connection, $channel) = getRabbit();
         $data = null;
