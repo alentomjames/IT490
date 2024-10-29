@@ -36,13 +36,13 @@ $callback = function ($msg) use ($channel) {
     } elseif ($type === "add_to_watchlist") {
         $movieId = $data['movie_id'];
         $userId = $data['user_id'];
-        echo $movieId;
-        echo $userId;
+        echo "Movie ID: $movieId\n";
         // add to watchlist
         $response = addToWatchlist($movieId, $userId);
     } elseif ($type === "remove_from_watchlist") {
         $movieId = $data['movie_id'];
         $userId = $data['user_id'];
+
         // remove from watchlist
         $response = removeFromWatchlist($movieId, $userId);
     } elseif ($type === "get_watchlist") {
