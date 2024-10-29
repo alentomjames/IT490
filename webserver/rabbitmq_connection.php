@@ -25,14 +25,14 @@ function closeRabbit($connection, $channel){
 function sendRequest($type, $parameter){
     list($connection, $channel) = getRabbit();
     // Declaring the channel its being sent on
-    $channel->queue_declare('frontendQueue', false, true, false, false);
+    $channel->queue_declare('frontendForDMZ', false, true, false, false);
     $data = json_encode([
         'type'     => $type,
         'parameter' => $parameter
     ]);
 
     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
-    $channel->basic_publish($msg, 'directExchange', 'frontendQueue');
+    $channel->basic_publish($msg, 'directExchange', 'frontendForDMZ');
     closeRabbit($connection, $channel);
 
 }
@@ -41,7 +41,7 @@ function recieveDMZ(){
     list($connection, $channel) = getRabbit();
     $data = null;
     // Declare the response channel 
-    $channel->queue_declare('dmzQueue', false, true, false, false);
+    $channel->queue_declare('dmzForFrontend', false, true, false, false);
 
     // Function waiting for the response from RabbitMQ 
     $callback = function($msg) use (&$data) {
@@ -49,12 +49,13 @@ function recieveDMZ(){
         // Check if the response type is 'success' and data is present
         if (isset($response['type']) && $response['type'] === 'success') {
             $data = $response['data'];
+            error_log("Successfully parsed DMZ response data");
         } else {
             echo 'Error: Failed to retrieve data or invalid response format received from DMZ.';
         }
     };
     
-    $channel->basic_consume('dmzQueue', '', false, true, false, false, $callback);
+    $channel->basic_consume('dmzForFrontend', '', false, true, false, false, $callback);
 
     // Wait for the response
     while ($channel->is_consuming()) {
