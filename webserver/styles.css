@@ -1,0 +1,737 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #007BFF;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-title {
+    text-decoration: none;
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.nav-title:hover {
+    color: #beddfe;
+}
+
+.navbar .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.navbar .nav-links button {
+    background-color: #fff;
+    color: #007BFF;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .nav-links button:hover {
+    background-color: #0056b3;
+    color: #fff;
+}
+
+/* Modal Styling */
+.modal {
+    margin: 100px auto;
+    padding: 30px;
+    border-radius: 15px;
+    background-color: #ffffff;
+    width: 350px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.modal h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.modal input[type="text"],
+.modal input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    background-color: #f9f9f9;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.modal button,
+.modal input[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal button:hover,
+.modal input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Animations for smooth fade-in effect */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Movie Page */
+.movie-page {
+    display: flex;
+    padding: 20px;
+    margin: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.movie-poster {
+    flex: 1;
+    padding-right: 20px;
+}
+
+.movie-poster img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+.movie-details {
+    flex: 2;
+    padding-left: 20px;
+}
+
+.movie-details h1 {
+    font-size: 2.5rem;
+    color: #333;
+}
+
+.movie-details p {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.movie-details strong {
+    color: #007BFF;
+}
+
+.vote-average {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #FFD700;
+    margin-left: 10px;
+    background-color: #007BFF;
+    padding: 5px 10px;
+    border-radius: 8px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.vote-average .fa-star {
+    color: #FFD700;
+    margin-left: 5px;
+    font-size: 1.3rem;
+}
+
+/* Carousel styling */
+.recommendations {
+    margin: 40px 20px;
+}
+
+.recommendations h2 {
+    font-size: 2rem;
+    color: #007BFF;
+    margin-bottom: 20px;
+}
+
+.carousel-container {
+    position: relative;
+    max-width: 100%;
+    margin: 40px auto;
+    overflow: hidden;
+}
+
+.recommendation-carousel {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+    min-width: 200px;
+    text-align: center;
+    margin-right: 20px;
+}
+
+.carousel-item img {
+    width: 100%;
+    border-radius: 10px;
+    display: block;
+}
+
+/* Carousel button styling */
+.carousel-button {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    height: 81%;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.carousel-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    display: block;
+}
+
+
+.carousel-button.prev {
+    left: 0;
+    z-index: 1;
+}
+
+.carousel-button.next {
+    right: 0;
+}
+
+
+/* Overlay Effect */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 200;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay.active {
+    display: flex;
+}
+
+/* Pagination Controls */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.pagination-controls button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-controls button:hover {
+    background-color: #0056b3;
+}
+
+.pagination-controls span {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+/* Filters and Search Bar */
+.filters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+#search-bar {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 300px;
+}
+
+#genre-filter {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Favorite Movies Selection */
+.favorites-selection {
+    padding: 20px;
+    text-align: center;
+}
+
+.favorites-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.favorite-item {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.favorite-item.selected {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.favorite-item:hover {
+    transform: scale(1.05);
+}
+
+.favorite-item img {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.favorite-item p {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #333;
+}
+
+/* User's Favorite Movies */
+.user-favorites {
+    padding: 20px;
+    text-align: center;
+}
+
+.user-favorites ul {
+    list-style: none;
+    padding: 0;
+}
+
+.user-favorites li {
+    font-size: 1.2rem;
+    color: #007BFF;
+    margin: 10px 0;
+}
+
+/* Recommendations */
+.recommendations {
+    padding: 20px;
+    text-align: center;
+}
+
+.recommendations h2 {
+    font-size: 2rem;
+    color: #007BFF;
+    margin-bottom: 20px;
+}
+
+.recommendation-item {
+    display: inline-block;
+    margin: 10px;
+    text-align: center;
+}
+
+.recommendation-item img {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.recommendation-item p {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #333;
+}
+
+/*Trivia*/
+.trivia-selection {
+    text-align: center;
+    margin: 20px;
+}
+
+.trivia-selection select,
+.trivia-selection button {
+    padding: 10px;
+    font-size: 1rem;
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.trivia-selection button {
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.trivia-selection button:hover {
+    background-color: #0056b3;
+}
+
+.trivia-selection button:active {
+    transform: scale(0.95);
+}
+
+.trivia-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.trivia-question {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 300px;
+}
+
+.trivia-question img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.trivia-question p {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.trivia-question ul {
+    list-style: none;
+    padding: 0;
+}
+
+.trivia-question li {
+    background-color: #f0f2f5;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.trivia-question li:hover {
+    background-color: #007BFF;
+    color: white;
+}
+
+.trivia-question li.selected {
+    background-color: #007BFF;
+    color: white;
+    pointer-events: none;
+}
+
+.score-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.score-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.score-content h2 {
+    margin-bottom: 20px;
+}
+
+.score-content button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.score-content button:hover {
+    background-color: #0056b3;
+}
+
+/*Home Page */
+
+.welcome-message {
+    text-align: center;
+    margin: 20px;
+}
+
+.welcome-message h1 {
+    font-size: 2.5rem;
+    color: #333;
+}
+
+.welcome-message p {
+    font-size: 1.2rem;
+    color: #555;
+}
+
+.trending-movies {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+.movie-item {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 200px;
+    text-decoration: none;
+}
+
+.movie-item img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.movie-item p {
+    font-size: 1rem;
+    color: #333;
+    text-decoration: none;
+}
+.movie-item a {
+
+    text-decoration: none;
+}
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .navbar {
+        padding: 10px 20px;
+    }
+
+    .navbar .nav-title {
+        font-size: 1.5rem;
+    }
+
+    .navbar .nav-links button {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+
+    .favorites-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .modal {
+        width: 90%;
+        padding: 20px;
+    }
+}
+
+/* Watchlist Container */
+.watchlist-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.watchlist-item {
+    width: 200px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.watchlist-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.watchlist-item img {
+    width: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.watchlist-item p {
+    font-size: 1.2rem;
+    color: #333;
+    padding: 15px 10px;
+    font-weight: bold;
+}
+
+/* Remove Button */
+.remove-button {
+    background: linear-gradient(135deg, #d9534f, #c9302c);
+    color: #fff;
+    padding: 10px 15px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.remove-button:hover {
+    background: linear-gradient(135deg, #c9302c, #a72820);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.remove-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.watchlist-button {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #FFD700;
+    background: linear-gradient(135deg, #007BFF, #0056b3);
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.watchlist-button:hover {
+    background: linear-gradient(135deg, #0056b3, #003e82);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.watchlist-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Top Ten Page Styles */
+.top-movies {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.movie-item {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 200px;
+}
+
+.movie-item a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.movie-item img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.movie-item p {
+    font-size: 1rem;
+    color: #333;
+}
+
+.vote-average {
+    font-size: 1.2rem;
+    color: #FFD700;
+    margin-top: 5px;
+}

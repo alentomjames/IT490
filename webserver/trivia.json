@@ -1,0 +1,2189 @@
+{
+    "movieTrivia": [
+        {
+            "category": "Action",
+            "questions": [
+                {
+                    "question": "In 'Die Hard', what is John McClane’s catchphrase?",
+                    "movie": "Die Hard",
+                    "options": [
+                        "a. Yippee-ki-yay!",
+                        "b. Hasta la vista!",
+                        "c. I’ll be back!",
+                        "d. Go ahead, make my day."
+                    ],
+                    "correctAnswer": "a. Yippee-ki-yay!"
+                },
+                {
+                    "question": "Who played the main character in 'Mad Max: Fury Road'?",
+                    "movie": "Mad Max: Fury Road",
+                    "options": [
+                        "a. Tom Hardy",
+                        "b. Mel Gibson",
+                        "c. Hugh Jackman",
+                        "d. Russell Crowe"
+                    ],
+                    "correctAnswer": "a. Tom Hardy"
+                },
+                {
+                    "question": "In 'The Matrix', what color pill does Neo take?",
+                    "movie": "The Matrix",
+                    "options": [
+                        "a. Red",
+                        "b. Blue",
+                        "c. Green",
+                        "d. Yellow"
+                    ],
+                    "correctAnswer": "a. Red"
+                },
+                {
+                    "question": "Who directed 'Terminator 2: Judgment Day'?",
+                    "movie": "Terminator 2: Judgment Day",
+                    "options": [
+                        "a. James Cameron",
+                        "b. Michael Bay",
+                        "c. Ridley Scott",
+                        "d. Steven Spielberg"
+                    ],
+                    "correctAnswer": "a. James Cameron"
+                },
+                {
+                    "question": "What is the name of the main character in 'John Wick'?",
+                    "movie": "John Wick",
+                    "options": [
+                        "a. John Wick",
+                        "b. Jack Reacher",
+                        "c. Jason Bourne",
+                        "d. Ethan Hunt"
+                    ],
+                    "correctAnswer": "a. John Wick"
+                },
+                {
+                    "question": "In 'Kill Bill', what is the Bride’s real name?",
+                    "movie": "Kill Bill",
+                    "options": [
+                        "a. Beatrix Kiddo",
+                        "b. Mia Wallace",
+                        "c. Jackie Brown",
+                        "d. Jules Winnfield"
+                    ],
+                    "correctAnswer": "a. Beatrix Kiddo"
+                },
+                {
+                    "question": "Who played the main character in 'The Bourne Identity'?",
+                    "movie": "The Bourne Identity",
+                    "options": [
+                        "a. Matt Damon",
+                        "b. Brad Pitt",
+                        "c. Leonardo DiCaprio",
+                        "d. Will Smith"
+                    ],
+                    "correctAnswer": "a. Matt Damon"
+                },
+                {
+                    "question": "In 'The Dark Knight', who played the Joker?",
+                    "movie": "The Dark Knight",
+                    "options": [
+                        "a. Heath Ledger",
+                        "b. Jack Nicholson",
+                        "c. Jared Leto",
+                        "d. Joaquin Phoenix"
+                    ],
+                    "correctAnswer": "a. Heath Ledger"
+                },
+                {
+                    "question": "Who directed 'Gladiator'?",
+                    "movie": "Gladiator",
+                    "options": [
+                        "a. Ridley Scott",
+                        "b. Steven Spielberg",
+                        "c. James Cameron",
+                        "d. Michael Bay"
+                    ],
+                    "correctAnswer": "a. Ridley Scott"
+                },
+                {
+                    "question": "In 'Braveheart', what is William Wallace’s famous line?",
+                    "movie": "Braveheart",
+                    "options": [
+                        "a. They may take our lives, but they'll never take our freedom!",
+                        "b. I am Spartacus!",
+                        "c. You can't handle the truth!",
+                        "d. I see dead people."
+                    ],
+                    "correctAnswer": "a. They may take our lives, but they'll never take our freedom!"
+                }
+            ]
+        },
+        {
+            "category": "Adventure",
+            "questions": [
+                {
+                    "question": "In 'Indiana Jones and the Last Crusade', what is Indiana searching for?",
+                    "movie": "Indiana Jones and the Last Crusade",
+                    "options": [
+                        "a. Ark of the Covenant",
+                        "b. Holy Grail",
+                        "c. Excalibur",
+                        "d. Philosopher’s Stone"
+                    ],
+                    "correctAnswer": "b. Holy Grail"
+                },
+                {
+                    "question": "What is the name of the hobbit in 'The Hobbit'?",
+                    "movie": "The Hobbit",
+                    "options": [
+                        "a. Frodo Baggins",
+                        "b. Samwise Gamgee",
+                        "c. Bilbo Baggins",
+                        "d. Merry Brandybuck"
+                    ],
+                    "correctAnswer": "c. Bilbo Baggins"
+                },
+                {
+                    "question": "Who directed 'Jurassic Park'?",
+                    "movie": "Jurassic Park",
+                    "options": [
+                        "a. Steven Spielberg",
+                        "b. James Cameron",
+                        "c. George Lucas",
+                        "d. Ridley Scott"
+                    ],
+                    "correctAnswer": "a. Steven Spielberg"
+                },
+                {
+                    "question": "In 'The Goonies', what is the name of the pirate ship?",
+                    "movie": "The Goonies",
+                    "options": [
+                        "a. Black Pearl",
+                        "b. Flying Dutchman",
+                        "c. Inferno",
+                        "d. One-Eyed Willy"
+                    ],
+                    "correctAnswer": "d. One-Eyed Willy"
+                },
+                {
+                    "question": "Who played the main character in 'The Mummy'?",
+                    "movie": "The Mummy",
+                    "options": [
+                        "a. Brendan Fraser",
+                        "b. Tom Cruise",
+                        "c. Dwayne Johnson",
+                        "d. Arnold Schwarzenegger"
+                    ],
+                    "correctAnswer": "a. Brendan Fraser"
+                },
+                {
+                    "question": "In 'The Princess Bride', what is the name of the hero?",
+                    "movie": "The Princess Bride",
+                    "options": [
+                        "a. Westley",
+                        "b. Inigo Montoya",
+                        "c. Fezzik",
+                        "d. Vizzini"
+                    ],
+                    "correctAnswer": "a. Westley"
+                },
+                {
+                    "question": "Who directed 'The Lion King'?",
+                    "movie": "The Lion King",
+                    "options": [
+                        "a. Ron Clements",
+                        "b. John Musker",
+                        "c. Rob Minkoff",
+                        "d. Roger Allers"
+                    ],
+                    "correctAnswer": "c. Rob Minkoff"
+                },
+                {
+                    "question": "In 'The NeverEnding Story', what is the name of the magical land?",
+                    "movie": "The NeverEnding Story",
+                    "options": [
+                        "a. Fantasia",
+                        "b. Narnia",
+                        "c. Middle-earth",
+                        "d. Wonderland"
+                    ],
+                    "correctAnswer": "a. Fantasia"
+                },
+                {
+                    "question": "Who played the main character in 'Jumanji'?",
+                    "movie": "Jumanji",
+                    "options": [
+                        "a. Robin Williams",
+                        "b. Jim Carrey",
+                        "c. Eddie Murphy",
+                        "d. Adam Sandler"
+                    ],
+                    "correctAnswer": "a. Robin Williams"
+                },
+                {
+                    "question": "In 'The Chronicles of Narnia', what is the name of the magical land?",
+                    "movie": "The Chronicles of Narnia",
+                    "options": [
+                        "a. Narnia",
+                        "b. Middle-earth",
+                        "c. Fantasia",
+                        "d. Wonderland"
+                    ],
+                    "correctAnswer": "a. Narnia"
+                }
+            ]
+        },
+        {
+            "category": "Animation",
+            "questions": [
+                {
+                    "question": "What is the name of the cowboy in 'Toy Story'?",
+                    "movie": "Toy Story",
+                    "options": [
+                        "a. Buzz",
+                        "b. Woody",
+                        "c. Jessie",
+                        "d. Slinky"
+                    ],
+                    "correctAnswer": "b. Woody"
+                },
+                {
+                    "question": "In 'Finding Nemo', what type of fish is Nemo?",
+                    "movie": "Finding Nemo",
+                    "options": [
+                        "a. Clownfish",
+                        "b. Goldfish",
+                        "c. Angelfish",
+                        "d. Betta"
+                    ],
+                    "correctAnswer": "a. Clownfish"
+                },
+                {
+                    "question": "Who directed 'Shrek'?",
+                    "movie": "Shrek",
+                    "options": [
+                        "a. Andrew Adamson",
+                        "b. Chris Miller",
+                        "c. Mike Myers",
+                        "d. Andrew Stanton"
+                    ],
+                    "correctAnswer": "a. Andrew Adamson"
+                },
+                {
+                    "question": "In 'The Incredibles', what is the name of the family’s superpower?",
+                    "movie": "The Incredibles",
+                    "options": [
+                        "a. Super strength",
+                        "b. Invisibility",
+                        "c. Elasticity",
+                        "d. Speed"
+                    ],
+                    "correctAnswer": "c. Elasticity"
+                },
+                {
+                    "question": "Who played the main character in 'Moana'?",
+                    "movie": "Moana",
+                    "options": [
+                        "a. Auli'i Cravalho",
+                        "b. Dwayne Johnson",
+                        "c. Rachel House",
+                        "d. Temuera Morrison"
+                    ],
+                    "correctAnswer": "a. Auli'i Cravalho"
+                },
+                {
+                    "question": "In 'Coco', what is the name of the magical land?",
+                    "movie": "Coco",
+                    "options": [
+                        "a. Land of the Dead",
+                        "b. Land of the Living",
+                        "c. Land of the Forgotten",
+                        "d. Land of the Remembered"
+                    ],
+                    "correctAnswer": "a. Land of the Dead"
+                },
+                {
+                    "question": "Who directed 'Frozen'?",
+                    "movie": "Frozen",
+                    "options": [
+                        "a. Chris Buck",
+                        "b. Jennifer Lee",
+                        "c. Josh Gad",
+                        "d. Kristen Bell"
+                    ],
+                    "correctAnswer": "a. Chris Buck"
+                },
+                {
+                    "question": "In 'Zootopia', what is the name of the bunny cop?",
+                    "movie": "Zootopia",
+                    "options": [
+                        "a. Judy Hopps",
+                        "b. Nick Wilde",
+                        "c. Chief Bogo",
+                        "d. Flash"
+                    ],
+                    "correctAnswer": "a. Judy Hopps"
+                },
+                {
+                    "question": "Who played the main character in 'How to Train Your Dragon'?",
+                    "movie": "How to Train Your Dragon",
+                    "options": [
+                        "a. Jay Baruchel",
+                        "b. Gerard Butler",
+                        "c. Craig Ferguson",
+                        "d. America Ferrera"
+                    ],
+                    "correctAnswer": "a. Jay Baruchel"
+                },
+                {
+                    "question": "In 'Ratatouille', what is the name of the rat?",
+                    "movie": "Ratatouille",
+                    "options": [
+                        "a. Remy",
+                        "b. Emile",
+                        "c. Django",
+                        "d. Gusteau"
+                    ],
+                    "correctAnswer": "a. Remy"
+                }
+            ]
+        },
+        {
+            "category": "Comedy",
+            "questions": [
+                {
+                    "question": "Who starred as the main character in 'Ace Ventura: Pet Detective'?",
+                    "movie": "Ace Ventura: Pet Detective",
+                    "options": [
+                        "a. Jim Carrey",
+                        "b. Adam Sandler",
+                        "c. Steve Carell",
+                        "d. Eddie Murphy"
+                    ],
+                    "correctAnswer": "a. Jim Carrey"
+                },
+                {
+                    "question": "In 'The Hangover', where does the bachelor party take place?",
+                    "movie": "The Hangover",
+                    "options": [
+                        "a. Miami",
+                        "b. Los Angeles",
+                        "c. Las Vegas",
+                        "d. New York"
+                    ],
+                    "correctAnswer": "c. Las Vegas"
+                },
+                {
+                    "question": "In 'Superbad', what are the names of the two main characters?",
+                    "movie": "Superbad",
+                    "options": [
+                        "a. Seth and Evan",
+                        "b. Mike and Dave",
+                        "c. John and Paul",
+                        "d. Ben and Jerry"
+                    ],
+                    "correctAnswer": "a. Seth and Evan"
+                },
+                {
+                    "question": "Who directed 'Anchorman: The Legend of Ron Burgundy'?",
+                    "movie": "Anchorman: The Legend of Ron Burgundy",
+                    "options": [
+                        "a. Adam McKay",
+                        "b. Judd Apatow",
+                        "c. Todd Phillips",
+                        "d. Paul Feig"
+                    ],
+                    "correctAnswer": "a. Adam McKay"
+                },
+                {
+                    "question": "In 'Dumb and Dumber', what are the names of the two main characters?",
+                    "movie": "Dumb and Dumber",
+                    "options": [
+                        "a. Harry and Lloyd",
+                        "b. Bill and Ted",
+                        "c. Wayne and Garth",
+                        "d. Beavis and Butt-Head"
+                    ],
+                    "correctAnswer": "a. Harry and Lloyd"
+                },
+                {
+                    "question": "Who played the main character in 'Mrs. Doubtfire'?",
+                    "movie": "Mrs. Doubtfire",
+                    "options": [
+                        "a. Robin Williams",
+                        "b. Jim Carrey",
+                        "c. Steve Martin",
+                        "d. Eddie Murphy"
+                    ],
+                    "correctAnswer": "a. Robin Williams"
+                },
+                {
+                    "question": "In 'Groundhog Day', what is the name of the main character?",
+                    "movie": "Groundhog Day",
+                    "options": [
+                        "a. Phil Connors",
+                        "b. Larry Daley",
+                        "c. Peter Venkman",
+                        "d. Carl Spackler"
+                    ],
+                    "correctAnswer": "a. Phil Connors"
+                },
+                {
+                    "question": "Who directed 'The Grand Budapest Hotel'?",
+                    "movie": "The Grand Budapest Hotel",
+                    "options": [
+                        "a. Wes Anderson",
+                        "b. Quentin Tarantino",
+                        "c. Martin Scorsese",
+                        "d. Tim Burton"
+                    ],
+                    "correctAnswer": "a. Wes Anderson"
+                },
+                {
+                    "question": "In 'Step Brothers', what are the names of the two main characters?",
+                    "movie": "Step Brothers",
+                    "options": [
+                        "a. Brennan and Dale",
+                        "b. Mike and Dave",
+                        "c. John and Paul",
+                        "d. Ben and Jerry"
+                    ],
+                    "correctAnswer": "a. Brennan and Dale"
+                },
+                {
+                    "question": "Who played the main character in 'The Mask'?",
+                    "movie": "The Mask",
+                    "options": [
+                        "a. Jim Carrey",
+                        "b. Adam Sandler",
+                        "c. Steve Carell",
+                        "d. Eddie Murphy"
+                    ],
+                    "correctAnswer": "a. Jim Carrey"
+                }
+            ]
+        },
+        {
+            "category": "Crime",
+            "questions": [
+                {
+                    "question": "In 'Pulp Fiction', what is the mysterious briefcase content rumored to contain?",
+                    "movie": "Pulp Fiction",
+                    "options": [
+                        "a. Diamonds",
+                        "b. Gold",
+                        "c. Money",
+                        "d. Unknown glowing object"
+                    ],
+                    "correctAnswer": "d. Unknown glowing object"
+                },
+                {
+                    "question": "Who directed the movie 'Goodfellas'?",
+                    "movie": "Goodfellas",
+                    "options": [
+                        "a. Martin Scorsese",
+                        "b. Quentin Tarantino",
+                        "c. Francis Ford Coppola",
+                        "d. Brian De Palma"
+                    ],
+                    "correctAnswer": "a. Martin Scorsese"
+                },
+                {
+                    "question": "In 'The Godfather', what is the name of the crime family?",
+                    "movie": "The Godfather",
+                    "options": [
+                        "a. Corleone",
+                        "b. Soprano",
+                        "c. Gambino",
+                        "d. Lucchese"
+                    ],
+                    "correctAnswer": "a. Corleone"
+                },
+                {
+                    "question": "Who played the main character in 'Scarface'?",
+                    "movie": "Scarface",
+                    "options": [
+                        "a. Al Pacino",
+                        "b. Robert De Niro",
+                        "c. Joe Pesci",
+                        "d. Ray Liotta"
+                    ],
+                    "correctAnswer": "a. Al Pacino"
+                },
+                {
+                    "question": "In 'Reservoir Dogs', what are the aliases of the main characters?",
+                    "movie": "Reservoir Dogs",
+                    "options": [
+                        "a. Mr. White, Mr. Orange, Mr. Blonde, Mr. Pink, Mr. Brown, Mr. Blue",
+                        "b. Mr. Black, Mr. Red, Mr. Yellow, Mr. Green, Mr. Purple, Mr. White",
+                        "c. Mr. Gold, Mr. Silver, Mr. Bronze, Mr. Copper, Mr. Iron, Mr. Steel",
+                        "d. Mr. Platinum, Mr. Titanium, Mr. Nickel, Mr. Zinc, Mr. Aluminum, Mr. Copper"
+                    ],
+                    "correctAnswer": "a. Mr. White, Mr. Orange, Mr. Blonde, Mr. Pink, Mr. Brown, Mr. Blue"
+                },
+                {
+                    "question": "Who directed 'Heat'?",
+                    "movie": "Heat",
+                    "options": [
+                        "a. Michael Mann",
+                        "b. David Fincher",
+                        "c. Christopher Nolan",
+                        "d. Ridley Scott"
+                    ],
+                    "correctAnswer": "a. Michael Mann"
+                },
+                {
+                    "question": "In 'The Departed', what is the name of the undercover cop?",
+                    "movie": "The Departed",
+                    "options": [
+                        "a. Billy Costigan",
+                        "b. Frank Costello",
+                        "c. Colin Sullivan",
+                        "d. Dignam"
+                    ],
+                    "correctAnswer": "a. Billy Costigan"
+                },
+                {
+                    "question": "Who played the main character in 'American Gangster'?",
+                    "movie": "American Gangster",
+                    "options": [
+                        "a. Denzel Washington",
+                        "b. Will Smith",
+                        "c. Jamie Foxx",
+                        "d. Samuel L. Jackson"
+                    ],
+                    "correctAnswer": "a. Denzel Washington"
+                },
+                {
+                    "question": "In 'The Usual Suspects', who is the mysterious crime lord?",
+                    "movie": "The Usual Suspects",
+                    "options": [
+                        "a. Keyser Söze",
+                        "b. Kaiser Soze",
+                        "c. Kaisar Soze",
+                        "d. Kieser Soze"
+                    ],
+                    "correctAnswer": "a. Keyser Söze"
+                },
+                {
+                    "question": "Who directed 'The Untouchables'?",
+                    "movie": "The Untouchables",
+                    "options": [
+                        "a. Brian De Palma",
+                        "b. Martin Scorsese",
+                        "c. Francis Ford Coppola",
+                        "d. Quentin Tarantino"
+                    ],
+                    "correctAnswer": "a. Brian De Palma"
+                }
+            ]
+        },
+        {
+            "category": "Documentary",
+            "questions": [
+                {
+                    "question": "Which documentary focuses on global warming and stars Al Gore?",
+                    "movie": "An Inconvenient Truth",
+                    "options": [
+                        "a. The Cove",
+                        "b. Planet Earth",
+                        "c. An Inconvenient Truth",
+                        "d. Super Size Me"
+                    ],
+                    "correctAnswer": "c. An Inconvenient Truth"
+                },
+                {
+                    "question": "What is the primary subject of 'March of the Penguins'?",
+                    "movie": "March of the Penguins",
+                    "options": [
+                        "a. Lion migration",
+                        "b. Penguin migration",
+                        "c. Seal migration",
+                        "d. Polar bear migration"
+                    ],
+                    "correctAnswer": "b. Penguin migration"
+                },
+                {
+                    "question": "Who directed 'Bowling for Columbine'?",
+                    "movie": "Bowling for Columbine",
+                    "options": [
+                        "a. Michael Moore",
+                        "b. Morgan Spurlock",
+                        "c. Errol Morris",
+                        "d. Werner Herzog"
+                    ],
+                    "correctAnswer": "a. Michael Moore"
+                },
+                {
+                    "question": "What is the primary subject of 'Blackfish'?",
+                    "movie": "Blackfish",
+                    "options": [
+                        "a. Killer whales",
+                        "b. Dolphins",
+                        "c. Sharks",
+                        "d. Seals"
+                    ],
+                    "correctAnswer": "a. Killer whales"
+                },
+                {
+                    "question": "What is the primary subject of 'The Cove'?",
+                    "movie": "The Cove",
+                    "options": [
+                        "a. Dolphin hunting",
+                        "b. Shark finning",
+                        "c. Whale hunting",
+                        "d. Seal clubbing"
+                    ],
+                    "correctAnswer": "a. Dolphin hunting"
+                },
+                {
+                    "question": "Who directed 'Super Size Me'?",
+                    "movie": "Super Size Me",
+                    "options": [
+                        "a. Morgan Spurlock",
+                        "b. Michael Moore",
+                        "c. Errol Morris",
+                        "d. Werner Herzog"
+                    ],
+                    "correctAnswer": "a. Morgan Spurlock"
+                },
+                {
+                    "question": "What is the primary subject of 'Planet Earth'?",
+                    "movie": "Planet Earth",
+                    "options": [
+                        "a. Wildlife",
+                        "b. Climate change",
+                        "c. Human history",
+                        "d. Space exploration"
+                    ],
+                    "correctAnswer": "a. Wildlife"
+                },
+                {
+                    "question": "Who directed 'The Act of Killing'?",
+                    "movie": "The Act of Killing",
+                    "options": [
+                        "a. Joshua Oppenheimer",
+                        "b. Michael Moore",
+                        "c. Morgan Spurlock",
+                        "d. Werner Herzog"
+                    ],
+                    "correctAnswer": "a. Joshua Oppenheimer"
+                },
+                {
+                    "question": "What is the primary subject of 'Food, Inc.'?",
+                    "movie": "Food, Inc.",
+                    "options": [
+                        "a. Food industry",
+                        "b. Climate change",
+                        "c. Space exploration",
+                        "d. Human history"
+                    ],
+                    "correctAnswer": "a. Food industry"
+                },
+                {
+                    "question": "Who directed 'Man on Wire'?",
+                    "movie": "Man on Wire",
+                    "options": [
+                        "a. James Marsh",
+                        "b. Michael Moore",
+                        "c. Morgan Spurlock",
+                        "d. Werner Herzog"
+                    ],
+                    "correctAnswer": "a. James Marsh"
+                }
+            ]
+        },
+        {
+            "category": "Drama",
+            "questions": [
+                {
+                    "question": "In 'The Shawshank Redemption', what is Andy Dufresne accused of?",
+                    "movie": "The Shawshank Redemption",
+                    "options": [
+                        "a. Theft",
+                        "b. Embezzlement",
+                        "c. Fraud",
+                        "d. Murder"
+                    ],
+                    "correctAnswer": "d. Murder"
+                },
+                {
+                    "question": "Who played the lead role in 'Forrest Gump'?",
+                    "movie": "Forrest Gump",
+                    "options": [
+                        "a. Tom Hanks",
+                        "b. Robert De Niro",
+                        "c. Al Pacino",
+                        "d. Harrison Ford"
+                    ],
+                    "correctAnswer": "a. Tom Hanks"
+                },
+                {
+                    "question": "In 'The Pursuit of Happyness', who played the main character?",
+                    "movie": "The Pursuit of Happyness",
+                    "options": [
+                        "a. Will Smith",
+                        "b. Denzel Washington",
+                        "c. Jamie Foxx",
+                        "d. Samuel L. Jackson"
+                    ],
+                    "correctAnswer": "a. Will Smith"
+                },
+                {
+                    "question": "Who directed 'The Godfather'? ",
+                    "movie": "The Godfather",
+                    "options": [
+                        "a. Francis Ford Coppola",
+                        "b. Martin Scorsese",
+                        "c. Steven Spielberg",
+                        "d. Quentin Tarantino"
+                    ],
+                    "correctAnswer": "a. Francis Ford Coppola"
+                },
+                {
+                    "question": "In 'A Beautiful Mind', who played the main character?",
+                    "movie": "A Beautiful Mind",
+                    "options": [
+                        "a. Russell Crowe",
+                        "b. Tom Hanks",
+                        "c. Brad Pitt",
+                        "d. Leonardo DiCaprio"
+                    ],
+                    "correctAnswer": "a. Russell Crowe"
+                },
+                {
+                    "question": "Who directed 'Schindler's List'?",
+                    "movie": "Schindler's List",
+                    "options": [
+                        "a. Steven Spielberg",
+                        "b. Martin Scorsese",
+                        "c. Quentin Tarantino",
+                        "d. James Cameron"
+                    ],
+                    "correctAnswer": "a. Steven Spielberg"
+                },
+                {
+                    "question": "In 'The Green Mile', who played the main character?",
+                    "movie": "The Green Mile",
+                    "options": [
+                        "a. Tom Hanks",
+                        "b. Morgan Freeman",
+                        "c. Denzel Washington",
+                        "d. Brad Pitt"
+                    ],
+                    "correctAnswer": "a. Tom Hanks"
+                },
+                {
+                    "question": "Who directed 'Fight Club'?",
+                    "movie": "Fight Club",
+                    "options": [
+                        "a. David Fincher",
+                        "b. Christopher Nolan",
+                        "c. Quentin Tarantino",
+                        "d. Martin Scorsese"
+                    ],
+                    "correctAnswer": "a. David Fincher"
+                },
+                {
+                    "question": "In 'The Social Network', who played Mark Zuckerberg?",
+                    "movie": "The Social Network",
+                    "options": [
+                        "a. Jesse Eisenberg",
+                        "b. Andrew Garfield",
+                        "c. Justin Timberlake",
+                        "d. Armie Hammer"
+                    ],
+                    "correctAnswer": "a. Jesse Eisenberg"
+                },
+                {
+                    "question": "Who directed 'The Revenant'?",
+                    "movie": "The Revenant",
+                    "options": [
+                        "a. Alejandro González Iñárritu",
+                        "b. Quentin Tarantino",
+                        "c. Christopher Nolan",
+                        "d. Martin Scorsese"
+                    ],
+                    "correctAnswer": "a. Alejandro González Iñárritu"
+                }
+            ]
+        },
+        {
+            "category": "Family",
+            "questions": [
+                {
+                    "question": "In 'The Lion King', who is Simba's father?",
+                    "movie": "The Lion King",
+                    "options": [
+                        "a. Scar",
+                        "b. Mufasa",
+                        "c. Rafiki",
+                        "d. Zazu"
+                    ],
+                    "correctAnswer": "b. Mufasa"
+                },
+                {
+                    "question": "In 'Frozen', what is the name of Elsa's sister?",
+                    "movie": "Frozen",
+                    "options": [
+                        "a. Anna",
+                        "b. Elsa",
+                        "c. Kristoff",
+                        "d. Hans"
+                    ],
+                    "correctAnswer": "a. Anna"
+                },
+                {
+                    "question": "In 'Finding Dory', what is the name of Dory's friend?",
+                    "movie": "Finding Dory",
+                    "options": [
+                        "a. Nemo",
+                        "b. Marlin",
+                        "c. Hank",
+                        "d. Destiny"
+                    ],
+                    "correctAnswer": "b. Marlin"
+                },
+                {
+                    "question": "Who directed 'The Incredibles'?",
+                    "movie": "The Incredibles",
+                    "options": [
+                        "a. Brad Bird",
+                        "b. John Lasseter",
+                        "c. Andrew Stanton",
+                        "d. Pete Docter"
+                    ],
+                    "correctAnswer": "a. Brad Bird"
+                },
+                {
+                    "question": "In 'Toy Story', what is the name of the space ranger?",
+                    "movie": "Toy Story",
+                    "options": [
+                        "a. Woody",
+                        "b. Buzz Lightyear",
+                        "c. Jessie",
+                        "d. Rex"
+                    ],
+                    "correctAnswer": "b. Buzz Lightyear"
+                },
+                {
+                    "question": "Who directed 'Frozen II'?",
+                    "movie": "Frozen II",
+                    "options": [
+                        "a. Chris Buck",
+                        "b. Jennifer Lee",
+                        "c. Josh Gad",
+                        "d. Kristen Bell"
+                    ],
+                    "correctAnswer": "a. Chris Buck"
+                },
+                {
+                    "question": "In 'Moana', what is the name of the demigod?",
+                    "movie": "Moana",
+                    "options": [
+                        "a. Maui",
+                        "b. Moana",
+                        "c. Te Fiti",
+                        "d. Tamatoa"
+                    ],
+                    "correctAnswer": "a. Maui"
+                },
+                {
+                    "question": "Who directed 'Coco'?",
+                    "movie": "Coco",
+                    "options": [
+                        "a. Lee Unkrich",
+                        "b. John Lasseter",
+                        "c. Andrew Stanton",
+                        "d. Pete Docter"
+                    ],
+                    "correctAnswer": "a. Lee Unkrich"
+                },
+                {
+                    "question": "In 'The Little Mermaid', what is the name of the sea witch?",
+                    "movie": "The Little Mermaid",
+                    "options": [
+                        "a. Ursula",
+                        "b. Ariel",
+                        "c. Sebastian",
+                        "d. Flounder"
+                    ],
+                    "correctAnswer": "a. Ursula"
+                },
+                {
+                    "question": "Who directed 'Beauty and the Beast' (1991)?",
+                    "movie": "Beauty and the Beast",
+                    "options": [
+                        "a. Gary Trousdale",
+                        "b. John Musker",
+                        "c. Ron Clements",
+                        "d. Kirk Wise"
+                    ],
+                    "correctAnswer": "a. Gary Trousdale"
+                }
+            ]
+        },
+        {
+            "category": "Fantasy",
+            "questions": [
+                {
+                    "question": "In 'Harry Potter', what house is Harry in?",
+                    "movie": "Harry Potter",
+                    "options": [
+                        "a. Ravenclaw",
+                        "b. Hufflepuff",
+                        "c. Slytherin",
+                        "d. Gryffindor"
+                    ],
+                    "correctAnswer": "d. Gryffindor"
+                },
+                {
+                    "question": "Who directed 'The Lord of the Rings' trilogy?",
+                    "movie": "The Lord of the Rings",
+                    "options": [
+                        "a. Steven Spielberg",
+                        "b. Peter Jackson",
+                        "c. George Lucas",
+                        "d. Ridley Scott"
+                    ],
+                    "correctAnswer": "b. Peter Jackson"
+                },
+                {
+                    "question": "In 'The Chronicles of Narnia', who is the main antagonist?",
+                    "movie": "The Chronicles of Narnia",
+                    "options": [
+                        "a. White Witch",
+                        "b. Aslan",
+                        "c. Mr. Tumnus",
+                        "d. Prince Caspian"
+                    ],
+                    "correctAnswer": "a. White Witch"
+                },
+                {
+                    "question": "Who directed 'Pan's Labyrinth'?",
+                    "movie": "Pan's Labyrinth",
+                    "options": [
+                        "a. Guillermo del Toro",
+                        "b. Tim Burton",
+                        "c. Peter Jackson",
+                        "d. Steven Spielberg"
+                    ],
+                    "correctAnswer": "a. Guillermo del Toro"
+                },
+                {
+                    "question": "In 'The Hobbit', what is the name of the dragon?",
+                    "movie": "The Hobbit",
+                    "options": [
+                        "a. Smaug",
+                        "b. Drogon",
+                        "c. Falkor",
+                        "d. Toothless"
+                    ],
+                    "correctAnswer": "a. Smaug"
+                },
+                {
+                    "question": "Who played the main character in 'Edward Scissorhands'?",
+                    "movie": "Edward Scissorhands",
+                    "options": [
+                        "a. Johnny Depp",
+                        "b. Leonardo DiCaprio",
+                        "c. Brad Pitt",
+                        "d. Tom Cruise"
+                    ],
+                    "correctAnswer": "a. Johnny Depp"
+                },
+                {
+                    "question": "In 'The Wizard of Oz', what is the name of the main character?",
+                    "movie": "The Wizard of Oz",
+                    "options": [
+                        "a. Dorothy",
+                        "b. Alice",
+                        "c. Wendy",
+                        "d. Belle"
+                    ],
+                    "correctAnswer": "a. Dorothy"
+                },
+                {
+                    "question": "Who directed 'Avatar'?",
+                    "movie": "Avatar",
+                    "options": [
+                        "a. James Cameron",
+                        "b. Steven Spielberg",
+                        "c. George Lucas",
+                        "d. Ridley Scott"
+                    ],
+                    "correctAnswer": "a. James Cameron"
+                },
+                {
+                    "question": "In 'The NeverEnding Story', what is the name of the boy who reads the book?",
+                    "movie": "The NeverEnding Story",
+                    "options": [
+                        "a. Bastian",
+                        "b. Atreyu",
+                        "c. Falkor",
+                        "d. Artax"
+                    ],
+                    "correctAnswer": "a. Bastian"
+                },
+                {
+                    "question": "Who played the main character in 'The Shape of Water'?",
+                    "movie": "The Shape of Water",
+                    "options": [
+                        "a. Sally Hawkins",
+                        "b. Octavia Spencer",
+                        "c. Michael Shannon",
+                        "d. Richard Jenkins"
+                    ],
+                    "correctAnswer": "a. Sally Hawkins"
+                }
+            ]
+        },
+        {
+            "category": "History",
+            "questions": [
+                {
+                    "question": "What historical event is depicted in 'Schindler's List'?",
+                    "movie": "Schindler's List",
+                    "options": [
+                        "a. American Civil War",
+                        "b. WWII Holocaust",
+                        "c. Cold War",
+                        "d. French Revolution"
+                    ],
+                    "correctAnswer": "b. WWII Holocaust"
+                },
+                {
+                    "question": "Which president is the focus of 'Lincoln'?",
+                    "movie": "Lincoln",
+                    "options": [
+                        "a. George Washington",
+                        "b. Thomas Jefferson",
+                        "c. Abraham Lincoln",
+                        "d. Theodore Roosevelt"
+                    ],
+                    "correctAnswer": "c. Abraham Lincoln"
+                },
+                {
+                    "question": "Who played the main character in 'Braveheart'?",
+                    "movie": "Braveheart",
+                    "options": [
+                        "a. Mel Gibson",
+                        "b. Russell Crowe",
+                        "c. Tom Hanks",
+                        "d. Brad Pitt"
+                    ],
+                    "correctAnswer": "a. Mel Gibson"
+                },
+                {
+                    "question": "In 'Gladiator', who played the main character?",
+                    "movie": "Gladiator",
+                    "options": [
+                        "a. Russell Crowe",
+                        "b. Mel Gibson",
+                        "c. Tom Hanks",
+                        "d. Brad Pitt"
+                    ],
+                    "correctAnswer": "a. Russell Crowe"
+                },
+                {
+                    "question": "Who directed '12 Years a Slave'?",
+                    "movie": "12 Years a Slave",
+                    "options": [
+                        "a. Steve McQueen",
+                        "b. Quentin Tarantino",
+                        "c. Martin Scorsese",
+                        "d. Steven Spielberg"
+                    ],
+                    "correctAnswer": "a. Steve McQueen"
+                },
+                {
+                    "question": "In 'The King's Speech', who played King George VI?",
+                    "movie": "The King's Speech",
+                    "options": [
+                        "a. Colin Firth",
+                        "b. Geoffrey Rush",
+                        "c. Hugh Grant",
+                        "d. Daniel Day-Lewis"
+                    ],
+                    "correctAnswer": "a. Colin Firth"
+                },
+                {
+                    "question": "Who directed 'The Imitation Game'?",
+                    "movie": "The Imitation Game",
+                    "options": [
+                        "a. Morten Tyldum",
+                        "b. Christopher Nolan",
+                        "c. David Fincher",
+                        "d. Martin Scorsese"
+                    ],
+                    "correctAnswer": "a. Morten Tyldum"
+                },
+                {
+                    "question": "In 'Dunkirk', who directed the movie?",
+                    "movie": "Dunkirk",
+                    "options": [
+                        "a. Christopher Nolan",
+                        "b. Steven Spielberg",
+                        "c. Ridley Scott",
+                        "d. James Cameron"
+                    ],
+                    "correctAnswer": "a. Christopher Nolan"
+                },
+                {
+                    "question": "Who played the main character in 'Lincoln'?",
+                    "movie": "Lincoln",
+                    "options": [
+                        "a. Daniel Day-Lewis",
+                        "b. Tom Hanks",
+                        "c. Russell Crowe",
+                        "d. Brad Pitt"
+                    ],
+                    "correctAnswer": "a. Daniel Day-Lewis"
+                },
+                {
+                    "question": "In 'The Last Samurai', who played the main character?",
+                    "movie": "The Last Samurai",
+                    "options": [
+                        "a. Tom Cruise",
+                        "b. Brad Pitt",
+                        "c. Leonardo DiCaprio",
+                        "d. Russell Crowe"
+                    ],
+                    "correctAnswer": "a. Tom Cruise"
+                }
+            ]
+        },
+        {
+            "category": "Horror",
+            "questions": [
+                {
+                    "question": "Who directed 'The Exorcist'?",
+                    "movie": "The Exorcist",
+                    "options": [
+                        "a. William Friedkin",
+                        "b. Wes Craven",
+                        "c. John Carpenter",
+                        "d. Tobe Hooper"
+                    ],
+                    "correctAnswer": "a. William Friedkin"
+                },
+                {
+                    "question": "In 'A Nightmare on Elm Street', what is the name of the villain?",
+                    "movie": "A Nightmare on Elm Street",
+                    "options": [
+                        "a. Jason Voorhees",
+                        "b. Michael Myers",
+                        "c. Freddy Krueger",
+                        "d. Leatherface"
+                    ],
+                    "correctAnswer": "c. Freddy Krueger"
+                },
+                {
+                    "question": "Who played the main character in 'The Shining'?",
+                    "movie": "The Shining",
+                    "options": [
+                        "a. Jack Nicholson",
+                        "b. Robert De Niro",
+                        "c. Al Pacino",
+                        "d. Dustin Hoffman"
+                    ],
+                    "correctAnswer": "a. Jack Nicholson"
+                },
+                {
+                    "question": "In 'Halloween', what is the name of the masked killer?",
+                    "movie": "Halloween",
+                    "options": [
+                        "a. Michael Myers",
+                        "b. Jason Voorhees",
+                        "c. Freddy Krueger",
+                        "d. Leatherface"
+                    ],
+                    "correctAnswer": "a. Michael Myers"
+                },
+                {
+                    "question": "Who directed 'Get Out'?",
+                    "movie": "Get Out",
+                    "options": [
+                        "a. Jordan Peele",
+                        "b. Quentin Tarantino",
+                        "c. James Wan",
+                        "d. Guillermo del Toro"
+                    ],
+                    "correctAnswer": "a. Jordan Peele"
+                },
+                {
+                    "question": "In 'The Conjuring', what is the name of the demon?",
+                    "movie": "The Conjuring",
+                    "options": [
+                        "a. Bathsheba",
+                        "b. Annabelle",
+                        "c. Valak",
+                        "d. La Llorona"
+                    ],
+                    "correctAnswer": "a. Bathsheba"
+                },
+                {
+                    "question": "Who played the main character in 'Psycho'?",
+                    "movie": "Psycho",
+                    "options": [
+                        "a. Anthony Perkins",
+                        "b. Robert De Niro",
+                        "c. Al Pacino",
+                        "d. Dustin Hoffman"
+                    ],
+                    "correctAnswer": "a. Anthony Perkins"
+                },
+                {
+                    "question": "In 'The Ring', what is the name of the cursed videotape?",
+                    "movie": "The Ring",
+                    "options": [
+                        "a. Cursed",
+                        "b. Death",
+                        "c. Fear",
+                        "d. Samara"
+                    ],
+                    "correctAnswer": "d. Samara"
+                },
+                {
+                    "question": "Who directed 'The Babadook'?",
+                    "movie": "The Babadook",
+                    "options": [
+                        "a. Jennifer Kent",
+                        "b. Karyn Kusama",
+                        "c. Ana Lily Amirpour",
+                        "d. Julia Ducournau"
+                    ],
+                    "correctAnswer": "a. Jennifer Kent"
+                },
+                {
+                    "question": "In 'Hereditary', what is the name of the mysterious force?",
+                    "movie": "Hereditary",
+                    "options": [
+                        "a. Paimon",
+                        "b. Charlie",
+                        "c. Annie",
+                        "d. Steve"
+                    ],
+                    "correctAnswer": "a. Paimon"
+                }
+            ]
+        },
+        {
+            "category": "Music",
+            "questions": [
+                {
+                    "question": "Who played the main character in 'Bohemian Rhapsody'?",
+                    "movie": "Bohemian Rhapsody",
+                    "options": [
+                        "a. Rami Malek",
+                        "b. Taron Egerton",
+                        "c. Joaquin Phoenix",
+                        "d. Bradley Cooper"
+                    ],
+                    "correctAnswer": "a. Rami Malek"
+                },
+                {
+                    "question": "In 'La La Land', who played the female lead?",
+                    "movie": "La La Land",
+                    "options": [
+                        "a. Emma Stone",
+                        "b. Jennifer Lawrence",
+                        "c. Scarlett Johansson",
+                        "d. Anne Hathaway"
+                    ],
+                    "correctAnswer": "a. Emma Stone"
+                },
+                {
+                    "question": "Who directed 'Whiplash'?",
+                    "movie": "Whiplash",
+                    "options": [
+                        "a. Damien Chazelle",
+                        "b. Christopher Nolan",
+                        "c. David Fincher",
+                        "d. Martin Scorsese"
+                    ],
+                    "correctAnswer": "a. Damien Chazelle"
+                },
+                {
+                    "question": "In 'A Star is Born', who played the male lead?",
+                    "movie": "A Star is Born",
+                    "options": [
+                        "a. Bradley Cooper",
+                        "b. Ryan Gosling",
+                        "c. Chris Hemsworth",
+                        "d. Tom Hardy"
+                    ],
+                    "correctAnswer": "a. Bradley Cooper"
+                },
+                {
+                    "question": "Who directed 'The Sound of Music'?",
+                    "movie": "The Sound of Music",
+                    "options": [
+                        "a. Robert Wise",
+                        "b. Alfred Hitchcock",
+                        "c. Stanley Kubrick",
+                        "d. Steven Spielberg"
+                    ],
+                    "correctAnswer": "a. Robert Wise"
+                },
+                {
+                    "question": "In 'Rocketman', who played the main character?",
+                    "movie": "Rocketman",
+                    "options": [
+                        "a. Taron Egerton",
+                        "b. Rami Malek",
+                        "c. Joaquin Phoenix",
+                        "d. Bradley Cooper"
+                    ],
+                    "correctAnswer": "a. Taron Egerton"
+                },
+                {
+                    "question": "Who directed 'Singin' in the Rain'?",
+                    "movie": "Singin' in the Rain",
+                    "options": [
+                        "a. Stanley Donen",
+                        "b. Gene Kelly",
+                        "c. Fred Astaire",
+                        "d. Vincente Minnelli"
+                    ],
+                    "correctAnswer": "a. Stanley Donen"
+                },
+                {
+                    "question": "In 'The Greatest Showman', who played the main character?",
+                    "movie": "The Greatest Showman",
+                    "options": [
+                        "a. Hugh Jackman",
+                        "b. Zac Efron",
+                        "c. Zendaya",
+                        "d. Michelle Williams"
+                    ],
+                    "correctAnswer": "a. Hugh Jackman"
+                },
+                {
+                    "question": "Who directed 'Amadeus'?",
+                    "movie": "Amadeus",
+                    "options": [
+                        "a. Milos Forman",
+                        "b. Francis Ford Coppola",
+                        "c. Martin Scorsese",
+                        "d. Steven Spielberg"
+                    ],
+                    "correctAnswer": "a. Milos Forman"
+                },
+                {
+                    "question": "In 'Walk the Line', who played Johnny Cash?",
+                    "movie": "Walk the Line",
+                    "options": [
+                        "a. Joaquin Phoenix",
+                        "b. Reese Witherspoon",
+                        "c. Ginnifer Goodwin",
+                        "d. Robert Patrick"
+                    ],
+                    "correctAnswer": "a. Joaquin Phoenix"
+                }
+            ]
+        },
+        {
+            "category": "Mystery",
+            "questions": [
+                {
+                    "question": "Who directed 'Se7en'?",
+                    "movie": "Se7en",
+                    "options": [
+                        "a. David Fincher",
+                        "b. Christopher Nolan",
+                        "c. Quentin Tarantino",
+                        "d. Martin Scorsese"
+                    ],
+                    "correctAnswer": "a. David Fincher"
+                },
+                {
+                    "question": "In 'The Sixth Sense', what is the famous line?",
+                    "movie": "The Sixth Sense",
+                    "options": [
+                        "a. I see dead people",
+                        "b. Here's Johnny!",
+                        "c. I'll be back",
+                        "d. You can't handle the truth!"
+                    ],
+                    "correctAnswer": "a. I see dead people"
+                },
+                {
+                    "question": "Who played the main character in 'Gone Girl'?",
+                    "movie": "Gone Girl",
+                    "options": [
+                        "a. Ben Affleck",
+                        "b. Matt Damon",
+                        "c. Leonardo DiCaprio",
+                        "d. Brad Pitt"
+                    ],
+                    "correctAnswer": "a. Ben Affleck"
+                },
+                {
+                    "question": "In 'Shutter Island', who played the main character?",
+                    "movie": "Shutter Island",
+                    "options": [
+                        "a. Leonardo DiCaprio",
+                        "b. Brad Pitt",
+                        "c. Johnny Depp",
+                        "d. Tom Cruise"
+                    ],
+                    "correctAnswer": "a. Leonardo DiCaprio"
+                },
+                {
+                    "question": "Who directed 'The Girl with the Dragon Tattoo'?",
+                    "movie": "The Girl with the Dragon Tattoo",
+                    "options": [
+                        "a. David Fincher",
+                        "b. Christopher Nolan",
+                        "c. Quentin Tarantino",
+                        "d. Martin Scorsese"
+                    ],
+                    "correctAnswer": "a. David Fincher"
+                },
+                {
+                    "question": "In 'Knives Out', who played the detective?",
+                    "movie": "Knives Out",
+                    "options": [
+                        "a. Daniel Craig",
+                        "b. Chris Evans",
+                        "c. Jamie Lee Curtis",
+                        "d. Michael Shannon"
+                    ],
+                    "correctAnswer": "a. Daniel Craig"
+                },
+                {
+                    "question": "Who directed 'Memento'?",
+                    "movie": "Memento",
+                    "options": [
+                        "a. Christopher Nolan",
+                        "b. David Fincher",
+                        "c. Quentin Tarantino",
+                        "d. Martin Scorsese"
+                    ],
+                    "correctAnswer": "a. Christopher Nolan"
+                },
+                {
+                    "question": "In 'The Prestige', who played the rival magicians?",
+                    "movie": "The Prestige",
+                    "options": [
+                        "a. Hugh Jackman and Christian Bale",
+                        "b. Robert Downey Jr. and Chris Evans",
+                        "c. Leonardo DiCaprio and Matt Damon",
+                        "d. Brad Pitt and Edward Norton"
+                    ],
+                    "correctAnswer": "a. Hugh Jackman and Christian Bale"
+                },
+                {
+                    "question": "Who directed 'Zodiac'?",
+                    "movie": "Zodiac",
+                    "options": [
+                        "a. David Fincher",
+                        "b. Christopher Nolan",
+                        "c. Quentin Tarantino",
+                        "d. Martin Scorsese"
+                    ],
+                    "correctAnswer": "a. David Fincher"
+                },
+                {
+                    "question": "In 'Prisoners', who played the main character?",
+                    "movie": "Prisoners",
+                    "options": [
+                        "a. Hugh Jackman",
+                        "b. Jake Gyllenhaal",
+                        "c. Ryan Reynolds",
+                        "d. Chris Hemsworth"
+                    ],
+                    "correctAnswer": "a. Hugh Jackman"
+                }
+            ]
+        },
+        {
+            "category": "Romance",
+            "questions": [
+                {
+                    "question": "Who played the main characters in 'Titanic'?",
+                    "movie": "Titanic",
+                    "options": [
+                        "a. Leonardo DiCaprio and Kate Winslet",
+                        "b. Brad Pitt and Angelina Jolie",
+                        "c. Tom Hanks and Meg Ryan",
+                        "d. Ryan Gosling and Emma Stone"
+                    ],
+                    "correctAnswer": "a. Leonardo DiCaprio and Kate Winslet"
+                },
+                {
+                    "question": "In 'The Notebook', who played the female lead?",
+                    "movie": "The Notebook",
+                    "options": [
+                        "a. Rachel McAdams",
+                        "b. Jennifer Lawrence",
+                        "c. Scarlett Johansson",
+                        "d. Anne Hathaway"
+                    ],
+                    "correctAnswer": "a. Rachel McAdams"
+                },
+                {
+                    "question": "Who directed 'Pride and Prejudice' (2005)?",
+                    "movie": "Pride and Prejudice",
+                    "options": [
+                        "a. Joe Wright",
+                        "b. Steven Spielberg",
+                        "c. Christopher Nolan",
+                        "d. David Fincher"
+                    ],
+                    "correctAnswer": "a. Joe Wright"
+                },
+                {
+                    "question": "In 'La La Land', who played the male lead?",
+                    "movie": "La La Land",
+                    "options": [
+                        "a. Ryan Gosling",
+                        "b. Bradley Cooper",
+                        "c. Chris Hemsworth",
+                        "d. Tom Hardy"
+                    ],
+                    "correctAnswer": "a. Ryan Gosling"
+                },
+                {
+                    "question": "Who directed 'The Fault in Our Stars'?",
+                    "movie": "The Fault in Our Stars",
+                    "options": [
+                        "a. Josh Boone",
+                        "b. John Green",
+                        "c. David Fincher",
+                        "d. Christopher Nolan"
+                    ],
+                    "correctAnswer": "a. Josh Boone"
+                },
+                {
+                    "question": "In 'Romeo + Juliet', who played Juliet?",
+                    "movie": "Romeo + Juliet",
+                    "options": [
+                        "a. Claire Danes",
+                        "b. Kate Winslet",
+                        "c. Natalie Portman",
+                        "d. Gwyneth Paltrow"
+                    ],
+                    "correctAnswer": "a. Claire Danes"
+                },
+                {
+                    "question": "Who directed 'The Shape of Water'?",
+                    "movie": "The Shape of Water",
+                    "options": [
+                        "a. Guillermo del Toro",
+                        "b. Tim Burton",
+                        "c. Peter Jackson",
+                        "d. Steven Spielberg"
+                    ],
+                    "correctAnswer": "a. Guillermo del Toro"
+                },
+                {
+                    "question": "In 'Pretty Woman', who played the female lead?",
+                    "movie": "Pretty Woman",
+                    "options": [
+                        "a. Julia Roberts",
+                        "b. Sandra Bullock",
+                        "c. Meg Ryan",
+                        "d. Jennifer Aniston"
+                    ],
+                    "correctAnswer": "a. Julia Roberts"
+                },
+                {
+                    "question": "Who directed 'La La Land'?",
+                    "movie": "La La Land",
+                    "options": [
+                        "a. Damien Chazelle",
+                        "b. Christopher Nolan",
+                        "c. David Fincher",
+                        "d. Martin Scorsese"
+                    ],
+                    "correctAnswer": "a. Damien Chazelle"
+                },
+                {
+                    "question": "In 'Casablanca', who played the male lead?",
+                    "movie": "Casablanca",
+                    "options": [
+                        "a. Humphrey Bogart",
+                        "b. Cary Grant",
+                        "c. Clark Gable",
+                        "d. James Stewart"
+                    ],
+                    "correctAnswer": "a. Humphrey Bogart"
+                }
+            ]
+        },
+        {
+            "category": "Science Fiction",
+            "questions": [
+                {
+                    "question": "Who directed 'Blade Runner'?",
+                    "movie": "Blade Runner",
+                    "options": [
+                        "a. Ridley Scott",
+                        "b. Steven Spielberg",
+                        "c. James Cameron",
+                        "d. George Lucas"
+                    ],
+                    "correctAnswer": "a. Ridley Scott"
+                },
+                {
+                    "question": "In 'The Matrix', who played the main character?",
+                    "movie": "The Matrix",
+                    "options": [
+                        "a. Keanu Reeves",
+                        "b. Brad Pitt",
+                        "c. Leonardo DiCaprio",
+                        "d. Tom Cruise"
+                    ],
+                    "correctAnswer": "a. Keanu Reeves"
+                },
+                {
+                    "question": "Who directed 'Inception'?",
+                    "movie": "Inception",
+                    "options": [
+                        "a. Christopher Nolan",
+                        "b. Steven Spielberg",
+                        "c. James Cameron",
+                        "d. Ridley Scott"
+                    ],
+                    "correctAnswer": "a. Christopher Nolan"
+                },
+                {
+                    "question": "In 'Star Wars', who is Luke Skywalker's father?",
+                    "movie": "Star Wars",
+                    "options": [
+                        "a. Darth Vader",
+                        "b. Obi-Wan Kenobi",
+                        "c. Yoda",
+                        "d. Han Solo"
+                    ],
+                    "correctAnswer": "a. Darth Vader"
+                },
+                {
+                    "question": "Who directed 'Avatar'?",
+                    "movie": "Avatar",
+                    "options": [
+                        "a. James Cameron",
+                        "b. Steven Spielberg",
+                        "c. George Lucas",
+                        "d. Ridley Scott"
+                    ],
+                    "correctAnswer": "a. James Cameron"
+                },
+                {
+                    "question": "In 'Interstellar', who played the main character?",
+                    "movie": "Interstellar",
+                    "options": [
+                        "a. Matthew McConaughey",
+                        "b. Leonardo DiCaprio",
+                        "c. Brad Pitt",
+                        "d. Tom Cruise"
+                    ],
+                    "correctAnswer": "a. Matthew McConaughey"
+                },
+                {
+                    "question": "Who directed 'The Terminator'?",
+                    "movie": "The Terminator",
+                    "options": [
+                        "a. James Cameron",
+                        "b. Steven Spielberg",
+                        "c. Ridley Scott",
+                        "d. George Lucas"
+                    ],
+                    "correctAnswer": "a. James Cameron"
+                },
+                {
+                    "question": "In 'Back to the Future', what is the name of the scientist?",
+                    "movie": "Back to the Future",
+                    "options": [
+                        "a. Doc Brown",
+                        "b. Marty McFly",
+                        "c. Biff Tannen",
+                        "d. George McFly"
+                    ],
+                    "correctAnswer": "a. Doc Brown"
+                },
+                {
+                    "question": "Who directed 'E.T. the Extra-Terrestrial'?",
+                    "movie": "E.T. the Extra-Terrestrial",
+                    "options": [
+                        "a. Steven Spielberg",
+                        "b. James Cameron",
+                        "c. George Lucas",
+                        "d. Ridley Scott"
+                    ],
+                    "correctAnswer": "a. Steven Spielberg"
+                },
+                {
+                    "question": "In 'The Fifth Element', who played the main character?",
+                    "movie": "The Fifth Element",
+                    "options": [
+                        "a. Bruce Willis",
+                        "b. Tom Cruise",
+                        "c. Keanu Reeves",
+                        "d. Will Smith"
+                    ],
+                    "correctAnswer": "a. Bruce Willis"
+                }
+            ]
+        },
+        {
+            "category": "TV Movie",
+            "questions": [
+                {
+                    "question": "Who played the main character in 'Breaking Bad'?",
+                    "movie": "Breaking Bad",
+                    "options": [
+                        "a. Bryan Cranston",
+                        "b. Aaron Paul",
+                        "c. Bob Odenkirk",
+                        "d. Dean Norris"
+                    ],
+                    "correctAnswer": "a. Bryan Cranston"
+                },
+                {
+                    "question": "In 'Game of Thrones', who is known as the Mother of Dragons?",
+                    "movie": "Game of Thrones",
+                    "options": [
+                        "a. Daenerys Targaryen",
+                        "b. Cersei Lannister",
+                        "c. Sansa Stark",
+                        "d. Arya Stark"
+                    ],
+                    "correctAnswer": "a. Daenerys Targaryen"
+                },
+                {
+                    "question": "Who directed 'Band of Brothers'?",
+                    "movie": "Band of Brothers",
+                    "options": [
+                        "a. Steven Spielberg",
+                        "b. Tom Hanks",
+                        "c. David Fincher",
+                        "d. Ridley Scott"
+                    ],
+                    "correctAnswer": "a. Steven Spielberg"
+                },
+                {
+                    "question": "In 'The Crown', who played Queen Elizabeth II?",
+                    "movie": "The Crown",
+                    "options": [
+                        "a. Claire Foy",
+                        "b. Olivia Colman",
+                        "c. Helena Bonham Carter",
+                        "d. Vanessa Kirby"
+                    ],
+                    "correctAnswer": "a. Claire Foy"
+                },
+                {
+                    "question": "Who played the main character in 'Sherlock'?",
+                    "movie": "Sherlock",
+                    "options": [
+                        "a. Benedict Cumberbatch",
+                        "b. Martin Freeman",
+                        "c. Andrew Scott",
+                        "d. Mark Gatiss"
+                    ],
+                    "correctAnswer": "a. Benedict Cumberbatch"
+                },
+                {
+                    "question": "In 'Breaking Bad', what is Walter White's alias?",
+                    "movie": "Breaking Bad",
+                    "options": [
+                        "a. Heisenberg",
+                        "b. Gus",
+                        "c. Saul",
+                        "d. Jesse"
+                    ],
+                    "correctAnswer": "a. Heisenberg"
+                },
+                {
+                    "question": "Who played the main character in 'The Sopranos'?",
+                    "movie": "The Sopranos",
+                    "options": [
+                        "a. James Gandolfini",
+                        "b. Bryan Cranston",
+                        "c. Jon Hamm",
+                        "d. Steve Buscemi"
+                    ],
+                    "correctAnswer": "a. James Gandolfini"
+                },
+                {
+                    "question": "In 'Stranger Things', what is the name of the parallel dimension?",
+                    "movie": "Stranger Things",
+                    "options": [
+                        "a. The Upside Down",
+                        "b. The Other Side",
+                        "c. The Dark World",
+                        "d. The Nether"
+                    ],
+                    "correctAnswer": "a. The Upside Down"
+                },
+                {
+                    "question": "Who directed 'Chernobyl'?",
+                    "movie": "Chernobyl",
+                    "options": [
+                        "a. Johan Renck",
+                        "b. David Fincher",
+                        "c. Steven Spielberg",
+                        "d. Ridley Scott"
+                    ],
+                    "correctAnswer": "a. Johan Renck"
+                },
+                {
+                    "question": "In 'The Mandalorian', what is the name of the child?",
+                    "movie": "The Mandalorian",
+                    "options": [
+                        "a. Grogu",
+                        "b. Yoda",
+                        "c. Mando",
+                        "d. Boba"
+                    ],
+                    "correctAnswer": "a. Grogu"
+                }
+            ]
+        },
+        {
+            "category": "Thriller",
+            "questions": [
+                {
+                    "question": "Who directed 'Psycho'?",
+                    "movie": "Psycho",
+                    "options": [
+                        "a. Alfred Hitchcock",
+                        "b. Stanley Kubrick",
+                        "c. Steven Spielberg",
+                        "d. Martin Scorsese"
+                    ],
+                    "correctAnswer": "a. Alfred Hitchcock"
+                },
+                {
+                    "question": "In 'Fight Club', who played the main character?",
+                    "movie": "Fight Club",
+                    "options": [
+                        "a. Edward Norton",
+                        "b. Brad Pitt",
+                        "c. Leonardo DiCaprio",
+                        "d. Tom Cruise"
+                    ],
+                    "correctAnswer": "a. Edward Norton"
+                },
+                {
+                    "question": "Who directed 'The Silence of the Lambs'?",
+                    "movie": "The Silence of the Lambs",
+                    "options": [
+                        "a. Jonathan Demme",
+                        "b. David Fincher",
+                        "c. Christopher Nolan",
+                        "d. Ridley Scott"
+                    ],
+                    "correctAnswer": "a. Jonathan Demme"
+                },
+                {
+                    "question": "In 'Gone Girl', who played the female lead?",
+                    "movie": "Gone Girl",
+                    "options": [
+                        "a. Rosamund Pike",
+                        "b. Jennifer Lawrence",
+                        "c. Scarlett Johansson",
+                        "d. Anne Hathaway"
+                    ],
+                    "correctAnswer": "a. Rosamund Pike"
+                },
+                {
+                    "question": "Who directed 'Black Swan'?",
+                    "movie": "Black Swan",
+                    "options": [
+                        "a. Darren Aronofsky",
+                        "b. Christopher Nolan",
+                        "c. David Fincher",
+                        "d. Martin Scorsese"
+                    ],
+                    "correctAnswer": "a. Darren Aronofsky"
+                },
+                {
+                    "question": "In 'The Girl with the Dragon Tattoo', who played the main character?",
+                    "movie": "The Girl with the Dragon Tattoo",
+                    "options": [
+                        "a. Rooney Mara",
+                        "b. Noomi Rapace",
+                        "c. Claire Foy",
+                        "d. Alicia Vikander"
+                    ],
+                    "correctAnswer": "a. Rooney Mara"
+                },
+                {
+                    "question": "Who directed 'Prisoners'?",
+                    "movie": "Prisoners",
+                    "options": [
+                        "a. Denis Villeneuve",
+                        "b. David Fincher",
+                        "c. Christopher Nolan",
+                        "d. Martin Scorsese"
+                    ],
+                    "correctAnswer": "a. Denis Villeneuve"
+                },
+                {
+                    "question": "In 'The Silence of the Lambs', who played the main character?",
+                    "movie": "The Silence of the Lambs",
+                    "options": [
+                        "a. Jodie Foster",
+                        "b. Julianne Moore",
+                        "c. Sigourney Weaver",
+                        "d. Meryl Streep"
+                    ],
+                    "correctAnswer": "a. Jodie Foster"
+                },
+                {
+                    "question": "Who directed 'Gone Girl'?",
+                    "movie": "Gone Girl",
+                    "options": [
+                        "a. David Fincher",
+                        "b. Christopher Nolan",
+                        "c. Quentin Tarantino",
+                        "d. Martin Scorsese"
+                    ],
+                    "correctAnswer": "a. David Fincher"
+                },
+                {
+                    "question": "In 'The Girl on the Train', who played the main character?",
+                    "movie": "The Girl on the Train",
+                    "options": [
+                        "a. Emily Blunt",
+                        "b. Rosamund Pike",
+                        "c. Amy Adams",
+                        "d. Jessica Chastain"
+                    ],
+                    "correctAnswer": "a. Emily Blunt"
+                }
+            ]
+        },
+        {
+            "category": "War",
+            "questions": [
+                {
+                    "question": "Who directed 'Saving Private Ryan'?",
+                    "movie": "Saving Private Ryan",
+                    "options": [
+                        "a. Steven Spielberg",
+                        "b. Christopher Nolan",
+                        "c. Ridley Scott",
+                        "d. James Cameron"
+                    ],
+                    "correctAnswer": "a. Steven Spielberg"
+                },
+                {
+                    "question": "In 'Dunkirk', who played the main character?",
+                    "movie": "Dunkirk",
+                    "options": [
+                        "a. Fionn Whitehead",
+                        "b. Tom Hardy",
+                        "c. Cillian Murphy",
+                        "d. Mark Rylance"
+                    ],
+                    "correctAnswer": "a. Fionn Whitehead"
+                },
+                {
+                    "question": "Who directed 'Apocalypse Now'?",
+                    "movie": "Apocalypse Now",
+                    "options": [
+                        "a. Francis Ford Coppola",
+                        "b. Steven Spielberg",
+                        "c. Martin Scorsese",
+                        "d. Stanley Kubrick"
+                    ],
+                    "correctAnswer": "a. Francis Ford Coppola"
+                },
+                {
+                    "question": "In 'Full Metal Jacket', who played the drill sergeant?",
+                    "movie": "Full Metal Jacket",
+                    "options": [
+                        "a. R. Lee Ermey",
+                        "b. Tom Hanks",
+                        "c. Robert De Niro",
+                        "d. Al Pacino"
+                    ],
+                    "correctAnswer": "a. R. Lee Ermey"
+                },
+                {
+                    "question": "Who directed 'Platoon'?",
+                    "movie": "Platoon",
+                    "options": [
+                        "a. Oliver Stone",
+                        "b. Steven Spielberg",
+                        "c. Francis Ford Coppola",
+                        "d. Martin Scorsese"
+                    ],
+                    "correctAnswer": "a. Oliver Stone"
+                },
+                {
+                    "question": "In 'Hacksaw Ridge', who played the main character?",
+                    "movie": "Hacksaw Ridge",
+                    "options": [
+                        "a. Andrew Garfield",
+                        "b. Tom Hanks",
+                        "c. Brad Pitt",
+                        "d. Leonardo DiCaprio"
+                    ],
+                    "correctAnswer": "a. Andrew Garfield"
+                },
+                {
+                    "question": "Who directed '1917'?",
+                    "movie": "1917",
+                    "options": [
+                        "a. Sam Mendes",
+                        "b. Christopher Nolan",
+                        "c. Steven Spielberg",
+                        "d. Ridley Scott"
+                    ],
+                    "correctAnswer": "a. Sam Mendes"
+                },
+                {
+                    "question": "In 'Fury', who played the main character?",
+                    "movie": "Fury",
+                    "options": [
+                        "a. Brad Pitt",
+                        "b. Shia LaBeouf",
+                        "c. Logan Lerman",
+                        "d. Michael Peña"
+                    ],
+                    "correctAnswer": "a. Brad Pitt"
+                },
+                {
+                    "question": "Who directed 'The Thin Red Line'?",
+                    "movie": "The Thin Red Line",
+                    "options": [
+                        "a. Terrence Malick",
+                        "b. Steven Spielberg",
+                        "c. Francis Ford Coppola",
+                        "d. Martin Scorsese"
+                    ],
+                    "correctAnswer": "a. Terrence Malick"
+                },
+                {
+                    "question": "In 'Letters from Iwo Jima', who played the main character?",
+                    "movie": "Letters from Iwo Jima",
+                    "options": [
+                        "a. Ken Watanabe",
+                        "b. Tom Hanks",
+                        "c. Clint Eastwood",
+                        "d. Brad Pitt"
+                    ],
+                    "correctAnswer": "a. Ken Watanabe"
+                }
+            ]
+        },
+        {
+            "category": "Western",
+            "questions": [
+                {
+                    "question": "Who directed 'The Good, the Bad and the Ugly'?",
+                    "movie": "The Good, the Bad and the Ugly",
+                    "options": [
+                        "a. Sergio Leone",
+                        "b. John Ford",
+                        "c. Clint Eastwood",
+                        "d. Sam Peckinpah"
+                    ],
+                    "correctAnswer": "a. Sergio Leone"
+                },
+                {
+                    "question": "In 'Unforgiven', who played the main character?",
+                    "movie": "Unforgiven",
+                    "options": [
+                        "a. Clint Eastwood",
+                        "b. John Wayne",
+                        "c. Gary Cooper",
+                        "d. Henry Fonda"
+                    ],
+                    "correctAnswer": "a. Clint Eastwood"
+                },
+                {
+                    "question": "Who directed 'Django Unchained'?",
+                    "movie": "Django Unchained",
+                    "options": [
+                        "a. Quentin Tarantino",
+                        "b. Sergio Leone",
+                        "c. John Ford",
+                        "d. Sam Peckinpah"
+                    ],
+                    "correctAnswer": "a. Quentin Tarantino"
+                },
+                {
+                    "question": "In 'True Grit', who played the main character?",
+                    "movie": "True Grit",
+                    "options": [
+                        "a. Jeff Bridges",
+                        "b. John Wayne",
+                        "c. Clint Eastwood",
+                        "d. Gary Cooper"
+                    ],
+                    "correctAnswer": "a. Jeff Bridges"
+                },
+                {
+                    "question": "Who directed 'The Magnificent Seven'?",
+                    "movie": "The Magnificent Seven",
+                    "options": [
+                        "a. John Sturges",
+                        "b. Sergio Leone",
+                        "c. John Ford",
+                        "d. Sam Peckinpah"
+                    ],
+                    "correctAnswer": "a. John Sturges"
+                },
+                {
+                    "question": "In 'The Hateful Eight', who directed the movie?",
+                    "movie": "The Hateful Eight",
+                    "options": [
+                        "a. Quentin Tarantino",
+                        "b. Sergio Leone",
+                        "c. John Ford",
+                        "d. Sam Peckinpah"
+                    ],
+                    "correctAnswer": "a. Quentin Tarantino"
+                },
+                {
+                    "question": "Who played the main character in 'The Revenant'?",
+                    "movie": "The Revenant",
+                    "options": [
+                        "a. Leonardo DiCaprio",
+                        "b. Tom Hardy",
+                        "c. Brad Pitt",
+                        "d. Matt Damon"
+                    ],
+                    "correctAnswer": "a. Leonardo DiCaprio"
+                },
+                {
+                    "question": "Who directed 'No Country for Old Men'?",
+                    "movie": "No Country for Old Men",
+                    "options": [
+                        "a. Coen Brothers",
+                        "b. Quentin Tarantino",
+                        "c. John Ford",
+                        "d. Sam Peckinpah"
+                    ],
+                    "correctAnswer": "a. Coen Brothers"
+                },
+                {
+                    "question": "In '3:10 to Yuma', who played the main character?",
+                    "movie": "3:10 to Yuma",
+                    "options": [
+                        "a. Russell Crowe",
+                        "b. Christian Bale",
+                        "c. Brad Pitt",
+                        "d. Matt Damon"
+                    ],
+                    "correctAnswer": "a. Russell Crowe"
+                },
+                {
+                    "question": "Who directed 'Once Upon a Time in the West'?",
+                    "movie": "Once Upon a Time in the West",
+                    "options": [
+                        "a. Sergio Leone",
+                        "b. John Ford",
+                        "c. Clint Eastwood",
+                        "d. Sam Peckinpah"
+                    ],
+                    "correctAnswer": "a. Sergio Leone"
+                }
+            ]
+        }
+    ]
+}

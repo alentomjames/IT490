@@ -1,0 +1,10 @@
+/webserver/vendor/
+/*.ini
+*.inc
+*.log
+*.monit
+*.conf
+webserver/vendor
+/vendor
+schemas.sql
+vendor
