@@ -695,3 +695,43 @@ body {
     transform: translateY(1px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+/* Top Ten Page Styles */
+.top-movies {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.movie-item {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 200px;
+}
+
+.movie-item a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.movie-item img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.movie-item p {
+    font-size: 1rem;
+    color: #333;
+}
+
+.vote-average {
+    font-size: 1.2rem;
+    color: #FFD700;
+    margin-top: 5px;
+}

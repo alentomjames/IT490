@@ -2,10 +2,10 @@
 session_start();
 $loggedIn = isset($_SESSION['userID']);
 
-// if (!$loggedIn) {
-//     header('Location: login.php');
-//     exit();
-// }
+if (!$loggedIn) {
+    header('Location: login.php');
+    exit();
+}
 
 require_once 'rabbitmq_connection.php';
 require_once('vendor/autoload.php');
@@ -14,13 +14,19 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 $type = 'top_rated_movies';
-sendRequest($type, null);
+sendRequest($type, null, "frontendForDB");
 
-$topMovies = recieveDMZ();
+$topMovies = recieveDB();
 
 if (!$topMovies) {
     echo '<p>Failed to retrieve top-rated movies!</p>';
     exit;
+}
+
+function getMovieDetails($movie_id) {
+    $type = 'movie_details';
+    sendRequest($type, $movie_id, "frontendForDMZ");
+    return recieveDMZ();
 }
 ?>
 
@@ -54,11 +60,12 @@ if (!$topMovies) {
 
     <div class="top-movies">
         <?php foreach (array_slice($topMovies, 0, 10) as $movie): ?>
+            <?php $movieDetails = getMovieDetails($movie['id']); ?>
             <div class="movie-item">
                 <a href="moviePage.php?id=<?php echo $movie['id']; ?>">
-                    <img src="https://image.tmdb.org/t/p/w200<?php echo $movie['poster_path']; ?>" alt="<?php echo $movie['title']; ?> Poster">
-                    <p><?php echo $movie['title']; ?></p>
-                    <p class="vote-average"><?php echo round($movie['vote_average'] / 2, 1); ?> <i class="fa fa-star"></i></p>
+                    <img src="https://image.tmdb.org/t/p/w200<?php echo $movieDetails['poster_path']; ?>" alt="<?php echo $movieDetails['title']; ?> Poster">
+                    <p><?php echo $movieDetails['title']; ?></p>
+                    <p class="vote-average"><?php echo round($movieDetails['vote_average'] / 2, 1); ?> <i class="fa fa-star"></i></p>
                 </a>
             </div>
         <?php endforeach; ?>
