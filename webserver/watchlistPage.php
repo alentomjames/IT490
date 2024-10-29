@@ -53,7 +53,7 @@ function fetchWatchlist($userId)
 function receiveRemoveResponse()
 {
     list($connection, $channel) = getRabbit();
-    $channel->queue_declare('databaseQueue', false, true, false, false);
+    $channel->queue_declare('databaseForFrontend', false, true, false, false);
 
     $callback = function ($msg) {
         $response = json_decode($msg->body, true);
@@ -64,7 +64,7 @@ function receiveRemoveResponse()
         }
     };
 
-    $channel->basic_consume('databaseQueue', '', false, true, false, false, $callback);
+    $channel->basic_consume('databaseForFrontend', '', false, true, false, false, $callback);
 
     while ($channel->is_consuming()) {
         $channel->wait();
