@@ -30,25 +30,25 @@ function removeFromWatchlist($movieId, $userId)
     receiveRemoveResponse();
 }
 
-// $userId = $_SESSION['userID'];
-// $watchlist = fetchWatchlist($userId);
+$userId = $_SESSION['userID'];
+$watchlist = fetchWatchlist($userId);
 
-// function fetchWatchlist($userId)
-// {
-//     list($connection, $channel) = getRabbit();
-//     $channel->queue_declare('frontendForDB', false, true, false, false);
+function fetchWatchlist($userId)
+{
+    list($connection, $channel) = getRabbit();
+    $channel->queue_declare('frontendForDB', false, true, false, false);
 
-//     $data = json_encode([
-//         'type'   => 'get_watchlist',
-//         'user_id' => $userId
-//     ]);
+    $data = json_encode([
+        'type'   => 'get_watchlist',
+        'user_id' => $userId
+    ]);
 
-//     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
-//     $channel->basic_publish($msg, 'directExchange', 'frontendForDB');
-//     closeRabbit($connection, $channel);
+    $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
+    $channel->basic_publish($msg, 'directExchange', 'frontendForDB');
+    closeRabbit($connection, $channel);
 
-//     return receiveWatchlistResponse();
-// }
+    return receiveWatchlistResponse();
+}
 
 // function receiveRemoveResponse()
 // {
