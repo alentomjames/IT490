@@ -5,10 +5,10 @@ require_once './vendor/autoload.php';
 
 use PhpAmqpLib\Message\AMQPMessage;
 
-if (!isset($_SESSION['userID'])) {
-    header('Location: login.php'); // Redirect if the user is not logged in
-    exit;
-}
+// if (!isset($_SESSION['userID'])) {
+//     header('Location: login.php'); // Redirect if the user is not logged in
+//     exit;
+// }
 
 $loggedIn = isset($_SESSION['userID']);
 
