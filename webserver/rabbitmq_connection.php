@@ -22,7 +22,7 @@ function closeRabbit($connection, $channel){
     }    
 }
 
-function sendRequest($type, $parameter){
+function sendRequest($type, $parameter){ƒ
     list($connection, $channel) = getRabbit();
     // Declaring the channel its being sent on
     $channel->queue_declare('frontendQueue', false, true, false, false);
@@ -34,7 +34,6 @@ function sendRequest($type, $parameter){
 
     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
     $channel->basic_publish($msg, 'directExchange', 'frontendQueue');
-    debug_to_console("Frontend Message Sent");
     closeRabbit($connection, $channel);
 
 }
@@ -56,13 +55,11 @@ function recieveDMZ(){
     };
     
     $channel->basic_consume('dmzQueue', '', false, true, false, false, $callback);
-    debug_to_console("Waiting for response");
 
     // Wait for the response
     while ($channel->is_consuming()) {
         $channel->wait();  
     }
-    debug_to_console("Response Recieved");
 
     // Close the channel and connection
     closeRabbit($connection, $channel);
