@@ -11,7 +11,7 @@ $client = new \GuzzleHttp\Client();
 $trending=fetchTrending()['results'];
 function fetchTrending() {
     $type = 'trending_movies';
-    sendRequest($type, '', 'frontendForDMZ');
+    sendRequest($type, 'day', 'frontendForDMZ');
     return recieveDMZ();
 }
 ?>
