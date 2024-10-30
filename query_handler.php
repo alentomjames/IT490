@@ -10,7 +10,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 require_once 'auth/login.php';
 require_once 'auth/register.php';
 require_once 'movies/watchlist.php';
-
+require_once 'movies/rating.php';
 // get the rabbitmq connection
 list($connection, $channel) = getRabbit();
 
