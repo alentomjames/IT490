@@ -43,9 +43,9 @@ function receiveRabbitMQResponse($connection, $channel)
     $callback = function ($msg) {
         $response = json_decode($msg->body, true);
         if ($response['type'] === 'success') {
-            return ['type' => 'success', 'watchlist' => $response];
+            echo json_encode(['type' => 'success', 'watchlist' => $response['watchlist']]);
         } else {
-            return ['type' => 'failure', 'message' => 'Failed to retrieve watchlist'];
+            echo json_encode(['type' => 'failure', 'message' => 'Failed to retrieve watchlist']);
         }
         exit;
     };
