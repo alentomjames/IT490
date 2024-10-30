@@ -30,6 +30,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 function receiveRabbitMQResponse()
 {
+
+    if (ob_get_length()) {
+        ob_clean();
+    }
     list($connection, $channel) = getRabbit();
     $channel->queue_declare('databaseForFrontend', false, true, false, false);
 
