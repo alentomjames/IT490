@@ -11,6 +11,8 @@ require_once 'auth/login.php';
 require_once 'auth/register.php';
 require_once 'movies/watchlist.php';
 require_once 'movies/rating.php';
+require_once 'movies/topTen.php';
+
 // get the rabbitmq connection
 list($connection, $channel) = getRabbit();
 
@@ -52,6 +54,11 @@ $callback = function ($msg) use ($channel) {
         $userId = (int)$data['user_id'];
         $rating = (int) $data['rating'];
         $response = rateMovie($movieId, $userId, $rating);
+    } elseif ($type === "top_rated_movies") {
+        $response = getTopTenMovies();
+    } elseif ($type === "get_likedMovies") {
+        $userId = (int) $data['user_id'];
+        $response = getFromRatings($userId);
     } else {
         echo "Received unknown command or missing required data fields\n";
         return;

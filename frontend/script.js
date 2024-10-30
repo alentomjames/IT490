@@ -78,7 +78,6 @@ function removeFromWatchlist(movieId) {
         .catch(error => console.error('Error:', error));
 }
 
-
 function setMovieRating(movieId, userId, rating) {
     if (rating < 1 || rating > 5) {
         alert("Please provide a rating between 1 and 5.");
@@ -94,23 +93,14 @@ function setMovieRating(movieId, userId, rating) {
         .then(data => {
             if (data['type'] === 'success') {
                 alert('Rating submitted successfully!');
+                exit();
             } else {
-                alert(`Failed to submit rating: ${data['reason']}`);
+                alert(`Failed to submit rating: ${data['message']}`);
+                exit();
             }
         })
-        .catch(error => console.error('Error submitting rating:', error));
-}
-
-// event listener for rating buttons
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.rate-button').forEach(button => {
-        button.addEventListener('click', event => {
-            const movieId = event.target.dataset.movieId;
-            const userId = event.target.dataset.userId;
-            const rating = parseInt(event.target.dataset.rating);
-
-            setMovieRating(movieId, userId, rating);
+        .catch(error => {
+            console.error('Error submitting rating:', error);
+            return { error: 'Failed to submit rating' };
         });
-    });
-});
-
+}
