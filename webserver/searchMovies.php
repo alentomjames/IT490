@@ -4,13 +4,12 @@ require 'rabbitmq_connection.php';
 
 // Setting page & query parameter 
 $query = isset($_GET['query']) ? trim($_GET['query']) : '';
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
 // Setting type thats being sent to the DMZ
 $type = 'movie_search';
 
 // Sending request 
-sendRequest($type, $page, 'frontendForDMZ');
+sendRequest($type, $query, 'frontendForDMZ');
 
 $filteredMovies = recieveDMZ();
 
