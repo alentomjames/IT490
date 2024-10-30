@@ -44,9 +44,6 @@ if ($movie_id) {
 
     $recommendations = isset($recommendationsData['results']) ? array_slice($recommendationsData['results'], 0, 10) : [];
 
-    echo "<pre>";
-    print_r($recommendations);
-    echo "</pre>";
 
     error_log("Recommendations received: " . print_r($recommendations, true)); // Debug log
 
