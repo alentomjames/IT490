@@ -38,13 +38,17 @@ if ($movie_id) {
     // Adding reccomendations 
     $type = 'reccomendations';
     sendRequest($type, $movie_id, 'frontendForDMZ');
-    $reccomendationsData = recieveDMZ();
+    $recommendationsData = recieveDMZ();
 
-    error_log("Recommendations response: " . print_r($reccomendationsData, true)); 
+    error_log("Recommendations response: " . print_r($recommendationsData, true)); 
 
-    $recommendations = isset($reccomendationsData['data']['results']) ? 
-    array_slice($reccomendationsData['data']['results'], 0, 10) : 
+    $recommendations = isset($recommendationsData['data']['results']) ? 
+    array_slice($recommendationsData['data']['results'], 0, 10) : 
     [];
+
+    echo "<pre>";
+    print_r($recommendations);
+    echo "</pre>";
 
     error_log("Recommendations received: " . print_r($recommendations, true)); // Debug log
 
