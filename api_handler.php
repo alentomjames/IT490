@@ -54,7 +54,8 @@ $callback = function ($msg) use ($channel) {
             // request = https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc
             $url = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page={$parameter}";
             echo "Fetching discover movie details for URL: $url\n";
-            break; 
+	    $response = fetchDetails($type, $parameter, $url);
+	    break; 
             
         default:
             echo "Unrecognized type: $type\n";
