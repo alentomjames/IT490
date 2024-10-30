@@ -17,7 +17,7 @@ $triviaData = json_decode($triviaJson, true);
 function fetchMoviePoster($movieTitle) {
     $type = 'search_movie';
     sendRequest($type, $movieTitle, 'frontendForDMZ');
-    return receiveDMZ();
+    return recieveDMZ();
 }
 
 function getTriviaQuestions($triviaData, $genre) {
