@@ -35,6 +35,7 @@ function sendRequest($type, $parameter, $queue){
     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
     $channel->basic_publish($msg, 'directExchange', $queue);
     closeRabbit($connection, $channel);
+    
 
 }
 

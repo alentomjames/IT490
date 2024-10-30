@@ -41,7 +41,7 @@ if ($movie_id) {
     sendRequest($type, $movie_id, 'frontendForDMZ');
     $recommendationsData = recieveDMZ();
 
-    error_log("Recommendations response: " . print_r($recommendationsData, true)); 
+    error_log("Recommendations response: " . print_r($recommendationsData, true));
 
     $recommendations = isset($recommendationsData['results']) ? array_slice($recommendationsData['results'], 0, 10) : [];
 
@@ -90,26 +90,33 @@ if ($movie_id) {
     </nav>
 
     <!-- Movie Content -->
-    <div class="movie-page">
-        <div class="movie-poster">
-            <img src="<?php echo $poster; ?>" alt="<?php echo $title; ?> Poster">
-        </div>
-        <div class="movie-details">
-            <!-- Add to Watchlist Button -->
-            <h1>
-                <?php echo $title; ?>
-                <span
-                    class="vote-average"> <?php echo $vote_average; ?> <i class="fa fa-star"></i>
-                </span>
-                <button
-                    onclick="addToWatchlist(<?php echo $movie_id; ?>)" class="watchlist-button">Add to Watchlist <i class="fa-solid fa-check"></i>
-                </button>
-            </h1>
-            <p><strong>Overview:</strong> <?php echo $overview; ?></p>
-            <p><strong>Genres:</strong> <?php echo $genres; ?></p>
-            <p><strong>Spoken Languages:</strong> <?php echo $languages; ?></p>
-            <p><strong>Production Companies:</strong> <?php echo $production_companies; ?></p>
-        </div>
+    <div class="movie-details">
+        <h1>
+            <?php echo $title; ?>
+            <span class="vote-average"> <?php echo $vote_average; ?> <i class="fa fa-star"></i></span>
+
+            <!-- Rating Selection Dropdown -->
+            <div class="rating-container">
+                <label for="user-rating">Your Rating:</label>
+                <select id="user-rating" onchange="setMovieRating(<?php echo $movie_id; ?>, <?php echo $_SESSION['userID']; ?>, this.value)">
+                    <option value="">Rate</option>
+                    <option value="1">1 Star</option>
+                    <option value="2">2 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="5">5 Stars</option>
+                </select>
+            </div>
+
+            <button onclick="addToWatchlist(<?php echo $movie_id; ?>)" class="watchlist-button">
+                Add to Watchlist <i class="fa-solid fa-check"></i>
+            </button>
+        </h1>
+        <p><strong>Overview:</strong> <?php echo $overview; ?></p>
+        <p><strong>Genres:</strong> <?php echo $genres; ?></p>
+        <p><strong>Spoken Languages:</strong> <?php echo $languages; ?></p>
+        <p><strong>Production Companies:</strong> <?php echo $production_companies; ?></p>
+    </div>
     </div>
 
     <!-- Recommended Movies -->
