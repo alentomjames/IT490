@@ -9,7 +9,8 @@ $userName = isset($_SESSION['name']) ? $_SESSION['name'] : 'Guest';
 // }
 require_once 'rabbitmq_connection.php';
 require_once 'vendor/autoload.php';
-function getMovieDetails($movieId) {
+function getMovieDetails($movieId)
+{
 
 
     $type = 'movie_details';
@@ -24,7 +25,11 @@ function getMovieDetails($movieId) {
     }
 }
 
-function getRecommendations($movieId) {
+function getRecommendations($movieId)
+{
+    if (ob_get_length()) {
+        ob_clean();
+    }
     $type = 'recommendations';
     sendRequest($type, $movieId, 'frontendForDMZ');
 
@@ -41,6 +46,7 @@ function getRecommendations($movieId) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,6 +54,7 @@ function getRecommendations($movieId) {
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
 </head>
+
 <body>
     <nav class="navbar">
         <a href="index.php" class="nav-title">BreadWinners</a>
@@ -122,6 +129,7 @@ function getRecommendations($movieId) {
                 container.appendChild(movieItem);
             });
         }
+
         function fetchRecommendations() {
             fetch('fetchRecommendations.php')
                 .then(response => response.json())
@@ -165,4 +173,5 @@ function getRecommendations($movieId) {
         }
     </script>
 </body>
+
 </html>
