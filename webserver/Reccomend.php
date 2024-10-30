@@ -105,7 +105,7 @@ require 'rabbitmq_connection.php';
                 .then(response => response.json())
                 .then(data => {
                     totalPages = data.total_pages;
-                    allMovies = data.results;
+                    allMovies = data.results.filter(movie => movie.poster_path);
                     displayMovies(allMovies);
                     document.getElementById('current-page').textContent = currentPage;
                 });
@@ -116,6 +116,7 @@ require 'rabbitmq_connection.php';
             moviesContainer.innerHTML = '';
 
             movies.forEach(movie => {
+                if(movie.poster_path){
                 const movieItem = document.createElement('div');
                 movieItem.classList.add('favorite-item');
                 movieItem.setAttribute('data-id', movie.id);
@@ -129,6 +130,7 @@ require 'rabbitmq_connection.php';
                 `;
 
                 moviesContainer.appendChild(movieItem);
+            }
             });
         }
 
