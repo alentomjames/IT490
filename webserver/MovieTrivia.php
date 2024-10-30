@@ -18,29 +18,22 @@ function fetchMoviePoster($movieTitle)
 {
     $type = 'search_movie';
     sendRequest($type, $movieTitle, 'frontendForDMZ');
-    $response = recieveDMZ();
-    error_log("Movie poster response: " .print_r($response, true));
-    return $response;
+    return recieveDMZ();
 }
 
 function getTriviaQuestions($triviaData, $genre)
 {
     $selectedTrivia = [];
     if ($genre) {
-        // Find the category that matches the selected genre
-        foreach ($triviaData['movieTrivia'] as $category) {
-            if ($category['category'] === $genre) {
-                $selectedTrivia = $category['questions'];
-                break;
-            }
+        $genreTrivia = $triviaData['movieTrivia'][array_search($genre, array_column($triviaData['movieTrivia'], 'category'))];
+        if ($genreTrivia) {
+            $selectedTrivia = $genreTrivia['questions'];
         }
     } else {
-        // If no genre selected, get questions from all categories
         foreach ($triviaData['movieTrivia'] as $category) {
             $selectedTrivia = array_merge($selectedTrivia, $category['questions']);
         }
     }
-
     return array_slice($selectedTrivia, 0, 10);
 }
 
@@ -65,7 +58,8 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
         <a href="index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
-                <li><button onclick="location.href='Reccomend.php'">Reccomended Movies</button></li>
+                <li><button onclick="location.href='Reccomend.php'">Movie Smoothie</button></li>
+                <li><button onclick="location.href='recBasedonLikesPage.php'">Recommended Movies</button></li>
                 <li><button onclick="location.href='MovieTrivia.php'">Movie Trivia</button></li>
                 <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
                 <li><button onclick="location.href='topTenPage.php'">Top Movies</button></li>
