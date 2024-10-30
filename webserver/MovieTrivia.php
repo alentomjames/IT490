@@ -120,7 +120,9 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
                 <p><?php echo $question['question']; ?></p>
                 <ul>
                     <?php foreach ($question['options'] as $option): ?>
-                        <li onclick="selectAnswer(this, '<?php echo htmlspecialchars($question['correctAnswer'], ENT_QUOTES); ?>')"><?php echo htmlspecialchars($option, ENT_QUOTES); ?></li>
+                        <li data-correct-answer="<?php echo htmlspecialchars($question['correctAnswer'], ENT_QUOTES); ?>" onclick="selectAnswer(this)">
+                            <?php echo htmlspecialchars($option, ENT_QUOTES); ?>
+                        </li>
                     <?php endforeach; ?>
                 </ul>
             </div>
@@ -133,6 +135,8 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
 
         function selectAnswer(element, correctAnswer) {
             if (element.classList.contains('selected')) return;
+
+            const correctAnswer = element.getAttribute('data-correct-answer');
 
             element.classList.add('selected');
             element.style.backgroundColor = '#007BFF';
