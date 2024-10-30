@@ -1,11 +1,11 @@
+#!/usr/bin/php
 <?php
 require 'vendor/autoload.php'; // Adjust path as necessary
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-function sendMessage($queue, $messageBody)
-{
+function sendMessage($queue, $messageBody) {
     // RabbitMQ server details
     $host = '172.29.4.30'; // Change if your RabbitMQ server is on another host
     $port = 5672; // Default RabbitMQ port
@@ -36,3 +36,4 @@ function sendMessage($queue, $messageBody)
 sendMessage('dmz', 'Hello, DMZ Queue!');
 sendMessage('db', 'Hello, DB Queue!');
 sendMessage('frontend', 'Hello, Frontend Queue!');
+

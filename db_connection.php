@@ -1,3 +1,4 @@
+#!/usr/bin/php
 <?php
 
 $getenv = parse_ini_file('db_config.env');
@@ -31,3 +32,5 @@ function getDbConnection()
 // 	echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
 // 	exit(0);
 // }
+
+?>

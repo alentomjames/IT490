@@ -1,8 +1,8 @@
 <?php
 
 require_once 'db_connection.php'; // file has db connection
-require_once 'rmq_connection.php'; // how I connect to RabbitMQ
-require_once 'vendor/autoload.php';
+require_once 'webserver/rabbitmq_connection.php'; // how I connect to RabbitMQ
+require_once  'webserver/vendor/autoload.php';
 
 use PhpAmpqLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -36,6 +36,7 @@ $callback = function ($msg) use ($channel) {
     } elseif ($type === "add_to_watchlist") {
         $movieId = $data['movie_id'];
         $userId = $data['user_id'];
+        echo "Movie ID: $movieId\n";
         // add to watchlist
         $response = addToWatchlist($movieId, $userId);
     } elseif ($type === "remove_from_watchlist") {
@@ -45,7 +46,7 @@ $callback = function ($msg) use ($channel) {
         // remove from watchlist
         $response = removeFromWatchlist($movieId, $userId);
     } elseif ($type === "get_watchlist") {
-        $userId = (int) $data['user_id'];
+        $userId = $data['user_id'];
         // get all watchlist
         $response = getFromWatchlist($userId);
     } else {
