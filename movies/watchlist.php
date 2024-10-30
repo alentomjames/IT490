@@ -43,9 +43,9 @@ function removeFromWatchlist(int $movieId, int $userId)
     $stmt->execute();
 
     if ($stmt->affected_rows > 0) {
-        $response = ['type' => 'success', 'message' => 'Movie removed from watchlist'];
+        $response = json_encode(['type' => 'success', 'message' => 'Movie removed from watchlist']);
     } else {
-        $response = ['type' => 'failure', 'message' => 'Movie does not exist in watchlist'];
+        $response = json_encode(['type' => 'failure', 'message' => 'Movie does not exist in watchlist']);
     }
 
     $stmt->close();
