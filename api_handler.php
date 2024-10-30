@@ -39,67 +39,15 @@ $callback = function ($msg) use ($channel) {
     $response = null;
     switch ($type) {
         case 'movie_details':
-            // https://api.themoviedb.org/3/movie/{movie_id}
-            // request = 
             $url = "https://api.themoviedb.org/3/movie/{$parameter}?language=en-US";
             echo "Fetching movie details for URL: $url\n";
             $response = fetchDetails($type, $parameter, $url);
             break;
-        case 'person_details':
-            // https://api.themoviedb.org/3/person/{person_id}
-            // request = 'https://api.themoviedb.org/3/person/person_id?language=en-US'
-            $url = "https://api.themoviedb.org/3/person/{$parameter}?language=en-US";
-            echo "Fetching person details for URL: $url\n";
-
+        case 'reccomendations':
+            $url = "https://api.themoviedb.org/3/movie/{$parameter}/recommendations?language=en-US&page=1";
+            echo "Fetching reccomendations: $url\n";
             $response = fetchDetails($type, $parameter, $url);
             break;
-
-        case 'review_details':
-            // https://api.themoviedb.org/3/movie/{movie_id}/reviews
-            // request = https://api.themoviedb.org/3/movie/movie_id/reviews?language=en-US&page=1'
-            $url = "https://api.themoviedb.org/3/review/{$parameter}?language=en-US";
-            break;    
-
-        case 'popular_movie_details':
-            // https://api.themoviedb.org/3/movie/popular
-            // request = https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&page=${page}
-            $url = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&page=${parameter}";
-            // parameter = page number?
-            // its a query parameter, not a path parameter
-            echo "";
-            break;
-
-        case 'recommended_movie_details':
-            // https://api.themoviedb.org/3/movie/{movie_id}/recommendations
-            // request = https://api.themoviedb.org/3/movie/movie_id/recommendations?language=en-US&page=1
-            $url = "https://api.themoviedb.org/3/movie/{$parameter}/recommendations?language=en-US&page=1'";
-            // parameter = movie_id
-            echo "Fetching recommended movie details for URL: $url\n";
-            break;
-        case 'search_details':
-            // https://api.themoviedb.org/3/search/???
-            // request = "https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(movieTitle)}&include_adult=false&language=en-US&page=1"
-            $url = "https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent($parameter)}&include_adult=false&language=en-US&page=1";
-            // parameter = movieTitle
-            echo "Fetching search details for URL: $url\n";
-            break;
-
-        case 'trending_movie_details':
-            // https://api.themoviedb.org/3/trending/movie/{time_window}
-            $url = "https://api.themoviedb.org/3/trending/movie/{$parameter}?language=en-US'";
-            // must be modified
-            // parameter = day
-            echo "Fetching trending movie details for URL: $url\n";
-            break;
-        /*
-        case 'trending_people_details':
-            // https://api.themoviedb.org/3/trending/person/{time_window}
-            $url = "https://api.themoviedb.org/3/trending/($parameter}/day?language=en-US";
-            // parameter = person
-            echo "Fetching trending people details for URL: $url\n";
-        */
-        
-
         default:
             echo "Unrecognized type: $type\n";
             return;
@@ -175,4 +123,3 @@ function fetchDetails($type, $parameter, $url) {
         ]);
     }
 }
-
