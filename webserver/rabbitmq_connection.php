@@ -42,10 +42,6 @@ function sendRequest($type, $parameter, $queue)
 
 function recieveDMZ()
 {
-
-    if (ob_get_length()) {
-        ob_clean();
-    }
     list($connection, $channel) = getRabbit();
     $data = null;
     // Declare the response channel
