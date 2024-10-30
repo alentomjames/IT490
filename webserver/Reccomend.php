@@ -3,6 +3,7 @@ session_start();
 $loggedIn = isset($_SESSION['userID']);
 
 require_once 'vendor/autoload.php';  
+require 'rabbitmq_connection.php';
 
 ?>
 
@@ -88,7 +89,116 @@ require_once 'vendor/autoload.php';
         <div id="recommendation-results"></div>
     </div>
 
+    <script>
+        let favoriteMovies = [];
+        let currentPage = 1;
+        let totalPages = 1;
+        let allMovies = [];
+        let searchQuery = '';
 
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMovies(currentPage);
+        });
+
+        function loadMovies(page) {
+            fetch(`loadMovies.php?page=${page}`)
+                .then(response => response.json())
+                .then(data => {
+                    totalPages = data.total_pages;
+                    allMovies = data.results;
+                    displayMovies(allMovies);
+                    document.getElementById('current-page').textContent = currentPage;
+                });
+        }
+
+        function displayMovies(movies) {
+            const moviesContainer = document.getElementById('movies-container');
+            moviesContainer.innerHTML = '';
+
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('favorite-item');
+                movieItem.setAttribute('data-id', movie.id);
+                movieItem.setAttribute('data-title', movie.title.toLowerCase());
+                movieItem.setAttribute('data-genres', movie.genre_ids.join(','));
+                movieItem.onclick = () => addFavorite(movie.id, movie.title);
+
+                movieItem.innerHTML = `
+                    <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title} Poster">
+                    <p>${movie.title}</p>
+                `;
+
+                moviesContainer.appendChild(movieItem);
+            });
+        }
+
+        function addFavorite(movieId, movieTitle) {
+            if (favoriteMovies.length < 3 && !favoriteMovies.includes(movieId)) {
+                favoriteMovies.push(movieId);
+                const listItem = document.createElement('li');
+                listItem.textContent = movieTitle;
+                document.getElementById('favorite-movies-list').appendChild(listItem);
+
+                const movieItem = document.querySelector(`.favorite-item[data-id="${movieId}"]`);
+                if (movieItem) {
+                    movieItem.classList.add('selected');
+                }
+
+                if (favoriteMovies.length === 3) {
+                    fetchRecommendations();
+                }
+            }
+        }
+
+        function fetchRecommendations() {
+            const recommendationResults = document.getElementById('recommendation-results');
+            recommendationResults.innerHTML = '';
+
+            favoriteMovies.forEach(movieId => {
+                fetch(`https://api.themoviedb.org/3/movie/${movieId}/recommendations?language=en-US&page=1`, {
+                    headers: {
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
+                        'accept': 'application/json',
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const firstRecommendation = data.results[0];
+                        const recommendationItem = document.createElement('div');
+                        recommendationItem.classList.add('recommendation-item');
+                        recommendationItem.innerHTML = `
+                        <a href="moviePage.php?id=${firstRecommendation.id}">
+                            <img src="https://image.tmdb.org/t/p/w200${firstRecommendation.poster_path}" alt="${firstRecommendation.title} Poster">
+                        </a>
+                        <p>${firstRecommendation.title}</p>
+                    `;
+                        recommendationResults.appendChild(recommendationItem);
+                    });
+            });
+        }
+
+
+        function searchMovies(query, genreFilter) {
+            fetch(`https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1`, {
+                headers: {
+                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
+                    'accept': 'application/json',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    let filteredMovies = data.results;
+
+                    if (genreFilter) {
+                        filteredMovies = filteredMovies.filter(movie => movie.genre_ids.includes(parseInt(genreFilter)));
+                    }
+
+                    displayMovies(filteredMovies);
+                });
+        }
+
+
+    </script>
 </body>
 
 </html>
