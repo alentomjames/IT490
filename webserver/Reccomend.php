@@ -24,7 +24,12 @@ require 'rabbitmq_connection.php';
         <a href="index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
-                <li><button onclick="location.href='Reccomend.php'">Reccomended Movies</button></li>
+                <li>
+                    <button onclick="location.href='Reccomend.php'" class="smoothie-button">
+                        <img src="smoothie.png" alt="Movie Smoothie" class="smoothie-icon">
+                    </button>
+                </li>
+                <li><button onclick="location.href='recBasedonLikesPage.php'">Recommended Movies</button></li>
                 <li><button onclick="location.href='MovieTrivia.php'">Movie Trivia</button></li>
                 <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
                 <li><button onclick="location.href='topTen.php'">Top Movies</button></li>
@@ -68,7 +73,7 @@ require 'rabbitmq_connection.php';
     </div>
 
     <div class="favorites-selection">
-        <h2>Select Your 3 Favorite Movies</h2>
+        <h2>Select Your 3 Favorite Movies For Your Blend</h2>
         <div class="favorites-container" id="movies-container">
         </div>
     </div>
@@ -80,7 +85,7 @@ require 'rabbitmq_connection.php';
     </div>
 
     <div class="user-favorites">
-        <h2>Your Favorite Movies</h2>
+        <h2>Your Blend</h2>
         <ul id="favorite-movies-list"></ul>
     </div>
 

@@ -9,38 +9,7 @@ $userName = isset($_SESSION['name']) ? $_SESSION['name'] : 'Guest';
 // }
 require_once 'rabbitmq_connection.php';
 require_once 'vendor/autoload.php';
-function getMovieDetails($movieId)
-{
 
-
-    $type = 'movie_details';
-    sendRequest($type, $movieId, 'frontendForDMZ');
-
-    $movie = recieveDMZ();
-
-    if ($movie) {
-        return $movie;
-    } else {
-        return null;
-    }
-}
-
-function getRecommendations($movieId)
-{
-    if (ob_get_length()) {
-        ob_clean();
-    }
-    $type = 'recommendations';
-    sendRequest($type, $movieId, 'frontendForDMZ');
-
-    $recommendationsData = recieveDMZ();
-
-    if ($recommendationsData) {
-        return isset($recommendationsData['results'][0]) ? $recommendationsData['results'][0] : null;
-    } else {
-        return [];
-    }
-}
 ?>
 
 
@@ -60,7 +29,12 @@ function getRecommendations($movieId)
         <a href="index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
-                <li><button onclick="location.href='Reccomend.php'">Recommended Movies</button></li>
+                <li>
+                    <button onclick="location.href='Reccomend.php'" class="smoothie-button">
+                        <img src="smoothie.png" alt="Movie Smoothie" class="smoothie-icon">
+                    </button>
+                </li>
+                <li><button onclick="location.href='recBasedonLikesPage.php'">Recommended Movies</button></li>
                 <li><button onclick="location.href='MovieTrivia.php'">Movie Trivia</button></li>
                 <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
                 <li><button onclick="location.href='topTen.php'">Top Movies</button></li>
@@ -117,21 +91,27 @@ function getRecommendations($movieId)
                 const movieItem = document.createElement('div');
                 movieItem.classList.add('movie-item');
                 movieItem.innerHTML = `<p>Movie ID: ${movie}</p>`;
-                getMovieDetails(movie).then(movieDetails => {
-                    if (movieDetails) {
-                        const movieTitle = movieDetails.title;
-                        const moviePoster = movieDetails.poster_path;
-                        movieItem.innerHTML = `<a href="moviePage.php?id=${movie}"><img src="https://image.tmdb.org/t/p/w200${moviePoster}" alt="${movieTitle} Poster"><p>${movieTitle}</p></a>`;
-                    } else {
+                fetch('loadMovieDetails.php?id=' + movie)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.type === 'success') {
+                            const movieDetails = data.movie;
+                            const movieTitle = movieDetails.title;
+                            const moviePoster = movieDetails.poster_path;
+                            movieItem.innerHTML = `<a href="moviePage.php?id=${movie}"><img src="https://image.tmdb.org/t/p/w200${moviePoster}" alt="${movieTitle} Poster"><p>${movieTitle}</p></a>`;
+                        } else {
+                            movieItem.innerHTML = `<p>Movie ID: ${movie}</p>`;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching movie details:', error);
                         movieItem.innerHTML = `<p>Movie ID: ${movie}</p>`;
-                    }
-                });
-                container.appendChild(movieItem);
+                    });
             });
         }
 
         function fetchRecommendations() {
-            fetch('fetchRecommendations.php')
+            fetch('loadRecommendations.php?id=' + movie)
                 .then(response => response.json())
                 .then(data => {
                     if (data.type === 'success') {
@@ -159,16 +139,22 @@ function getRecommendations($movieId)
                 const movieItem = document.createElement('div');
                 movieItem.classList.add('movie-item');
                 movieItem.innerHTML = `<p>Movie ID: ${movie.id}</p>`;
-                getMovieDetails(movie.id).then(movieDetails => {
-                    if (movieDetails) {
-                        const movieTitle = movieDetails.title;
-                        const moviePoster = movieDetails.poster_path;
-                        movieItem.innerHTML = `<a href="moviePage.php?id=${movie.id}"><img src="https://image.tmdb.org/t/p/w200${moviePoster}" alt="${movieTitle} Poster"><p>${movieTitle}</p></a>`;
-                    } else {
+                fetch('loadMovieDetails.php?id=' + movie.id)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.type === 'success') {
+                            const movieDetails = data.movie;
+                            const movieTitle = movieDetails.title;
+                            const moviePoster = movieDetails.poster_path;
+                            movieItem.innerHTML = `<a href="moviePage.php?id=${movie.id}"><img src="https://image.tmdb.org/t/p/w200${moviePoster}" alt="${movieTitle} Poster"><p>${movieTitle}</p></a>`;
+                        } else {
+                            movieItem.innerHTML = `<p>Movie ID: ${movie.id}</p>`;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching movie details:', error);
                         movieItem.innerHTML = `<p>Movie ID: ${movie.id}</p>`;
-                    }
-                });
-                container.appendChild(movieItem);
+                    });
             });
         }
     </script>

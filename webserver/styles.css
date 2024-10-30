@@ -58,6 +58,28 @@ body {
     color: #fff;
 }
 
+.navbar .nav-links button.smoothie-button {
+    background-color: white;
+    border: none; 
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar .nav-links button.smoothie-button:hover {
+    transform: scale(1.1); 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.navbar .nav-links .smoothie-icon {
+    width: 40px; 
+    height: auto;
+}
+
+
 /* Modal Styling */
 .modal {
     margin: 100px auto;
@@ -746,3 +768,4 @@ body {
     color: #FFD700;
     margin-top: 5px;
 }
+
