@@ -100,8 +100,10 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
         <?php foreach ($selectedTrivia as $question): ?>
             <?php
             $movieDetails = fetchMoviePoster($question['movie']);
-            echo $movieDetails;
-            $posterUrl = $movieDetails['poster_path'] ? 'https://image.tmdb.org/t/p/w200' . $movieDetails['poster_path'] : '';
+            echo '<pre>';
+            print_r($movieDetails);
+            echo '</pre>';
+            $posterUrl = isset($movieDetails['poster_path']) ? 'https://image.tmdb.org/t/p/w200' . $movieDetails['poster_path'] : '';
             ?>
             <div class="trivia-question">
                 <img src="<?php echo $posterUrl; ?>" alt="<?php echo $question['movie']; ?> Poster">
