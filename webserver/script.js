@@ -139,6 +139,34 @@ function removeFromWatchlist(movieId) {
 }
 
 
+// Code for Reccomended Movies Page 
+
+function filterMovies() {
+    searchQuery = document.getElementById('search-bar').value.toLowerCase();
+    const genreFilter = document.getElementById('genre-filter').value;
+
+    if (searchQuery) {
+        searchMovies(searchQuery, genreFilter);
+    } else {
+        let filteredMovies = allMovies;
+
+        if (genreFilter) {
+            filteredMovies = filteredMovies.filter(movie => movie.genre_ids.includes(parseInt(genreFilter)));
+        }
+
+        displayMovies(filteredMovies);
+    }
+}
+
+function changePage(direction) {
+    if (direction === -1 && currentPage > 1) {
+        currentPage--;
+    } else if (direction === 1 && currentPage < totalPages) {
+        currentPage++;
+    }
+    loadMovies(currentPage);
+}
+
 function setMovieRating(movieId, userId, rating) {
     if (rating < 1 || rating > 5) {
         alert("Please provide a rating between 1 and 5.");
@@ -160,7 +188,3 @@ function setMovieRating(movieId, userId, rating) {
         })
         .catch(error => console.error('Error submitting rating:', error));
 }
-
-
-
-

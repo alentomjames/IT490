@@ -3,17 +3,8 @@ session_start();
 $loggedIn = isset($_SESSION['userID']);
 
 require_once 'vendor/autoload.php';  
+require 'rabbitmq_connection.php';
 
-$client = new \GuzzleHttp\Client();
-
-$response = $client->request('GET', 'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc', [
-    'headers' => [
-        'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
-        'accept' => 'application/json',
-    ],
-]);
-
-$movies = json_decode($response->getBody(), true)['results']; 
 ?>
 
 <!DOCTYPE html>
@@ -110,16 +101,11 @@ $movies = json_decode($response->getBody(), true)['results'];
         });
 
         function loadMovies(page) {
-            fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&page=${page}`, {
-                headers: {
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
-                    'accept': 'application/json',
-                }
-            })
+            fetch(`loadMovies.php?page=${page}`)
                 .then(response => response.json())
                 .then(data => {
                     totalPages = data.total_pages;
-                    allMovies = data.results;
+                    allMovies = data.results.filter(movie => movie.poster_path);
                     displayMovies(allMovies);
                     document.getElementById('current-page').textContent = currentPage;
                 });
@@ -130,6 +116,7 @@ $movies = json_decode($response->getBody(), true)['results'];
             moviesContainer.innerHTML = '';
 
             movies.forEach(movie => {
+                if(movie.poster_path){
                 const movieItem = document.createElement('div');
                 movieItem.classList.add('favorite-item');
                 movieItem.setAttribute('data-id', movie.id);
@@ -143,6 +130,7 @@ $movies = json_decode($response->getBody(), true)['results'];
                 `;
 
                 moviesContainer.appendChild(movieItem);
+            }
             });
         }
 
@@ -169,12 +157,7 @@ $movies = json_decode($response->getBody(), true)['results'];
             recommendationResults.innerHTML = '';
 
             favoriteMovies.forEach(movieId => {
-                fetch(`https://api.themoviedb.org/3/movie/${movieId}/recommendations?language=en-US&page=1`, {
-                    headers: {
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
-                        'accept': 'application/json',
-                    }
-                })
+                fetch(`fetchRecommendations.php?movieId=${movieId}`)
                     .then(response => response.json())
                     .then(data => {
                         const firstRecommendation = data.results[0];
@@ -191,30 +174,9 @@ $movies = json_decode($response->getBody(), true)['results'];
             });
         }
 
-        function filterMovies() {
-            searchQuery = document.getElementById('search-bar').value.toLowerCase();
-            const genreFilter = document.getElementById('genre-filter').value;
-
-            if (searchQuery) {
-                searchMovies(searchQuery, genreFilter);
-            } else {
-                let filteredMovies = allMovies;
-
-                if (genreFilter) {
-                    filteredMovies = filteredMovies.filter(movie => movie.genre_ids.includes(parseInt(genreFilter)));
-                }
-
-                displayMovies(filteredMovies);
-            }
-        }
 
         function searchMovies(query, genreFilter) {
-            fetch(`https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1`, {
-                headers: {
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
-                    'accept': 'application/json',
-                }
-            })
+            fetch(`searchMovies.php?query=${encodeURIComponent(query)}`)
                 .then(response => response.json())
                 .then(data => {
                     let filteredMovies = data.results;
@@ -227,14 +189,7 @@ $movies = json_decode($response->getBody(), true)['results'];
                 });
         }
 
-        function changePage(direction) {
-            if (direction === -1 && currentPage > 1) {
-                currentPage--;
-            } else if (direction === 1 && currentPage < totalPages) {
-                currentPage++;
-            }
-            loadMovies(currentPage);
-        }
+
     </script>
 </body>
 
