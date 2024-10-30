@@ -65,6 +65,11 @@ function recieveDMZ(){
             break;
         }
     }
+
+    // Close the channel and connection
+    closeRabbit($connection, $channel);
+
+    return $data;
 }
     function recieveDB(){
         list($connection, $channel) = getRabbit();
