@@ -2,13 +2,14 @@
 session_start();
 $loggedIn = isset($_SESSION['userID']);
 
-require_once 'vendor/autoload.php';
+
+require_once('vendor/autoload.php');
 require_once 'rabbitmq_connection.php';
 
 $client = new \GuzzleHttp\Client();
 
-$trending = fetchTrending();
-
+$trending=fetchTrending();
+echo json_encode($trending['results']);
 function fetchTrending() {
     $type = 'trending_movies';
     sendRequest($type, 'day', 'frontendForDMZ');
@@ -34,14 +35,34 @@ function fetchTrending() {
                 <li><button onclick="location.href='MovieTrivia.php'">Movie Trivia</button></li>
                 <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
                 <li><button onclick="location.href='topTen.php'">Top Movies</button></li>
+                <!-- If they are logged in then display a "Welcome [user]" text at the top where the buttons would usually be and a logout button --->
                 <p class="nav-title">Welcome, <?php echo $_SESSION['name']; ?>!</p>
+                <!-- Logout button that calls logout.php to delete the userID from session and redirects them to the login page --->
                 <li><button onclick="location.href='logout.php'">Logout</button></li>
             <?php else: ?>
-                <li><button onclick="location.href='login.php'">Login</button></li>
-                <li><button onclick="location.href='sign_up.php'">Sign Up</button></li>
+                <!-- If they aren't logged in then display the buttons for login or sign up on the navbar --->
+
+            <li><button onclick="location.href='login.php'">Login</button></li>
+            <li><button onclick="location.href='sign_up.php'">Sign Up</button></li>
             <?php endif; ?>
         </ul>
     </nav>
+
+    <div class="welcome-message">
+        <h1>Hello, <?php echo $_SESSION['name']; ?></h1>
+        <p>Welcome to BreadWinners. Here are the top 10 trending movies:</p>
+    </div>
+
+    <div class="trending-movies">
+        <?php foreach (array_slice($trending['results'], 0, 10) as $movie): ?>
+            <div class="movie-item">
+                <a href="moviePage.php?id=<?php echo $movie['id']; ?>">
+                    <img src="https://image.tmdb.org/t/p/w200<?php echo $movie['poster_path']; ?>" alt="<?php echo $movie['title']; ?> Poster">
+                    <p><?php echo $movie['title']; ?></p>
+                </a>
+            </div>
+        <?php endforeach; ?>
+    </div>
 
     <div class="filters">
         <input type="text" id="search-bar" placeholder="Search for movies..." oninput="filterMovies()">
@@ -84,12 +105,23 @@ function fetchTrending() {
     <script>
         let currentPage = 1;
         let totalPages = 1;
-        let allMovies = <?php echo json_encode($trending['results']); ?>;
+        let allMovies = [];
         let searchQuery = '';
 
         document.addEventListener('DOMContentLoaded', () => {
-            displayMovies(allMovies);
+            loadMovies(currentPage);
         });
+
+        function loadMovies(page) {
+            fetch(`loadMovies.php?page=${page}`)
+                .then(response => response.json())
+                .then(data => {
+                    totalPages = data.total_pages;
+                    allMovies = data.results.filter(movie => movie.poster_path);
+                    displayMovies(allMovies);
+                    document.getElementById('current-page').textContent = currentPage;
+                });
+        }
 
         function displayMovies(movies) {
             const moviesContainer = document.getElementById('movies-container');
@@ -102,26 +134,16 @@ function fetchTrending() {
                 movieItem.setAttribute('data-id', movie.id);
                 movieItem.setAttribute('data-title', movie.title.toLowerCase());
                 movieItem.setAttribute('data-genres', movie.genre_ids.join(','));
+                movieItem.onclick = () => addFavorite(movie.id, movie.title);
 
                 movieItem.innerHTML = `
-                    <a href="moviePage.php?id=${movie.id}">
-                        <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title} Poster">
-                    </a>
+                    <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title} Poster">
                     <p>${movie.title}</p>
                 `;
 
                 moviesContainer.appendChild(movieItem);
             }
             });
-        }
-
-        function changePage(direction) {
-            if (direction === -1 && currentPage > 1) {
-                currentPage--;
-            } else if (direction === 1 && currentPage < totalPages) {
-                currentPage++;
-            }
-            loadMovies(currentPage);
         }
 
         function filterMovies() {
@@ -153,6 +175,15 @@ function fetchTrending() {
 
                     displayMovies(filteredMovies);
                 });
+        }
+
+        function changePage(direction) {
+            if (direction === -1 && currentPage > 1) {
+                currentPage--;
+            } else if (direction === 1 && currentPage < totalPages) {
+                currentPage++;
+            }
+            loadMovies(currentPage);
         }
     </script>
 </body>
