@@ -176,7 +176,7 @@ require 'rabbitmq_connection.php';
 
 
         function searchMovies(query, genreFilter) {
-            fetch(``searchMovies.php?query=${encodeURIComponent(query)}&page=${page})
+            fetch(`searchMovies.php?query=${encodeURIComponent(query)}&page=${page}`)
                 .then(response => response.json())
                 .then(data => {
                     let filteredMovies = data.results;
