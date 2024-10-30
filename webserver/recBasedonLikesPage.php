@@ -3,11 +3,11 @@ session_start();
 $loggedIn = isset($_SESSION['userID']);
 $userName = isset($_SESSION['name']) ? $_SESSION['name'] : 'Guest';
 
-if (!$loggedIn) {
-    header('Location: login.php');
-    exit();
-}
-?>
+// if (!$loggedIn) {
+//     header('Location: login.php');
+//     exit();
+// }
+// ?>
 
 <!DOCTYPE html>
 <html lang="en">
