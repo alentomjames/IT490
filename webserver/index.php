@@ -9,7 +9,7 @@ require_once 'rabbitmq_connection.php';
 $client = new \GuzzleHttp\Client();
 
 $trending=fetchTrending();
-echo json_encode($trending);
+echo json_encode($trending['results']);
 function fetchTrending() {
     $type = 'trending_movies';
     sendRequest($type, 'day', 'frontendForDMZ');
@@ -54,7 +54,7 @@ function fetchTrending() {
     </div>
 
     <div class="trending-movies">
-        <?php foreach (array_slice($trending, 0, 10) as $movie): ?>
+        <?php foreach (array_slice($trending['results'], 0, 10) as $movie): ?>
             <div class="movie-item">
                 <a href="moviePage.php?id=<?php echo $movie['id']; ?>">
                     <img src="https://image.tmdb.org/t/p/w200<?php echo $movie['poster_path']; ?>" alt="<?php echo $movie['title']; ?> Poster">
