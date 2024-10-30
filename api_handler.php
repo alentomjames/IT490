@@ -63,13 +63,13 @@ $callback = function ($msg) use ($channel) {
         case 'popular_movie_details':
             // https://api.themoviedb.org/3/movie/popular
             // request = https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&page=${page}
-            $url = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by={$parameter}.desc&page=${page}";
-            // parameter = popularity
-            // or is it meant to be page?
+            $url = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&page=${parameter}";
+            // parameter = page number?
+            // its a query parameter, not a path parameter
             echo "";
             break;
 
-        case 'recommended_details':
+        case 'recommended_movie_details':
             // https://api.themoviedb.org/3/movie/{movie_id}/recommendations
             // request = https://api.themoviedb.org/3/movie/movie_id/recommendations?language=en-US&page=1
             $url = "https://api.themoviedb.org/3/movie/{$parameter}/recommendations?language=en-US&page=1'";
@@ -83,6 +83,14 @@ $callback = function ($msg) use ($channel) {
             // parameter = movieTitle
             echo "Fetching search details for URL: $url\n";
             break;
+
+        case 'trending_movie_details':
+            // https://api.themoviedb.org/3/trending/movie/{time_window}
+            $url = "https://api.themoviedb.org/3/trending/movie/{$day}?language=en-US'";
+            // must be modified
+            // parameter = day
+            echo "Fetching trending movie details for URL: $url\n";
+            break;
         /*
         case 'trending_people_details':
             // https://api.themoviedb.org/3/trending/person/{time_window}
@@ -90,14 +98,7 @@ $callback = function ($msg) use ($channel) {
             // parameter = person
             echo "Fetching trending people details for URL: $url\n";
         */
-        /*
-        case 'trending_movie_details':
-            // https://api.themoviedb.org/3/trending/movie/{time_window}
-            $url = "https://api.themoviedb.org/3/trending/movie/day?language=en-US'";
-            // must be modified
-            echo "Fetching trending movie details for URL: $url\n";
-            break;
-        */
+        
 
         default:
             echo "Unrecognized type: $type\n";
