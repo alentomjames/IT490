@@ -18,7 +18,9 @@ function fetchMoviePoster($movieTitle)
 {
     $type = 'search_movie';
     sendRequest($type, $movieTitle, 'frontendForDMZ');
-    return recieveDMZ();
+    $response = recieveDMZ();
+    error_log("Movie poster response: " .print_r($response, true));
+    return $response;
 }
 
 function getTriviaQuestions($triviaData, $genre)
