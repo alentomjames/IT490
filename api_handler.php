@@ -86,7 +86,7 @@ $callback = function ($msg) use ($channel) {
 
         case 'trending_movie_details':
             // https://api.themoviedb.org/3/trending/movie/{time_window}
-            $url = "https://api.themoviedb.org/3/trending/movie/{$day}?language=en-US'";
+            $url = "https://api.themoviedb.org/3/trending/movie/{$parameter}?language=en-US'";
             // must be modified
             // parameter = day
             echo "Fetching trending movie details for URL: $url\n";
