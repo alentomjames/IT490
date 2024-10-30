@@ -8,15 +8,9 @@ require_once 'rabbitmq_connection.php';
 
 $client = new \GuzzleHttp\Client();
 
-$response = $client->request('GET', 'https://api.themoviedb.org/3/trending/movie/day?language=en-US', [
-    'headers' => [
-        'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
-        'accept' => 'application/json',
-    ],
-]);
 $trending=fetchTrending()['results'];
 function fetchTrending() {
-    $type = 'search_movie';
+    $type = 'trending_movies';
     sendRequest($type, '', 'frontendForDMZ');
     return recieveDMZ();
 }
