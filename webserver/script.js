@@ -209,7 +209,7 @@ function loadTopTenMovies() {
                     const item = document.createElement('div');
                     item.className = 'movie-item';
 
-                    fetch(`https://api.themoviedb.org/3/movie/${movie.movie_id}?api_key=YOUR_API_KEY`)
+                    fetch(`https://api.themoviedb.org/3/movie/${movie.movie_id}?api_key=38b40730e9d751a8d47f6e30b11ef937`)
                         .then(response => response.json())
                         .then(movieDetails => {
                             item.innerHTML = `
