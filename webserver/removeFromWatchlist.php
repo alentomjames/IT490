@@ -43,6 +43,9 @@ if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
 function receiveRabbitMQResponse($connection, $channel)
 {
 
+    if (ob_get_length()) {
+        ob_clean();
+    }
     $channel->queue_declare('databaseForFrontend', false, true, false, false);
 
     $callback = function ($msg) {
