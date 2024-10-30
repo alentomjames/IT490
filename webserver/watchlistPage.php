@@ -5,7 +5,7 @@ session_start();
 
 $loggedIn = isset($_SESSION['userID']);
 $userName = $loggedIn ? $_SESSION['name'] : null;
-
+echo "Clicked on page";
 ?>
 <!DOCTYPE html>
 <html lang="en">

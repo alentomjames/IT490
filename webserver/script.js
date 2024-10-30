@@ -69,7 +69,9 @@ function loadWatchlist() {
     fetch('fetchWatchlist.php', {
         method: 'GET',
     })
-        .then(response => response.json())
+        .then(response =>
+            console.log(response),
+            response.json())
         .then(data => {
             const watchlistContainer = document.querySelector('.watchlist-container');
             watchlistContainer.innerHTML = '';
