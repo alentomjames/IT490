@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $type = 'set_rating';
 
     if ($rating < 1 || $rating > 5) {
-        return json_encode(['type' => 'failure', 'message' => 'Invalid rating value. Must be between 1 and 5']);
+        echo json_encode(['type' => 'failure', 'message' => 'Invalid rating value. Must be between 1 and 5']);
         exit();
     }
 
@@ -43,14 +43,15 @@ function receiveRabbitMQResponse()
     $callback = function ($msg) {
         $response = json_decode($msg->body, true);
         if ($response['type'] === 'success') {
-            return json_encode(['type' => 'success', 'message' => 'Rating submitted successfully']);
+            echo json_encode(['type' => 'success', 'message' => 'Rating submitted successfully']);
         } else {
-            return json_encode(['type' => 'failure', 'message' => 'Failed to submit rating']);
+            echo json_encode(['type' => 'failure', 'message' => 'Failed to submit rating']);
         }
         exit();
     };
 
     $channel->basic_consume('databaseForFrontend', '', false, true, false, false, $callback);
+
     while ($channel->is_consuming()) {
         $channel->wait();
     }
