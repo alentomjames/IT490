@@ -138,3 +138,4 @@ function removeFromWatchlist(movieId) {
         .catch(error => console.error('Error:', error));
 }
 
+
