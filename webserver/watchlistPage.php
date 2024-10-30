@@ -122,7 +122,8 @@ function receiveWatchlistResponse()
         <a href="index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
-                <li><button onclick="location.href='Reccomend.php'">Reccomended Movies</button></li>
+                <li><button onclick="location.href='Reccomend.php'">Movie Smoothie</button></li>
+                <li><button onclick="location.href='recBasedonLikesPage.php'">Recommended Movies</button></li>
                 <li><button onclick="location.href='MovieTrivia.php'">Movie Trivia</button></li>
                 <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
                 <li><button onclick="location.href='topTen.php'">Top Movies</button></li>

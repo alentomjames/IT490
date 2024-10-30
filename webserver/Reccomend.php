@@ -2,18 +2,9 @@
 session_start();
 $loggedIn = isset($_SESSION['userID']);
 
-require_once 'vendor/autoload.php';
+require_once 'vendor/autoload.php';  
+require 'rabbitmq_connection.php';
 
-$client = new \GuzzleHttp\Client();
-
-$response = $client->request('GET', 'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc', [
-    'headers' => [
-        'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
-        'accept' => 'application/json',
-    ],
-]);
-
-$movies = json_decode($response->getBody(), true)['results'];
 ?>
 
 <!DOCTYPE html>
@@ -29,14 +20,14 @@ $movies = json_decode($response->getBody(), true)['results'];
 </head>
 
 <body>
-    <nav class="navbar">
+<nav class="navbar">
         <a href="index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
                 <li><button onclick="location.href='Reccomend.php'">Reccomended Movies</button></li>
                 <li><button onclick="location.href='MovieTrivia.php'">Movie Trivia</button></li>
                 <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
-                <li><button onclick="location.href='topTenPage.php'">Top Movies</button></li>
+                <li><button onclick="location.href='topTen.php'">Top Movies</button></li>
                 <!-- If they are logged in then display a "Welcome [user]" text at the top where the buttons would usually be and a logout button --->
                 <p class="nav-title">Welcome, <?php echo $_SESSION['name']; ?>!</p>
                 <!-- Logout button that calls logout.php to delete the userID from session and redirects them to the login page --->
@@ -44,8 +35,8 @@ $movies = json_decode($response->getBody(), true)['results'];
             <?php else: ?>
                 <!-- If they aren't logged in then display the buttons for login or sign up on the navbar --->
 
-                <li><button onclick="location.href='login.php'">Login</button></li>
-                <li><button onclick="location.href='sign_up.php'">Sign Up</button></li>
+            <li><button onclick="location.href='login.php'">Login</button></li>
+            <li><button onclick="location.href='sign_up.php'">Sign Up</button></li>
             <?php endif; ?>
         </ul>
     </nav>
@@ -109,17 +100,14 @@ $movies = json_decode($response->getBody(), true)['results'];
             loadMovies(currentPage);
         });
 
+        
+
         function loadMovies(page) {
-            fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&page=${page}`, {
-                    headers: {
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
-                        'accept': 'application/json',
-                    }
-                })
+            fetch(`loadMovies.php?page=${page}`)
                 .then(response => response.json())
                 .then(data => {
                     totalPages = data.total_pages;
-                    allMovies = data.results;
+                    allMovies = data.results.filter(movie => movie.poster_path);
                     displayMovies(allMovies);
                     document.getElementById('current-page').textContent = currentPage;
                 });
@@ -130,6 +118,7 @@ $movies = json_decode($response->getBody(), true)['results'];
             moviesContainer.innerHTML = '';
 
             movies.forEach(movie => {
+                if(movie.poster_path){
                 const movieItem = document.createElement('div');
                 movieItem.classList.add('favorite-item');
                 movieItem.setAttribute('data-id', movie.id);
@@ -143,6 +132,7 @@ $movies = json_decode($response->getBody(), true)['results'];
                 `;
 
                 moviesContainer.appendChild(movieItem);
+            }
             });
         }
 
@@ -169,12 +159,7 @@ $movies = json_decode($response->getBody(), true)['results'];
             recommendationResults.innerHTML = '';
 
             favoriteMovies.forEach(movieId => {
-                fetch(`https://api.themoviedb.org/3/movie/${movieId}/recommendations?language=en-US&page=1`, {
-                        headers: {
-                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
-                            'accept': 'application/json',
-                        }
-                    })
+                fetch(`fetchRecommendations.php?movieId=${movieId}`)
                     .then(response => response.json())
                     .then(data => {
                         const firstRecommendation = data.results[0];
@@ -191,30 +176,9 @@ $movies = json_decode($response->getBody(), true)['results'];
             });
         }
 
-        function filterMovies() {
-            searchQuery = document.getElementById('search-bar').value.toLowerCase();
-            const genreFilter = document.getElementById('genre-filter').value;
-
-            if (searchQuery) {
-                searchMovies(searchQuery, genreFilter);
-            } else {
-                let filteredMovies = allMovies;
-
-                if (genreFilter) {
-                    filteredMovies = filteredMovies.filter(movie => movie.genre_ids.includes(parseInt(genreFilter)));
-                }
-
-                displayMovies(filteredMovies);
-            }
-        }
 
         function searchMovies(query, genreFilter) {
-            fetch(`https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1`, {
-                    headers: {
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
-                        'accept': 'application/json',
-                    }
-                })
+            fetch(`searchMovies.php?query=${encodeURIComponent(query)}`)
                 .then(response => response.json())
                 .then(data => {
                     let filteredMovies = data.results;
@@ -227,14 +191,7 @@ $movies = json_decode($response->getBody(), true)['results'];
                 });
         }
 
-        function changePage(direction) {
-            if (direction === -1 && currentPage > 1) {
-                currentPage--;
-            } else if (direction === 1 && currentPage < totalPages) {
-                currentPage++;
-            }
-            loadMovies(currentPage);
-        }
+
     </script>
 </body>
 
