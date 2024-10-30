@@ -1,8 +1,8 @@
 <?php
 
-require_once './webserver/vendor/autoload.php';
-require_once './db_connection.php'; // file has db connection
-require_once './webserver/rabbitmq_connection.php'; // how I connect to RabbitMQ
+require_once './vendor/autoload.php';
+require_once 'db_connection.php';
+require_once 'rmq_connection.php';
 
 $dbConnection = getDbConnection();
 
