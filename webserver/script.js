@@ -204,8 +204,8 @@ function loadTopTenMovies() {
             const topMoviesContainer = document.getElementById('top-movies-container');
             topMoviesContainer.innerHTML = '';
 
-            if (data['type'] === 'success' && data['topMovies'].length > 0) {
-                data['topMovies'].forEach(movie => {
+            if (data['type'] === 'success' && data['top_movies'].length > 0) {
+                data['top_movies'].forEach(movie => {
                     const item = document.createElement('div');
                     item.className = 'movie-item';
 
