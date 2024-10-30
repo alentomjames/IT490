@@ -34,7 +34,7 @@ function fetchTrending()
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
                 <li><button onclick="location.href='Reccomend.php'">Movie Smoothie</button></li>
-                <li><button onclick="location.href='recBasedonLikesPage.php'">Recommended</button></li>
+                <li><button onclick="location.href='recBasedonLikesPage.php'">Recommended Movies</button></li>
                 <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
                 <li><button onclick="location.href='topTenPage.php'">Top Movies</button></li>
                 <!-- If they are logged in then display a "Welcome [user]" text at the top where the buttons would usually be and a logout button --->
