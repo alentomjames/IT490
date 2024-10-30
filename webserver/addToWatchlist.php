@@ -40,9 +40,9 @@ function receiveRabbitMQResponse()
     $callback = function ($msg) {
         $response = json_decode($msg->body, true);
         if ($response['type'] === 'success') {
-            echo json_encode(['success' => true, 'message' => 'Movie added to watchlist']);
+            echo json_encode(['type' => 'success', 'message' => 'Movie added to watchlist']);
         } else {
-            echo json_encode(['success' => false, 'message' => 'Failed to add movie']);
+            echo json_encode(['type' => 'failure', 'message' => 'Failed to add movie']);
         }
         exit();
     };
