@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 function receiveRabbitMQResponse(){
     list($connection, $channel) = getRabbit();
     // Declare the response channel
-    $channel->queue_declare('databaseQueue', false, true, false, false);
+    $channel->queue_declare('databaseForFrontend', false, true, false, false);
 
     // Function waiting for the response from RabbitMQ
     $callback = function($msg) {
@@ -65,7 +65,7 @@ function receiveRabbitMQResponse(){
     };
     // Use basic_consume to access the queue and call $callback for success or failure
     // https://www.rabbitmq.com/tutorials/tutorial-six-php
-    $channel->basic_consume('databaseQueue', '', false, true, false, false, $callback);
+    $channel->basic_consume('databaseForFrontend', '', false, true, false, false, $callback);
 
       // Wait for the response
       while ($channel->is_consuming()) {
