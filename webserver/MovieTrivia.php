@@ -120,7 +120,7 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
                 <p><?php echo $question['question']; ?></p>
                 <ul>
                     <?php foreach ($question['options'] as $option): ?>
-                        <li onclick="selectAnswer(this, '<?php echo $question['correctAnswer']; ?>')"><?php echo $option; ?></li>
+                        <li onclick="selectAnswer(this, '<?php echo htmlspecialchars($question['correctAnswer'], ENT_QUOTES); ?>')"><?php echo htmlspecialchars($option, ENT_QUOTES); ?></li>
                     <?php endforeach; ?>
                 </ul>
             </div>
