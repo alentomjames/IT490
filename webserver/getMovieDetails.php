@@ -9,7 +9,7 @@ $movieId = isset($_GET['movieId']) ? (int)$_GET['movieId'] : 1;
 $type = 'movie_details';
 
 // Sending request 
-sendRequest($type, $page, 'frontendForDMZ');
+sendRequest($type, $movieId, 'frontendForDMZ');
 
 $moviesData = recieveDMZ();
 
