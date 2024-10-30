@@ -25,15 +25,20 @@ function getTriviaQuestions($triviaData, $genre)
 {
     $selectedTrivia = [];
     if ($genre) {
-        $genreTrivia = $triviaData['movieTrivia'][array_search($genre, array_column($triviaData['movieTrivia'], 'category'))];
-        if ($genreTrivia) {
-            $selectedTrivia = $genreTrivia['questions'];
+        // Find the category that matches the selected genre
+        foreach ($triviaData['movieTrivia'] as $category) {
+            if ($category['category'] === $genre) {
+                $selectedTrivia = $category['questions'];
+                break;
+            }
         }
     } else {
+        // If no genre selected, get questions from all categories
         foreach ($triviaData['movieTrivia'] as $category) {
             $selectedTrivia = array_merge($selectedTrivia, $category['questions']);
         }
     }
+
     return array_slice($selectedTrivia, 0, 10);
 }
 
