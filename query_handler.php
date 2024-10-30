@@ -10,6 +10,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 require_once 'auth/login.php';
 require_once 'auth/register.php';
 require_once 'movies/watchlist.php';
+require_once 'movies/likedMovies.php';
 
 // get the rabbitmq connection
 list($connection, $channel) = getRabbit();
@@ -49,7 +50,12 @@ $callback = function ($msg) use ($channel) {
         $userId = $data['user_id'];
         // get all watchlist
         $response = getFromWatchlist($userId);
-    } else {
+    } elseif ($type === "get_likedMovies"){
+        $userId = (int) $data['user_id'];
+        // get all watchlist
+        $response = getFromRatings($userId);
+    }
+    else {
         echo "Received unknown command or missing required data fields\n";
         return;
     }
