@@ -6,3 +6,5 @@
 *.conf
 webserver/vendor
 /vendor
+schemas.sql
+vendor

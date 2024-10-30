@@ -18,18 +18,19 @@ if ($movie_id) {
     //Sends request to rabbitMQ_connection.php to call API
     sendRequest($type, $movie_id, 'frontendForDMZ');
 
+
     //Sends request to rabbitMQ_connection.php to recieve API movie data
     $movie = recieveDMZ();
 
     // Movie data
-    if ($movie){
-    $title = $movie['title'];
-    $vote_average = round($movie['vote_average'] / 2, 1);
-    $overview = $movie['overview'];
-    $poster = 'https://image.tmdb.org/t/p/w500' . $movie['poster_path'];
-    $genres = implode(', ', array_column($movie['genres'], 'name'));
-    $languages = implode(', ', array_column($movie['spoken_languages'], 'english_name'));
-    $production_companies = implode(', ', array_column($movie['production_companies'], 'name'));
+    if ($movie) {
+        $title = $movie['title'];
+        $vote_average = round($movie['vote_average'] / 2, 1);
+        $overview = $movie['overview'];
+        $poster = 'https://image.tmdb.org/t/p/w500' . $movie['poster_path'];
+        $genres = implode(', ', array_column($movie['genres'], 'name'));
+        $languages = implode(', ', array_column($movie['spoken_languages'], 'english_name'));
+        $production_companies = implode(', ', array_column($movie['production_companies'], 'name'));
     } else {
         echo '<p>Failed to retrieve movie!</p>';
         die('<p>Failed to retrieve movie! Please try again later.</p>');
@@ -56,6 +57,7 @@ if ($movie_id) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,8 +66,9 @@ if ($movie_id) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="script.js" defer></script>
 </head>
+
 <body>
-<nav class="navbar">
+    <nav class="navbar">
         <a href="index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
@@ -80,8 +83,8 @@ if ($movie_id) {
             <?php else: ?>
                 <!-- If they aren't logged in then display the buttons for login or sign up on the navbar --->
 
-            <li><button onclick="location.href='login.php'">Login</button></li>
-            <li><button onclick="location.href='sign_up.php'">Sign Up</button></li>
+                <li><button onclick="location.href='login.php'">Login</button></li>
+                <li><button onclick="location.href='sign_up.php'">Sign Up</button></li>
             <?php endif; ?>
         </ul>
     </nav>
@@ -128,4 +131,5 @@ if ($movie_id) {
         </div>
     </div>
 </body>
+
 </html>

@@ -15,42 +15,51 @@ require_once 'movies/watchlist.php';
 list($connection, $channel) = getRabbit();
 
 // queue where i'll consume login/register requests
-$channel->queue_declare('frontendQueue', false, true, false, false);
+$channel->queue_declare('frontendForDB', false, true, false, false);
 
 // process the login/register requests
 $callback = function ($msg) use ($channel) {
     $data = json_decode($msg->body, true);
     $type = $data['type']; // for now types are: login, register
-    $username = $data['username'];
-    $password = $data['password'];
-    $movieId = $data['movie_id'];
-    $userId = $data['user_id'];
 
     if ($type === 'login') {
         // calling login function
+        $username = $data['username'];
+        $password = $data['password'];
         $response = login($username, $password);
     } elseif ($type === 'register') {
         // register request
+        $username = $data['username'];
+        $password = $data['password'];
         $name = $data['name'];
         $response = register($name, $username, $password);
     } elseif ($type === "add_to_watchlist") {
+        $movieId = $data['movie_id'];
+        $userId = $data['user_id'];
+        echo "Movie ID: $movieId\n";
         // add to watchlist
         $response = addToWatchlist($movieId, $userId);
     } elseif ($type === "remove_from_watchlist") {
+        $movieId = $data['movie_id'];
+        $userId = $data['user_id'];
+
         // remove from watchlist
         $response = removeFromWatchlist($movieId, $userId);
     } elseif ($type === "get_watchlist") {
+        $userId = $data['user_id'];
         // get all watchlist
         $response = getFromWatchlist($userId);
+    } else {
+        echo "Received unknown command or missing required data fields\n";
+        return;
     }
-    // send the response back to the client
     $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
-    $channel->basic_publish($responseMsg, 'directExchange', 'databaseQueue');
+    $channel->basic_publish($responseMsg, 'directExchange', 'databaseForFrontend');
 };
 
 
 // consume the messages from the queue
-$channel->basic_consume('frontendQueue', '', false, true, false, false, $callback);
+$channel->basic_consume('frontendForDB', '', false, true, false, false, $callback);
 
 // wait for messages
 while ($channel->is_consuming()) {

@@ -17,15 +17,15 @@ function addToWatchlist(int $movieId, int $userId)
     try {
         $stmt->execute();
         if ($stmt->affected_rows > 0) {
-            $response = ['type' => 'success', 'message' => 'Movie added to watchlist'];
+            $response = json_encode(['type' => 'success', 'message' => 'Movie added to watchlist']);
         } else {
-            $response = ['type' => 'failure', 'message' => 'Failed to add movie to watchlist'];
+            $response = json_encode(['type' => 'failure', 'message' => 'Failed to add movie to watchlist']);
         }
     } catch (mysqli_sql_exception $e) {
         if ($e->getCode() == 1062) { // duplicate entry error code
-            $response = ['type' => 'failure', 'message' => 'Movie already exists in watchlist'];
+            $response = json_encode(['type' => 'failure', 'message' => 'Movie already exists in watchlist']);
         } else {
-            $response = ['type' => 'failure', 'message' => 'Error adding movie: ' . $e->getMessage()];
+            $response = json_encode(['type' => 'failure', 'message' => 'Error adding movie: ' . $e->getMessage()]);
         }
     }
 
@@ -43,9 +43,9 @@ function removeFromWatchlist(int $movieId, int $userId)
     $stmt->execute();
 
     if ($stmt->affected_rows > 0) {
-        $response = ['type' => 'success', 'message' => 'Movie removed from watchlist'];
+        $response = json_encode(['type' => 'success', 'message' => 'Movie removed from watchlist']);
     } else {
-        $response = ['type' => 'failure', 'message' => 'Movie does not exist in watchlist'];
+        $response = json_encode(['type' => 'failure', 'message' => 'Movie does not exist in watchlist']);
     }
 
     $stmt->close();
@@ -70,19 +70,25 @@ function getFromWatchlist(int $userId)
     $stmt->close();
 
     if (!empty($watchlist)) {
-        $response = ['type' => 'success', 'watchlist' => $watchlist];
+        $response = json_encode(['type' => 'success', 'watchlist' => $watchlist]);
     } else {
-        $response = ['type' => 'failure', 'message' => 'Watchlist is empty'];
+        $response = json_encode(['type' => 'failure', 'message' => 'Watchlist is empty']);
     }
 
     return $response;
 }
 
-// Example usage and output
-$responseAdd = addToWatchlist(222, 1);
-$responseRemove = removeFromWatchlist(222, 1);
-$responseGet = getFromWatchlist(1);
 
-var_dump($responseAdd);
-var_dump($responseRemove);
-var_dump($responseGet);
+// Example usage and output
+// $responseAdd = addToWatchlist(222, 1);
+// $responseRemove = removeFromWatchlist(222, 1);
+// $responseGet = getFromWatchlist(1);
+// $watchlistArray = json_decode($responseGet, true);
+// if ($watchlistArray['type'] === 'success') {
+//     print_r($watchlistArray['watchlist']);
+// } else {
+//     echo $watchlistArray['message'];
+// }
+// var_dump($responseAdd);
+// var_dump($responseRemove);
+// var_dump($responseGet);
