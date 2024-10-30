@@ -12,7 +12,7 @@ $trending = fetchTrending();
 function fetchTrending() {
     $type = 'trending_movies';
     sendRequest($type, 'day', 'frontendForDMZ');
-    return receiveDMZ();
+    return recieveDMZ();
 }
 ?>
 
