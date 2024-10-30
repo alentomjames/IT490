@@ -1,15 +1,13 @@
 #!/bin/bash
 
-#BASIC RULES 
 
-iptables  -F
+# stops all incoming traffic
+# iptables  -A  INPUT  -j  DROP
 
-iptables  -t  nat  -F
+# stops all forwarding traffic
+# iptables  -A  FORWARD  -j  DROP
 
-iptables  -A  INPUT  -j  DROP
-
-iptables  -A  FORWARD  -j  DROP
-
+# allows output traffic
 iptables  -A  OUTPUT  -j  ACCEPT
 
 # Allow Incoming SSH from Message Router
@@ -27,4 +25,9 @@ sudo iptables -A INPUT -p tcp --sport 22 -m conntrack --ctstate ESTABLISHED -j A
 sudo iptables -A INPUT -p tcp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 sudo iptables -A OUTPUT -p tcp --sport 443 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 
+# If something ever goes wrong with outgoing/incoming connections (ping github.come and the other networks to test) because of new iptable commands, run the following and then re-enable ufw
+# iptables -F
+# iptables -t nat -F
+# iptables -t mangle -F
+# iptables -X
 
