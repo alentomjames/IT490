@@ -7,7 +7,37 @@ $userName = isset($_SESSION['name']) ? $_SESSION['name'] : 'Guest';
 //     header('Location: login.php');
 //     exit();
 // }
+require_once 'rabbitmq_connection.php';
+require_once 'vendor/autoload.php';
+function getMovieDetails($movieId) {
+
+
+    $type = 'movie_details';
+    sendRequest($type, $movieId, 'frontendForDMZ');
+
+    $movie = recieveDMZ();
+
+    if ($movie) {
+        return $movie;
+    } else {
+        return null;
+    }
+}
+
+function getRecommendations($movieId) {
+    $type = 'recommendations';
+    sendRequest($type, $movieId, 'frontendForDMZ');
+
+    $recommendationsData = recieveDMZ();
+
+    if ($recommendationsData) {
+        return isset($recommendationsData['results'][0]) ? $recommendationsData['results'][0] : null;
+    } else {
+        return [];
+    }
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -36,9 +66,13 @@ $userName = isset($_SESSION['name']) ? $_SESSION['name'] : 'Guest';
         </ul>
     </nav>
 
-    <h1>Based on your Likes You Might Enjoy: </h1>
+    <h1>These are your liked movies:</h1>
     <div class="liked-container" id="liked-movies-container">
         <p>Loading your recommended movies...</p>
+    </div>
+    <h1>Based on your likes, you might enjoy:</h1>
+    <div class="recommendations-container" id="recommendations-container">
+        <p>Loading recommendations...</p>
     </div>
 
     <script>
@@ -62,6 +96,7 @@ $userName = isset($_SESSION['name']) ? $_SESSION['name'] : 'Guest';
                 });
         }
 
+
         function displayLikedMovies(movies) {
             const container = document.getElementById('liked-movies-container');
             container.innerHTML = '';
@@ -75,6 +110,56 @@ $userName = isset($_SESSION['name']) ? $_SESSION['name'] : 'Guest';
                 const movieItem = document.createElement('div');
                 movieItem.classList.add('movie-item');
                 movieItem.innerHTML = `<p>Movie ID: ${movie}</p>`;
+                getMovieDetails(movie).then(movieDetails => {
+                    if (movieDetails) {
+                        const movieTitle = movieDetails.title;
+                        const moviePoster = movieDetails.poster_path;
+                        movieItem.innerHTML = `<a href="moviePage.php?id=${movie}"><img src="https://image.tmdb.org/t/p/w200${moviePoster}" alt="${movieTitle} Poster"><p>${movieTitle}</p></a>`;
+                    } else {
+                        movieItem.innerHTML = `<p>Movie ID: ${movie}</p>`;
+                    }
+                });
+                container.appendChild(movieItem);
+            });
+        }
+        function fetchRecommendations() {
+            fetch('fetchRecommendations.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.type === 'success') {
+                        displayRecommendations(data.recommendations);
+                    } else {
+                        document.getElementById('recommendations-container').innerHTML = '<p>' + data.message + '</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching recommendations:', error);
+                    document.getElementById('recommendations-container').innerHTML = '<p>Error loading recommendations.</p>';
+                });
+        }
+
+        function displayRecommendations(recommendations) {
+            const container = document.getElementById('recommendations-container');
+            container.innerHTML = '';
+
+            if (recommendations.length === 0) {
+                container.innerHTML = '<p>No recommendations available.</p>';
+                return;
+            }
+
+            recommendations.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-item');
+                movieItem.innerHTML = `<p>Movie ID: ${movie.id}</p>`;
+                getMovieDetails(movie.id).then(movieDetails => {
+                    if (movieDetails) {
+                        const movieTitle = movieDetails.title;
+                        const moviePoster = movieDetails.poster_path;
+                        movieItem.innerHTML = `<a href="moviePage.php?id=${movie.id}"><img src="https://image.tmdb.org/t/p/w200${moviePoster}" alt="${movieTitle} Poster"><p>${movieTitle}</p></a>`;
+                    } else {
+                        movieItem.innerHTML = `<p>Movie ID: ${movie.id}</p>`;
+                    }
+                });
                 container.appendChild(movieItem);
             });
         }

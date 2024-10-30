@@ -41,7 +41,7 @@ function receiveRabbitMQResponse($connection, $channel)
     $callback = function ($msg) {
         $response = json_decode($msg->body, true);
         if ($response['type'] === 'success') {
-            echo json_encode(['type' => 'success', 'top_movies' => $response['topMovies']]);
+            echo json_encode(['type' => 'success', 'top_movies' => $response['top_movies']]);
         } else {
             echo json_encode(['type' => 'failure', 'message' => 'Failed to retrieve top movies']);
         }

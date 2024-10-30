@@ -14,13 +14,15 @@ $client = new \GuzzleHttp\Client();
 $triviaJson = file_get_contents('trivia.json');
 $triviaData = json_decode($triviaJson, true);
 
-function fetchMoviePoster($movieTitle) {
+function fetchMoviePoster($movieTitle)
+{
     $type = 'search_movie';
     sendRequest($type, $movieTitle, 'frontendForDMZ');
     return recieveDMZ();
 }
 
-function getTriviaQuestions($triviaData, $genre) {
+function getTriviaQuestions($triviaData, $genre)
+{
     $selectedTrivia = [];
     if ($genre) {
         $genreTrivia = $triviaData['movieTrivia'][array_search($genre, array_column($triviaData['movieTrivia'], 'category'))];
@@ -42,6 +44,7 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,6 +52,7 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
     <nav class="navbar">
         <a href="index.php" class="nav-title">BreadWinners</a>
@@ -57,7 +61,7 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
                 <li><button onclick="location.href='Reccomend.php'">Reccomended Movies</button></li>
                 <li><button onclick="location.href='MovieTrivia.php'">Movie Trivia</button></li>
                 <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
-                <li><button onclick="location.href='topTen.php'">Top Movies</button></li>
+                <li><button onclick="location.href='topTenPage.php'">Top Movies</button></li>
                 <p class="nav-title">Welcome, <?php echo $_SESSION['name']; ?>!</p>
                 <li><button onclick="location.href='logout.php'">Logout</button></li>
             <?php else: ?>
@@ -159,4 +163,5 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
         }
     </script>
 </body>
+
 </html>
