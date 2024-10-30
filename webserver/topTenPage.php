@@ -38,11 +38,20 @@ $userName = $loggedIn ? $_SESSION['name'] : null;
 </head>
 
 <body>
-    <nav class="navbar">
+<nav class="navbar">
         <a href="index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
-                <p class="nav-title">Welcome, <?php echo $_SESSION['name']; ?>!</p>
+                <li>
+                    <button onclick="location.href='Reccomend.php'" class="smoothie-button">
+                        <img src="smoothie.png" alt="Movie Smoothie" class="smoothie-icon">
+                    </button>
+                </li>
+                <li><button onclick="location.href='recBasedonLikesPage.php'">Recommended Movies</button></li>
+                <li><button onclick="location.href='MovieTrivia.php'">Movie Trivia</button></li>
+                <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
+                <li><button onclick="location.href='topTen.php'">Top Movies</button></li>
+                <p class="nav-title">Welcome, <?php echo htmlspecialchars($userName); ?>!</p>
                 <li><button onclick="location.href='logout.php'">Logout</button></li>
             <?php else: ?>
                 <li><button onclick="location.href='login.php'">Login</button></li>
