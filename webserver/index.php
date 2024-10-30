@@ -9,6 +9,7 @@ require_once 'rabbitmq_connection.php';
 $client = new \GuzzleHttp\Client();
 
 $trending=fetchTrending()['results'];
+echo json_encode($trending);
 function fetchTrending() {
     $type = 'trending_movies';
     sendRequest($type, 'day', 'frontendForDMZ');
