@@ -109,7 +109,7 @@ function addToWatchlist(movieId) {
     })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
+            if (data['type'] === 'success') {
                 alert('Movie added to watchlist!');
                 loadWatchlist(); // Refresh watchlist to include the new movie
             } else {
@@ -137,5 +137,4 @@ function removeFromWatchlist(movieId) {
         })
         .catch(error => console.error('Error:', error));
 }
-
 
