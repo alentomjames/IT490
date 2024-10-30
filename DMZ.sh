@@ -15,7 +15,6 @@ iptables  -t  nat  -F
 # allows output traffic
 iptables  -A  OUTPUT  -j  ACCEPT
 
-
 # Allow Incoming SSH from Message Router
 
 sudo iptables -A INPUT -p tcp -s 172.29.4.30/24 --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
