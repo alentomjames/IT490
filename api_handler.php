@@ -72,8 +72,8 @@ $callback = function ($msg) use ($channel) {
             $url = "https://api.themoviedb.org/3/trending/movie/day?language=en-US";
             // parameter = time_window (day)
             echo "Fetching trending movie details for URL: $url\n";
-            $parameter = 'time_window';
-            $type = 'day';
+            $type = '';
+            $parameter = '';
 	        $response = fetchDetails($type, $parameter, $url);
             break; 
 
