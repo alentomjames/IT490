@@ -556,6 +556,7 @@ body {
     gap: 20px;
     padding: 20px;
 }
+
 .movie-item {
     background-color: #fff;
     padding: 20px;
@@ -577,10 +578,12 @@ body {
     color: #333;
     text-decoration: none;
 }
+
 .movie-item a {
 
     text-decoration: none;
 }
+
 /* Responsive Design */
 @media screen and (max-width: 768px) {
     .navbar {
@@ -638,6 +641,7 @@ body {
 }
 
 .watchlist-item p {
+    height: 90px;
     font-size: 1.2rem;
     color: #333;
     padding: 15px 10px;
