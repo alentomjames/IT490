@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+
+
+$loggedIn = isset($_SESSION['userID']);
+$userName = $loggedIn ? $_SESSION['name'] : null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
