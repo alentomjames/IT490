@@ -15,6 +15,7 @@ require_once 'vendor/autoload.php';
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,6 +23,7 @@ require_once 'vendor/autoload.php';
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
 </head>
+
 <body>
     <nav class="navbar">
         <a href="index.php" class="nav-title">BreadWinners</a>
@@ -107,6 +109,7 @@ require_once 'vendor/autoload.php';
                     });
             });
         }
+
         function fetchRecommendations() {
             fetch('loadRecommendations.php?id=' + movie)
                 .then(response => response.json())
@@ -156,4 +159,5 @@ require_once 'vendor/autoload.php';
         }
     </script>
 </body>
+
 </html>
