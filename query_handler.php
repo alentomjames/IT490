@@ -41,13 +41,17 @@ $callback = function ($msg) use ($channel) {
     } elseif ($type === "remove_from_watchlist") {
         $movieId = $data['movie_id'];
         $userId = $data['user_id'];
-
         // remove from watchlist
         $response = removeFromWatchlist($movieId, $userId);
     } elseif ($type === "get_watchlist") {
         $userId = (int) $data['user_id'];
         // get all watchlist
         $response = getFromWatchlist($userId);
+    } elseif ($type === "set_rating") {
+        $movieId = (int) $data['movie_id'];
+        $userId = (int)$data['user_id'];
+        $rating = (int) $data['rating'];
+        $response = rateMovie($movieId, $userId, $rating);
     } else {
         echo "Received unknown command or missing required data fields\n";
         return;
