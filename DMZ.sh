@@ -2,8 +2,6 @@
 
 #BASIC RULES 
 
-Echo  1  >  / proc / sys / net / ipv4 / ip_forward
-
 iptables  -F
 
 iptables  -t  nat  -F
@@ -13,7 +11,6 @@ iptables  -A  INPUT  -j  DROP
 iptables  -A  FORWARD  -j  DROP
 
 iptables  -A  OUTPUT  -j  ACCEPT
-
 
 # Allow Incoming SSH from Message Router
 
