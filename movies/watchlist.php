@@ -71,8 +71,8 @@ function getFromWatchlist(int $userId)
 
     // Return as an array instead of JSON-encoded string
     if (!empty($watchlist)) {
-        return ['type' => 'success', 'watchlist' => $watchlist];
+        return json_encode(['type' => 'success', 'watchlist' => $watchlist]);
     } else {
-        return ['type' => 'failure', 'message' => 'Watchlist is empty'];
+        return json_encode(['type' => 'failure', 'message' => 'Watchlist is empty']);
     }
 }
