@@ -240,8 +240,8 @@ function loadRecommendations() {
             const recommendationsContainer = document.getElementById('recommendations-container');
             recommendationsContainer.innerHTML = '';
 
-            if (data['type'] === 'success' && data['liked'].length > 0) {
-                data['liked'].forEach(movie => {
+            if (data['type'] === 'success' && data['recommendations'].length > 0) {
+                data['recommendations'].forEach(movie => {
                     const item = document.createElement('div');
                     item.className = 'recommendation-item';
                     item.innerHTML = `
