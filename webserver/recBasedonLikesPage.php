@@ -3,9 +3,10 @@ session_start();
 $loggedIn = isset($_SESSION['userID']);
 $userName = isset($_SESSION['name']) ? $_SESSION['name'] : 'Guest';
 
-require_once('vendor/autoload.php');
-require_once 'rabbitmq_connection.php';
-
+// if (!$loggedIn) {
+//     header('Location: login.php');
+//     exit();
+// }
 ?>
 
 <!DOCTYPE html>
@@ -52,7 +53,7 @@ require_once 'rabbitmq_connection.php';
                     if (data.type === 'success') {
                         displayLikedMovies(data.liked);
                     } else {
-                        document.getElementById('liked-movies-container').innerHTML = '<p>Failed to load liked movies.</p>';
+                        document.getElementById('liked-movies-container').innerHTML = '<p>' + data.message + '</p>';
                     }
                 })
                 .catch(error => {
@@ -65,10 +66,15 @@ require_once 'rabbitmq_connection.php';
             const container = document.getElementById('liked-movies-container');
             container.innerHTML = '';
 
+            if (movies.length === 0) {
+                container.innerHTML = '<p>Your liked movies list is empty!</p>';
+                return;
+            }
+
             movies.forEach(movie => {
                 const movieItem = document.createElement('div');
                 movieItem.classList.add('movie-item');
-                movieItem.innerHTML = `<p>Movie ID: ${movie.id}</p>`;
+                movieItem.innerHTML = `<p>Movie ID: ${movie}</p>`;
                 container.appendChild(movieItem);
             });
         }

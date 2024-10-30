@@ -3,7 +3,6 @@
 session_start();
 header('Content-Type: application/json');
 require_once './vendor/autoload.php';
-//require_once './db_connection.php';
 require_once './rabbitmq_connection.php';
 
 use PhpAmqpLib\Message\AMQPMessage;
@@ -21,24 +20,19 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
     $channel->queue_declare('frontendForDB', false, true, false, false);
 
-
     $data = json_encode([
         'type' => $type,
         'user_id' => $userId
     ]);
 
-
     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
     $channel->basic_publish($msg, 'directExchange', 'frontendForDB');
-
 
     receiveRabbitMQResponse($connection, $channel);
 }
 
-
 function receiveRabbitMQResponse($connection, $channel)
 {
-
     if (ob_get_length()) {
         ob_clean();
     }
