@@ -81,8 +81,8 @@ function loadWatchlist() {
                     item.dataset.movieId = movieId;
 
                     // Fetch movie details from TMDB API
-                    fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=38b40730e9d751a8d47f6e30b11ef937`)
-                        .then(response => response.json())
+                    fetch(`getMovieDetails.php?movieId=${movieId}`)
+                    .then(response => response.json())
                         .then(movie => {
                             item.innerHTML = `
                                 <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}">
