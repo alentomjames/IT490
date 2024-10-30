@@ -12,6 +12,7 @@ require_once 'auth/register.php';
 require_once 'movies/watchlist.php';
 require_once 'movies/rating.php';
 require_once 'movies/topTen.php';
+require_once 'movies/likedMovies.php';
 
 // get the rabbitmq connection
 list($connection, $channel) = getRabbit();
