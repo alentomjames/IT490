@@ -47,7 +47,7 @@ function receiveRabbitMQResponse($connection, $channel)
     $callback = function ($msg) {
         $response = json_decode($msg->body, true);
         if ($response['type'] === 'success') {
-            echo json_encode(['type' => 'success', 'recommendations' => $response['liked']]);
+            echo json_encode(['type' => 'success', 'recommendations' => $response]);
         } else {
             echo json_encode(['type' => 'failure', 'message' => 'Failed to retrieve recommendations']);
         }
