@@ -103,7 +103,7 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
             echo '<pre>';
             print_r($movieDetails);
             echo '</pre>';
-            $posterUrl = isset($movieDetails['poster_path']) ? 'https://image.tmdb.org/t/p/w200' . $movieDetails['poster_path'] : '';
+            $posterUrl = isset($movieDetails['results'][0]['poster_path']) ? 'https://image.tmdb.org/t/p/w200' . $movieDetails['results'][0]['poster_path'] : '';
             ?>
             <div class="trivia-question">
                 <img src="<?php echo $posterUrl; ?>" alt="<?php echo $question['movie']; ?> Poster">
