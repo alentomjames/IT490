@@ -100,6 +100,8 @@ require 'rabbitmq_connection.php';
             loadMovies(currentPage);
         });
 
+        
+
         function loadMovies(page) {
             fetch(`loadMovies.php?page=${page}`)
                 .then(response => response.json())
