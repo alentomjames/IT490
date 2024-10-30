@@ -82,7 +82,7 @@ function loadWatchlist() {
 
                     // Fetch movie details from TMDB API
                     fetch(`getMovieDetails.php?movieId=${movieId}`)
-                    .then(response => response.json())
+                        .then(response => response.json())
                         .then(movie => {
                             item.innerHTML = `
                                 <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}">
