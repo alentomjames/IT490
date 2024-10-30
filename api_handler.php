@@ -61,7 +61,7 @@ $callback = function ($msg) use ($channel) {
             // https://api.themoviedb.org/3/search/???
             // request = "https://api.themoviedb.org/3/search/movie?query=$movieTitle&include_adult=false&language=en-US&page=1"
             $url = "https://api.themoviedb.org/3/search/movie?query={$parameter}&include_adult=false&language=en-US&page=1";
-            $type = 'search_moves';
+            $type = 'search_movies';
             // parameter = movieTitle , aka movie name
             // no path parameters, only query parameters available 
             echo "Fetching search details for URL: $url\n";
