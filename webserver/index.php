@@ -8,6 +8,7 @@ if (!$loggedIn) {
 }
 
 require_once('vendor/autoload.php');
+require_once 'rabbitmq_connection.php';
 
 $client = new \GuzzleHttp\Client();
 
@@ -17,8 +18,12 @@ $response = $client->request('GET', 'https://api.themoviedb.org/3/trending/movie
         'accept' => 'application/json',
     ],
 ]);
-
-$trendingMovies = json_decode($response->getBody(), true)['results'];
+$trending=fetchTrending()['results'];
+function fetchTrending() {
+    $type = 'search_movie';
+    sendRequest($type, '', 'frontendForDMZ');
+    return recieveDMZ();
+}
 ?>
 
 <!DOCTYPE html>
@@ -58,7 +63,7 @@ $trendingMovies = json_decode($response->getBody(), true)['results'];
     </div>
 
     <div class="trending-movies">
-        <?php foreach (array_slice($trendingMovies, 0, 10) as $movie): ?>
+        <?php foreach (array_slice($trending, 0, 10) as $movie): ?>
             <div class="movie-item">
                 <a href="moviePage.php?id=<?php echo $movie['id']; ?>">
                     <img src="https://image.tmdb.org/t/p/w200<?php echo $movie['poster_path']; ?>" alt="<?php echo $movie['title']; ?> Poster">
