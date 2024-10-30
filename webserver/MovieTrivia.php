@@ -101,7 +101,7 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
             <?php
             $movieDetails = fetchMoviePoster($question['movie']);
             echo '<pre>';
-            print_r($movieDetails['data']);
+            print_r($movieDetails);
             echo '</pre>';
             $posterUrl = isset($movieDetails['poster_path']) ? 'https://image.tmdb.org/t/p/w200' . $movieDetails['poster_path'] : '';
             ?>
