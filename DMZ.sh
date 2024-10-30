@@ -8,10 +8,13 @@ iptables  -F
 
 iptables  -t  nat  -F
 
-iptables  -A  INPUT  -j  DROP
+# stops all incoming traffic
+# iptables  -A  INPUT  -j  DROP
 
-iptables  -A  FORWARD  -j  DROP
+# stops all forwarding traffic
+# iptables  -A  FORWARD  -j  DROP
 
+# allows output traffic
 iptables  -A  OUTPUT  -j  ACCEPT
 
 
