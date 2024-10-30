@@ -10,23 +10,23 @@ function getFromRatings(int $userId)
 {
     global $dbConnection;
 
-    $query = "SELECT movie_id FROM ratings WHERE user_id = ? AND rating > 4";
+    $query = "SELECT movie_id FROM rating WHERE user_id = ? AND rating > 4";
     $stmt = $dbConnection->prepare($query);
     $stmt->bind_param("i", $userId);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    $watchlist = [];
+    $liked = [];
     while ($row = $result->fetch_assoc()) {
-        $watchlist[] = $row['movie_id'];
+        $liked[] = $row['movie_id'];
     }
 
     $stmt->close();
 
-    if (!empty($watchlist)) {
-        $response = json_encode(['type' => 'success', 'watchlist' => $watchlist]);
+    if (!empty($liked)) {
+        $response = json_encode(['type' => 'success', 'liked' => $liked]);
     } else {
-        $response = json_encode(['type' => 'failure', 'message' => 'Watchlist is empty']);
+        $response = json_encode(['type' => 'failure', 'message' => 'Liked movies is empty']);
     }
 
     return $response;
