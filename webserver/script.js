@@ -229,3 +229,73 @@ function loadTopTenMovies() {
         })
         .catch(error => console.error('Error fetching top movies:', error));
 }
+
+// Load recommendations and display
+function loadRecommendations() {
+    fetch('getRecommendations.php', {
+        method: 'GET',
+    })
+        .then(response => response.json())
+        .then(data => {
+            const recommendationsContainer = document.getElementById('recommendations-container');
+            recommendationsContainer.innerHTML = '';
+
+            if (data['type'] === 'success' && data['liked'].length > 0) {
+                data['liked'].forEach(movie => {
+                    const item = document.createElement('div');
+                    item.className = 'recommendation-item';
+                    item.innerHTML = `
+                    <a href="moviePage.php?id=${movie.id}">
+                        <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}">
+                        <p>${movie.title}</p>
+                        <p class="vote-average">${Math.round(movie.vote_average / 2 * 10) / 10} <i class="fa fa-star"></i></p>
+                    </a>
+                `;
+                    recommendationsContainer.appendChild(item);
+                });
+            } else {
+                recommendationsContainer.innerHTML = '<p>No recommendations found based on your liked movies.</p>';
+            }
+        })
+        .catch(error => console.error('Error fetching recommendations:', error));
+}
+
+document.addEventListener('DOMContentLoaded', loadRecommendations);
+
+function loadSimilarMovies(movieId) {
+    const apiKey = '38b40730e9d751a8d47f6e30b11ef937';
+    fetch(`https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${apiKey}&language=en-US&page=1`, {
+        method: 'GET',
+    })
+        .then(response => response.json())
+        .then(data => {
+            const similarMoviesContainer = document.getElementById('similar-movies-container');
+            similarMoviesContainer.innerHTML = '';
+
+            if (data.results && data.results.length > 0) {
+                data.results.forEach(movie => {
+                    const item = document.createElement('div');
+                    item.className = 'movie-item';
+
+                    fetch(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=${apiKey}`)
+                        .then(response => response.json())
+                        .then(movieDetails => {
+                            item.innerHTML = `
+                                <a href="moviePage.php?id=${movie.id}">
+                                    <img src="https://image.tmdb.org/t/p/w200${movieDetails.poster_path}" alt="${movieDetails.title}">
+                                    <p>${movieDetails.title}</p>
+                                    <p class="vote-average">${Math.round(movieDetails.vote_average / 2 * 10) / 10} <i class="fa fa-star"></i></p>
+                                </a>
+                            `;
+                            similarMoviesContainer.appendChild(item);
+                        })
+                        .catch(error => console.error('Error fetching movie details:', error));
+                });
+            } else {
+                similarMoviesContainer.innerHTML = '<p>No similar movies found!</p>';
+            }
+        })
+        .catch(error => console.error('Error fetching similar movies:', error));
+}
+
+

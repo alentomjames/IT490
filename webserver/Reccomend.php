@@ -2,7 +2,7 @@
 session_start();
 $loggedIn = isset($_SESSION['userID']);
 
-require_once 'vendor/autoload.php';  
+require_once 'vendor/autoload.php';
 require 'rabbitmq_connection.php';
 
 ?>
@@ -20,7 +20,7 @@ require 'rabbitmq_connection.php';
 </head>
 
 <body>
-<nav class="navbar">
+    <nav class="navbar">
         <a href="index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
@@ -40,8 +40,8 @@ require 'rabbitmq_connection.php';
             <?php else: ?>
                 <!-- If they aren't logged in then display the buttons for login or sign up on the navbar --->
 
-            <li><button onclick="location.href='login.php'">Login</button></li>
-            <li><button onclick="location.href='sign_up.php'">Sign Up</button></li>
+                <li><button onclick="location.href='login.php'">Login</button></li>
+                <li><button onclick="location.href='sign_up.php'">Sign Up</button></li>
             <?php endif; ?>
         </ul>
     </nav>
@@ -105,7 +105,7 @@ require 'rabbitmq_connection.php';
             loadMovies(currentPage);
         });
 
-        
+
 
         function loadMovies(page) {
             fetch(`loadMovies.php?page=${page}`)
@@ -123,21 +123,21 @@ require 'rabbitmq_connection.php';
             moviesContainer.innerHTML = '';
 
             movies.forEach(movie => {
-                if(movie.poster_path){
-                const movieItem = document.createElement('div');
-                movieItem.classList.add('favorite-item');
-                movieItem.setAttribute('data-id', movie.id);
-                movieItem.setAttribute('data-title', movie.title.toLowerCase());
-                movieItem.setAttribute('data-genres', movie.genre_ids.join(','));
-                movieItem.onclick = () => addFavorite(movie.id, movie.title);
+                if (movie.poster_path) {
+                    const movieItem = document.createElement('div');
+                    movieItem.classList.add('favorite-item');
+                    movieItem.setAttribute('data-id', movie.id);
+                    movieItem.setAttribute('data-title', movie.title.toLowerCase());
+                    movieItem.setAttribute('data-genres', movie.genre_ids.join(','));
+                    movieItem.onclick = () => addFavorite(movie.id, movie.title);
 
-                movieItem.innerHTML = `
+                    movieItem.innerHTML = `
                     <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title} Poster">
                     <p>${movie.title}</p>
                 `;
 
-                moviesContainer.appendChild(movieItem);
-            }
+                    moviesContainer.appendChild(movieItem);
+                }
             });
         }
 
@@ -195,8 +195,6 @@ require 'rabbitmq_connection.php';
                     displayMovies(filteredMovies);
                 });
         }
-
-
     </script>
 </body>
 
