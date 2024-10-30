@@ -40,10 +40,10 @@ if ($movie_id) {
     sendRequest($type, $movie_id, 'frontendForDMZ');
     $reccomendationsData = recieveDMZ();
 
-    error_log("Recommendations response: " . print_r($recommendationsResponse, true)); 
+    error_log("Recommendations response: " . print_r($reccomendationsData, true)); 
 
-    $recommendations = isset($recommendationsResponse['data']['results']) ? 
-    array_slice($recommendationsResponse['data']['results'], 0, 10) : 
+    $recommendations = isset($reccomendationsData['data']['results']) ? 
+    array_slice($reccomendationsData['data']['results'], 0, 10) : 
     [];
 
     error_log("Recommendations received: " . print_r($recommendations, true)); // Debug log
