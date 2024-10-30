@@ -56,8 +56,8 @@ function getMovieRating(int $movieId, int $userId)
     $stmt->bind_result($rating);
 
     if ($stmt->fetch()) {
-        return ['type' => 'success', 'rating' => $rating];
+        return json_encode(['type' => 'success', 'rating' => $rating]);
     } else {
-        return ['type' => 'failure', 'reason' => 'No rating found for this movie and user'];
+        return json_encode(['type' => 'failure', 'reason' => 'No rating found for this movie and user']);
     }
 }
