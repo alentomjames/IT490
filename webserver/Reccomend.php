@@ -174,12 +174,7 @@ require 'rabbitmq_connection.php';
 
 
         function searchMovies(query, genreFilter) {
-            fetch(`https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1`, {
-                headers: {
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZiYTg5YTMyMzE3MmRmZmE0Mjk5NjU3YTM3MTYzNyIsIm5iZiI6MTcyOTI4ODcyNS4xNTE3MSwic3ViIjoiNjcxMTFhOGJjZjhkZTg3N2I0OWZjYmUzIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.vo9zln6wlz5XoDloD8bubYw3ZRgp-xlBL873eZ68fgQ',
-                    'accept': 'application/json',
-                }
-            })
+            fetch(``searchMovies.php?query=${encodeURIComponent(query)}&page=${page})
                 .then(response => response.json())
                 .then(data => {
                     let filteredMovies = data.results;
