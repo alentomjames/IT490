@@ -180,7 +180,7 @@ function setMovieRating(movieId, userId, rating) {
     })
         .then(response => response.json())
         .then(data => {
-            if (data['success']) {
+            if (data['type'] === 'success') {
                 alert('Rating submitted successfully!');
                 exit();
             } else {
