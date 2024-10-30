@@ -2,8 +2,6 @@
 
 #BASIC RULES 
 
-Echo  1  >  / proc / sys / net / ipv4 / ip_forward
-
 iptables  -F
 
 iptables  -t  nat  -F
