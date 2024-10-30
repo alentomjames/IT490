@@ -1,10 +1,5 @@
 #!/bin/bash
 
-#BASIC RULES 
-
-iptables  -F
-
-iptables  -t  nat  -F
 
 # stops all incoming traffic
 # iptables  -A  INPUT  -j  DROP
