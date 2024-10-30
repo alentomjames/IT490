@@ -37,7 +37,7 @@ $userName = isset($_SESSION['name']) ? $_SESSION['name'] : 'Guest';
     </nav>
 
     <h1>Based on your Likes You Might Enjoy: </h1>
-    <div class="watchlist-container" id="liked-movies-container">
+    <div class="liked-container" id="liked-movies-container">
         <p>Loading your recommended movies...</p>
     </div>
 
