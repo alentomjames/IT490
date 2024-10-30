@@ -3,10 +3,9 @@ session_start();
 $loggedIn = isset($_SESSION['userID']);
 $userName = isset($_SESSION['name']) ? $_SESSION['name'] : 'Guest';
 
-if (!$loggedIn) {
-    header('Location: login.php');
-    exit();
-}
+require_once('vendor/autoload.php');
+require_once 'rabbitmq_connection.php';
+
 ?>
 
 <!DOCTYPE html>
