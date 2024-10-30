@@ -109,6 +109,8 @@ $movies = json_decode($response->getBody(), true)['results'];
             loadMovies(currentPage);
         });
 
+        
+
         function loadMovies(page) {
             fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&page=${page}`, {
                     headers: {
