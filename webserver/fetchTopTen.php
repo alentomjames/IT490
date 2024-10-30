@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
     $channel->basic_publish($msg, 'directExchange', 'frontendForDB');
-    closeRabbit($connection, $channel);
+
     receiveRabbitMQResponse($connection, $channel);
 }
 
