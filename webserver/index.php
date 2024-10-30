@@ -38,7 +38,8 @@ function fetchTrending()
                         <img src="smoothie.png" alt="Movie Smoothie" class="smoothie-icon">
                     </button>
                 </li>
-                <li><button onclick="location.href='recBasedonLikesPage.php'">Recommended Movies</button></li>
+               <li><button onclick="location.href='recBasedonLikesPage.php'">Recommended Movies</button></li>
+                <li><button onclick="location.href='MovieTrivia.php'">Movie Trivia</button></li>
                 <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
                 <li><button onclick="location.href='topTenPage.php'">Top Movies</button></li>
                 <!-- If they are logged in then display a "Welcome [user]" text at the top where the buttons would usually be and a logout button --->
