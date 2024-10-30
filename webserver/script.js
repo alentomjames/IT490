@@ -138,3 +138,29 @@ function removeFromWatchlist(movieId) {
         .catch(error => console.error('Error:', error));
 }
 
+
+function setMovieRating(movieId, userId, rating) {
+    if (rating < 1 || rating > 5) {
+        alert("Please provide a rating between 1 and 5.");
+        return;
+    }
+
+    fetch('setRating.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ movie_id: movieId, user_id: userId, rating: rating })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data['success']) {
+                alert('Rating submitted successfully!');
+            } else {
+                alert(`Failed to submit rating: ${data['message']}`);
+            }
+        })
+        .catch(error => console.error('Error submitting rating:', error));
+}
+
+
+
+
