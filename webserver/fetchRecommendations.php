@@ -6,7 +6,7 @@ require 'rabbitmq_connection.php';
 $movieId = isset($_GET['movieId']) ? (int)$_GET['movieId'] : 1;
 
 // Setting type thats being sent to the DMZ
-$type = 'movie_details';
+$type = 'reccomendations';
 
 // Sending request 
 sendRequest($type, $movieId, 'frontendForDMZ');
