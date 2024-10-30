@@ -55,7 +55,7 @@ $callback = function ($msg) use ($channel) {
         $userId = (int)$data['user_id'];
         $rating = (int) $data['rating'];
         $response = rateMovie($movieId, $userId, $rating);
-    } elseif ($type === "top_rated_movies") {
+    } elseif ($type === "get_top_ten") {
         $response = getTopTenMovies();
     } elseif ($type === "get_likedMovies") {
         $userId = (int) $data['user_id'];

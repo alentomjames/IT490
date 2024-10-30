@@ -10,7 +10,7 @@ function getFromRatings(int $userId)
 {
     global $dbConnection;
 
-    $query = "SELECT movie_id FROM rating WHERE user_id = ? AND rating > 4";
+    $query = "SELECT movie_id FROM rating WHERE user_id = ? AND rating >= 4";
     $stmt = $dbConnection->prepare($query);
     $stmt->bind_param("i", $userId);
     $stmt->execute();

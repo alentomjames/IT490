@@ -14,6 +14,15 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 
+
+// function getMovieDetails($movie_id) {
+//     $type = 'movie_details';
+//     sendRequest($type, $movie_id, "frontendForDMZ");
+//     return recieveDMZ();
+// }
+
+$loggedIn = isset($_SESSION['userID']);
+$userName = $loggedIn ? $_SESSION['name'] : null;
 ?>
 
 <!DOCTYPE html>
@@ -46,18 +55,10 @@ use PhpAmqpLib\Message\AMQPMessage;
         <h1>These are our top-rated movies on our page</h1>
     </div>
 
-    <div class="top-movies">
-        <?php foreach (array_slice($topMovies, 0, 10) as $movie): ?>
-            <?php $movieDetails = getMovieDetails($movie['id']); ?>
-            <div class="movie-item">
-                <a href="moviePage.php?id=<?php echo $movie['id']; ?>">
-                    <img src="https://image.tmdb.org/t/p/w200<?php echo $movieDetails['poster_path']; ?>" alt="<?php echo $movieDetails['title']; ?> Poster">
-                    <p><?php echo $movieDetails['title']; ?></p>
-                    <p class="vote-average"><?php echo round($movieDetails['vote_average'] / 2, 1); ?> <i class="fa fa-star"></i></p>
-                </a>
-            </div>
-        <?php endforeach; ?>
+    <div class="top-movies" id="top-movies-container">
+        <!-- Movies will be loaded here by JavaScript -->
     </div>
+
 </body>
 
 </html>

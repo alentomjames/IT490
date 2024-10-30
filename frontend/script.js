@@ -165,4 +165,44 @@ function setMovieRating(movieId, userId, rating) {
         });
 }
 
+// Add this script to your script.js or inline within topTenPage.php
+document.addEventListener('DOMContentLoaded', loadTopTenMovies);
+
+function loadTopTenMovies() {
+    fetch('fetchTopTen.php', {
+        method: 'GET',
+    })
+        .then(response => response.json())
+        .then(data => {
+            const topMoviesContainer = document.getElementById('top-movies-container');
+            topMoviesContainer.innerHTML = '';
+
+            if (data['type'] === 'success' && data['topMovies'].length > 0) {
+                data['topMovies'].forEach(movie => {
+                    const item = document.createElement('div');
+                    item.className = 'movie-item';
+
+                    fetch(`https://api.themoviedb.org/3/movie/${movie.movie_id}?api_key=YOUR_API_KEY`)
+                        .then(response => response.json())
+                        .then(movieDetails => {
+                            item.innerHTML = `
+                                <a href="moviePage.php?id=${movie.movie_id}">
+                                    <img src="https://image.tmdb.org/t/p/w200${movieDetails.poster_path}" alt="${movieDetails.title}">
+                                    <p>${movieDetails.title}</p>
+                                    <p class="vote-average">${Math.round(movieDetails.vote_average / 2 * 10) / 10} <i class="fa fa-star"></i></p>
+                                </a>
+                            `;
+                            topMoviesContainer.appendChild(item);
+                        })
+                        .catch(error => console.error('Error fetching movie details:', error));
+                });
+            } else {
+                topMoviesContainer.innerHTML = '<p>No top-rated movies found!</p>';
+            }
+        })
+        .catch(error => console.error('Error fetching top movies:', error));
+}
+
+
+
 
