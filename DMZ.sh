@@ -14,45 +14,20 @@ iptables  -A  FORWARD  -j  DROP
 
 iptables  -A  OUTPUT  -j  ACCEPT
 
-#FORWARD'S RULES WE WISH 
+
+# Allow Incoming SSH from Message Router
+
+sudo iptables -A INPUT -p tcp -s 172.29.4.30/24 --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 22 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+
+# Allow Outgoing SSH
+
+sudo iptables -A OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --sport 22 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+
+# Allow Incoming HTTPS (Port 443 is what TMDB API run on)
+
+sudo iptables -A INPUT -p tcp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 443 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 
 
-#ETH0 = Connects to the Router
-#ETH1 = Connects to the DMZ
-#ETH2 = Connects to the Local Serverr?
-#We are not using ethernet, so these lines are voided
-
-# LET'S ALL TRAFFIC GO FROM ETH0 TO ETH1 
-
-# sudo iptables  -A  FORWARD  -i  eth0  -o  eth1  -s  state  --state  NEW, ESTABLISHED, RELATED  -j  ACCEPT
-
-# LET'S THE RESPONSE ONLY GO TO PETITIONS FROM ETH1 TO ETH0 
-
-# sudo iptables  -A  FORWARD  -i  eth1  -o  eth0  -s  state  --state  ESTABLISHED, RELATED  -j  ACCEPT
-
-# LET'S ALL TRAFFIC GO FROM ETH2 TO ETH1 
-
-# sudo iptables  -A  FORWARD  -i  eth2  -o  eth1  -s  state  --state  NEW, ESTABLISHED, RELATED  -j  ACCEPT
-
-# LETS ONLY PASSES RESPONSES TO PETITIONS FROM ETH1 TO ETH2 
-
-# sudo iptables  -A  FORWARD  -i  eth1  , or  eth2  -s  state  --state  ESTABLISHED, RELATED  -j  ACCEPT
-
-
-
-#PRIORITIZE REDIRECTIONS FROM THE OUTSIDE TO THE DMZ
-
-#IPS FICTICS THAT ARE WITHIN THE ETH1 RANGE
-
-#TCP Port 1414, Connect to the Message Router (may or may not work)
-
-sudo iptables  -t  nat  -A  PREROUTING  -i  eth0  -p  tcp  --dport  53  -j  DNAT  --to  172.168.4.30: 1414
-
-
-#alternative prerouting lines
-
-#sudo iptables -t nat -A PREROUTING -p $LAN_IFACE -d ???.???.???.? (Data source IP address) \ -j DNAT --to-destination 172.29.4.30
-
-
-#sudo iptables -t nat -A PREROUTING -p tcp --dport 1414 -j ACCEPT
-#sudo iptables -t nat -A PREROUTING -p tcp --dport ?? (Data source port) -j ACCEPT
