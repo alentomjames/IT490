@@ -182,9 +182,14 @@ function setMovieRating(movieId, userId, rating) {
         .then(data => {
             if (data['success']) {
                 alert('Rating submitted successfully!');
+                exit();
             } else {
                 alert(`Failed to submit rating: ${data['message']}`);
+                exit();
             }
         })
-        .catch(error => console.error('Error submitting rating:', error));
+        .catch(error => {
+            console.error('Error submitting rating:', error);
+            return { error: 'Failed to submit rating' };  // Returning an error object
+        });
 }
