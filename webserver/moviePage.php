@@ -42,9 +42,7 @@ if ($movie_id) {
 
     error_log("Recommendations response: " . print_r($recommendationsData, true)); 
 
-    $recommendations = isset($recommendationsData['data']['results']) ? 
-    array_slice($recommendationsData['data']['results'], 0, 10) : 
-    [];
+    $recommendations = isset($recommendationsData['results']) ? array_slice($recommendationsData['results'], 0, 10) : [];
 
     echo "<pre>";
     print_r($recommendations);
