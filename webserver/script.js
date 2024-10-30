@@ -242,17 +242,21 @@ function loadRecommendations() {
 
             if (data['type'] === 'success' && data.recommendations['liked'].length > 0) {
                 data.recommendations['liked'].forEach(movie => {
-                    const item = document.createElement('div');
-                    item.className = 'recommendation-item';
-                    item.innerHTML = `
-                    <a href="moviePage.php?id=${movie.id}">
-                        <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}">
-                        <p>${movie.title}</p>
-                        <p class="vote-average">${Math.round(movie.vote_average / 2 * 10) / 10} <i class="fa fa-star"></i></p>
-                    </a>
-                `;
+                    fetch(`fetchRecommendations.php?movieId=${movie}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const firstRecommendation = data.results[0];
+                        const recommendationItem = document.createElement('div');
+                        recommendationItem.classList.add('recommendation-item');
+                        recommendationItem.innerHTML = `
+                        <a href="moviePage.php?id=${firstRecommendation.id}">
+                            <img src="https://image.tmdb.org/t/p/w200${firstRecommendation.poster_path}" alt="${firstRecommendation.title} Poster">
+                        </a>
+                        <p>${firstRecommendation.title}</p>
+                    `;
                     recommendationsContainer.appendChild(item);
                 });
+            });
             } else {
                 recommendationsContainer.innerHTML = '<p>No recommendations found based on your liked movies.</p>';
             }
