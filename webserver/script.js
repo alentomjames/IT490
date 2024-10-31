@@ -232,85 +232,91 @@ function loadRecommendations() {
     fetch('getRecommendations.php', {
         method: 'GET',
     })
-        .then(response => response.json())
-        .then(data => {
-            const recommendationsContainer = document.getElementById('recommendations-container');
-            recommendationsContainer.innerHTML = '';
+    .then(response => response.json())
+    .then(data => {
+        const recommendationsContainer = document.getElementById('recommendations-container');
+        recommendationsContainer.innerHTML = '';
 
-            if (data['type'] === 'success' && data.recommendations['liked'].length > 0) {
-                data.recommendations['liked'].forEach(movie => {
+        if (data['type'] === 'success' && data.recommendations['liked'].length > 0) {
+            data.recommendations['liked'].forEach(movieId => {
+                // Fetch movie details for the liked movie
+                fetch(`getMovieDetails.php?movieId=${movieId}`)
+                .then(response => response.json())
+                .then(movie => {
                     const item = document.createElement('div');
                     item.className = 'recommendation-item';
                     item.innerHTML = `
-                    <a href="moviePage.php?id=${movie.id}">
-                        <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}">
-                        <p>${movie.title}</p>
-                        <p class="vote-average">${Math.round(movie.vote_average / 2 * 10) / 10} <i class="fa fa-star"></i></p>
-                    </a>
-                `;
-                    fetch(`fetchRecommendations.php?movieId=${movie}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            const firstRecommendation = data.results[0];
+                        <a href="moviePage.php?id=${movie.id}">
+                            <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}">
+                            <p>${movie.title}</p>
+                            <p class="vote-average">${Math.round(movie.vote_average / 2 * 10) / 10} <i class="fa fa-star"></i></p>
+                        </a>
+                    `;
+                    recommendationsContainer.appendChild(item);
+
+                    // Fetch recommendations based on the liked movie
+                    fetch(`fetchRecommendations.php?movieId=${movie.id}`)
+                    .then(response => response.json())
+                    .then(recData => {
+                        const firstRecommendation = recData.results[0];
+                        if (firstRecommendation) {
                             const recommendationItem = document.createElement('div');
                             recommendationItem.classList.add('recommendation-item');
                             recommendationItem.innerHTML = `
-                        <a href="moviePage.php?id=${firstRecommendation.id}">
-                            <img src="https://image.tmdb.org/t/p/w200${firstRecommendation.poster_path}" alt="${firstRecommendation.title} Poster">
-                        </a>
-                        <p>${firstRecommendation.title}</p>
-                    `;
+                                <a href="moviePage.php?id=${firstRecommendation.id}">
+                                    <img src="https://image.tmdb.org/t/p/w200${firstRecommendation.poster_path}" alt="${firstRecommendation.title} Poster">
+                                    <p>${firstRecommendation.title}</p>
+                                </a>
+                            `;
                             recommendationsContainer.appendChild(recommendationItem);
-                        });
-                });
-
-
-            } else {
-                recommendationsContainer.innerHTML = '<p>No recommendations found based on your liked movies.</p>';
-            }
-        })
-        .catch(error => console.error('Error fetching recommendations:', error));
-
-    const likedContainer = document.getElementById('liked-movies-container');
-    likedContainer.innerHTML = '';
-
+                        }
+                    })
+                    .catch(error => console.error('Error fetching recommendations:', error));
+                })
+                .catch(error => console.error('Error fetching movie details:', error));
+            });
+        } else {
+            recommendationsContainer.innerHTML = '<p>No recommendations found based on your liked movies.</p>';
+        }
+    })
+    .catch(error => console.error('Error fetching recommendations:', error));
 }
+
 
 function loadLikedMovies() {
     fetch('getRecommendations.php', {
         method: 'GET',
     })
-        .then(response => response.json())
-        .then(data => {
-            const likedContainer = document.getElementById('liked-movies-container');
-            likedContainer.innerHTML = '';
+    .then(response => response.json())
+    .then(data => {
+        const likedContainer = document.getElementById('liked-movies-container');
+        likedContainer.innerHTML = '';
 
-            if (data['type'] === 'success' && data.recommendations['liked'].length > 0) {
-                console.log('Movies liked: ', data.recommendations['liked']);
-                data.recommendations['liked'].forEach(movie => {
-                    fetch(`getMovieDetails.php?movieId=${movie}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Movie Details', data);
-                        const movieDetails = data;
-                        const likedItem = document.createElement('div');
-                        likedItem.className = 'liked-item';
-                        likedItem.innerHTML = `
-                        <a href="moviePage.php?id=${movie.id}">
+        if (data['type'] === 'success' && data.recommendations['liked'].length > 0) {
+            console.log('Movies liked: ', data.recommendations['liked']);
+            data.recommendations['liked'].forEach(movieId => {
+                fetch(`getMovieDetails.php?movieId=${movieId}`)
+                .then(response => response.json())
+                .then(movieDetails => {
+                    console.log('Movie Details', movieDetails);
+                    const likedItem = document.createElement('div');
+                    likedItem.className = 'liked-item';
+                    likedItem.innerHTML = `
+                        <a href="moviePage.php?id=${movieDetails.id}">
                             <img src="https://image.tmdb.org/t/p/w200${movieDetails.poster_path}">
                             <p>${movieDetails.title}</p>
                         </a>
                     `;
                     likedContainer.appendChild(likedItem);
-
-                    });
-
-                });
-            } else {
-                likedContainer.innerHTML = '<p>No liked movies found.</p>';
-            }
-        })
-        .catch(error => console.error('Error fetching liked movies:', error));
+                })
+                .catch(error => console.error('Error fetching movie details:', error));
+            });
+        } else {
+            likedContainer.innerHTML = '<p>No liked movies found.</p>';
+        }
+    })
+    .catch(error => console.error('Error fetching liked movies:', error));
 }
+
 
 
