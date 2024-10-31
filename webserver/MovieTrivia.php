@@ -2,7 +2,6 @@
 session_start();
 $loggedIn = isset($_SESSION['userID']);
 
-
 require_once 'vendor/autoload.php';
 require_once 'rabbitmq_connection.php';
 
@@ -129,7 +128,7 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
         <?php endforeach; ?>
     </div>
 
-        <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             const options = document.querySelectorAll('.trivia-question li');
             options.forEach(option => {
@@ -146,6 +145,12 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
             const questionElement = element.closest('.trivia-question');
             const isCorrect = element.hasAttribute('data-correct-answer');
 
+            // Prevent multiple selections for the same question
+            if (questionElement.classList.contains('answered')) {
+                return;
+            }
+            questionElement.classList.add('answered');
+
             element.classList.add('selected');
             element.style.backgroundColor = '#007BFF';
             element.style.color = 'white';
@@ -155,18 +160,24 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
             options.forEach(option => option.style.pointerEvents = 'none');
 
             selectedAnswers.push(element.textContent.trim());
+            console.log("Selected answer:", element.textContent.trim());
             if (isCorrect) {
-                correctAnswers++;
+                correctAnswers += 1;
+                console.log("Correct answer selected. Total correct answers:", correctAnswers);
+            } else {
+                console.log("Incorrect answer selected.");
             }
 
             // Check if all questions have been answered
             const totalQuestions = document.querySelectorAll('.trivia-question').length;
+            console.log("Selected answers count:", selectedAnswers.length, "Total questions:", totalQuestions);
             if (selectedAnswers.length === totalQuestions) {
                 setTimeout(showScore, 500);
             }
         }
 
         function showScore() {
+            console.log("Showing score. Correct answers:", correctAnswers, "Total questions:", selectedAnswers.length);
             const scorePopup = document.createElement('div');
             scorePopup.classList.add('score-popup');
             scorePopup.innerHTML = `
@@ -179,13 +190,12 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
         }
 
         function restartTrivia() {
+            console.log("Restarting trivia.");
             document.querySelector('.score-popup').remove();
             document.getElementById('trivia-container').innerHTML = '';
             document.getElementById('genre-select').value = '';
         }
     </script>
-    </body>
-    </html>
 </body>
 
 </html>
