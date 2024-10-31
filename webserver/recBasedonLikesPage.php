@@ -13,6 +13,14 @@ $userName = $loggedIn ? $_SESSION['name'] : null;
     <title>Recommended Movies Based on Your Likes - BreadWinners</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+        loadLikedMovies();
+        loadRecommendations();
+        });
+
+</script>
 </head>
 
 <body>
@@ -54,14 +62,7 @@ $userName = $loggedIn ? $_SESSION['name'] : null;
     </section>
 
     <script src="script.js"></script>
-    <script>
 
-        document.addEventListener('DOMContentLoaded', () => {
-        loadLikedMovies();
-        loadRecommendations();
-        });
-
-    </script>
 </body>
 
 </html>
