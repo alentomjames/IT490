@@ -52,8 +52,16 @@ $userName = $loggedIn ? $_SESSION['name'] : null;
         <div id="liked-movies-container" class="liked-movies">
         </div>
     </section>
-    
+
     <script src="script.js"></script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+        loadLikedMovies();
+        loadRecommendations();
+        });
+
+    </script>
 </body>
 
 </html>

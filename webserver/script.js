@@ -58,11 +58,6 @@ function moveCarousel(direction) {
     carousel.style.transform = `translateX(-${carouselIndex * itemWidth}px)`;
 }
 
-// display user watchlist
-document.addEventListener('DOMContentLoaded', () => {
-    loadWatchlist();
-});
-
 
 // load watchlist and display
 function loadWatchlist() {
@@ -320,10 +315,5 @@ function loadLikedMovies() {
         })
         .catch(error => console.error('Error fetching liked movies:', error));
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    loadLikedMovies();
-    loadRecommendations();
-});
 
 
