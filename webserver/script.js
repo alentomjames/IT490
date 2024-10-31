@@ -231,56 +231,40 @@ function loadTopTenMovies() {
 }
 
 function loadRecommendations() {
-    const recommendationsContainer = document.getElementById('recommendations-container');
-
-    recommendationsContainer.innerHTML = '';  // Clear any existing recommendations
-
-    // Fetch the user's liked movies from getRecommendations.php
     fetch('getRecommendations.php', {
         method: 'GET',
     })
         .then(response => response.json())
         .then(data => {
+            const recommendationsContainer = document.getElementById('recommendations-container');
+            recommendationsContainer.innerHTML = '';
+
             if (data['type'] === 'success' && data.recommendations['liked'].length > 0) {
                 data.recommendations['liked'].forEach(movie => {
-<<<<<<< HEAD
-=======
-                    fetch(`getMovieDetails.php?movieId=${movie}`)
+                    const item = document.createElement('div');
+                    item.className = 'recommendation-item';
+                    item.innerHTML = `
+                    <a href="moviePage.php?id=${movie.id}">
+                        <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}">
+                        <p>${movie.title}</p>
+                        <p class="vote-average">${Math.round(movie.vote_average / 2 * 10) / 10} <i class="fa fa-star"></i></p>
+                    </a>
+                `;
+                    fetch(`fetchRecommendations.php?movieId=${movie}`)
                     .then(response => response.json())
                     .then(data => {
-                    const firstLiked = data.results[0];
-                    const likedItem = document.createElement('div');
-                    likedItem.classList.add('liked-item');
-                    likedItem.innerHTML = `
-                        <a href="moviePage.php?id=${movie}">
-                            <img src="https://image.tmdb.org/t/p/w200${firstLiked.poster_path}" alt="${firstLiked.title} Poster">
-                            <p>${firstLiked.title}</p>
+                        const firstRecommendation = data.results[0];
+                        const recommendationItem = document.createElement('div');
+                        recommendationItem.classList.add('recommendation-item');
+                        recommendationItem.innerHTML = `
+                        <a href="moviePage.php?id=${firstRecommendation.id}">
+                            <img src="https://image.tmdb.org/t/p/w200${firstRecommendation.poster_path}" alt="${firstRecommendation.title} Poster">
                         </a>
+                        <p>${firstRecommendation.title}</p>
                     `;
- 
-                    likedMoviesContainer.appendChild(likedItem);
-                    }).catch(error => console.error('Error fetching liked movies:', error));
-
-                    
->>>>>>> parent of c586e74 (changing values of firstliked to just data)
-
-                    // Fetch recommendations for each liked movie
-                    fetch(`fetchRecommendations.php?movieId=${movie}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            const firstRecommendation = data.results[0];
-                            const recommendationItem = document.createElement('div');
-                            recommendationItem.classList.add('recommendation-item');
-                            recommendationItem.innerHTML = `
-                                <a href="moviePage.php?id=${firstRecommendation.id}">
-                                    <img src="https://image.tmdb.org/t/p/w200${firstRecommendation.poster_path}" alt="${firstRecommendation.title} Poster">
-                                    <p>${firstRecommendation.title}</p>
-                                </a>
-                            `;
-                            recommendationsContainer.appendChild(recommendationItem);
-                        })
-                        .catch(error => console.error('Error fetching recommendations:', error));
+                    recommendationsContainer.appendChild(item);
                 });
+            });
             } else {
                 recommendationsContainer.innerHTML = '<p>No recommendations found based on your liked movies.</p>';
             }
