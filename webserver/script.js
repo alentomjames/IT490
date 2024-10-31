@@ -246,15 +246,23 @@ function loadRecommendations() {
             if (data['type'] === 'success' && data.recommendations['liked'].length > 0) {
                 // Display each liked movie in the likedMoviesContainer
                 data.recommendations['liked'].forEach(movie => {
+                    fetch(`getMovieDetails.php?movieId=${movie}`)
+                    .then(response => response.json())
+                    .then(data => {
+                    const firstLiked = data.results[0];
                     const likedItem = document.createElement('div');
                     likedItem.classList.add('liked-item');
                     likedItem.innerHTML = `
                         <a href="moviePage.php?id=${movie}">
-                            <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title} Poster">
+                            <img src="https://image.tmdb.org/t/p/w200${firstLiked.poster_path}" alt="${movie.title} Poster">
                             <p>${movie.title}</p>
                         </a>
                     `;
+ 
                     likedMoviesContainer.appendChild(likedItem);
+                    }).catch(error => console.error('Error fetching liked movies:', error));
+
+                    
 
                     // Fetch recommendations for each liked movie
                     fetch(`fetchRecommendations.php?movieId=${movie}`)
