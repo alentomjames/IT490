@@ -4,7 +4,7 @@ require 'rabbitmq_connection.php';
 
 // Setting page parameter 
 $query = isset($_GET['query']) ? (int)$_GET['query'] : '';
-
+error_log('Query: ', $query);
 // Setting type thats being sent to the DMZ
 $type = 'search_movie';
 
