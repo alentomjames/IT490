@@ -299,7 +299,7 @@ function loadLikedMovies() {
                     fetch(`getMovieDetails.php?movieId=${movie}`)
                     .then(response => response.json())
                     .then(data => {
-                        console.log('DATA: ', data);
+                        console.log('Movie Details', data);
                         const movieDetails = data;
                         const likedItem = document.createElement('div');
                         likedItem.className = 'liked-item';
