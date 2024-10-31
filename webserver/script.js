@@ -295,15 +295,22 @@ function loadLikedMovies() {
 
             if (data['type'] === 'success' && data.recommendations['liked'].length > 0) {
                 data.recommendations['liked'].forEach(movie => {
-                    const likedItem = document.createElement('div');
-                    likedItem.className = 'liked-item';
-                    likedItem.innerHTML = `
+                    fetch(`getMovieDetails.php?movieId=${movie}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const movieDetails = data;
+                        const likedItem = document.createElement('div');
+                        likedItem.className = 'liked-item';
+                        likedItem.innerHTML = `
                         <a href="moviePage.php?id=${movie.id}">
-                            <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}">
-                            <p>${movie.title}</p>
+                            <img src="https://image.tmdb.org/t/p/w200${movieDetails.poster_path}" alt="${movieDetails.title}">
+                            <p>${movieDetails.title}</p>
                         </a>
                     `;
                     likedContainer.appendChild(likedItem);
+
+                    });
+
                 });
             } else {
                 likedContainer.innerHTML = '<p>No liked movies found.</p>';
