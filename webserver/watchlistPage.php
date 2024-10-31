@@ -15,12 +15,7 @@ $userName = $loggedIn ? $_SESSION['name'] : null;
     <title>Your Watchlist</title>
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
-    <script>
-        // display user watchlist
-        document.addEventListener('DOMContentLoaded', () => {
-            loadWatchlist();
-        });
-    </script>
+
 </head>
 
 <body>

@@ -234,7 +234,10 @@ function loadTopTenMovies() {
 document.addEventListener('DOMContentLoaded', () => {
     loadTopTenMovies();
 });
-
+// display user watchlist
+document.addEventListener('DOMContentLoaded', () => {
+    loadWatchlist();
+});
 
 function loadRecommendations() {
     fetch('getRecommendations.php', {
