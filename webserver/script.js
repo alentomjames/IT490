@@ -294,16 +294,18 @@ function loadLikedMovies() {
             likedContainer.innerHTML = '';
 
             if (data['type'] === 'success' && data.recommendations['liked'].length > 0) {
+                console.log('Movies liked: ', data.recommendations['liked']);
                 data.recommendations['liked'].forEach(movie => {
                     fetch(`getMovieDetails.php?movieId=${movie}`)
                     .then(response => response.json())
                     .then(data => {
+                        console.log('DATA: ', data);
                         const movieDetails = data;
                         const likedItem = document.createElement('div');
                         likedItem.className = 'liked-item';
                         likedItem.innerHTML = `
                         <a href="moviePage.php?id=${movie.id}">
-                            <img src="https://image.tmdb.org/t/p/w500${movieDetails.poster_path}">
+                            <img src="https://image.tmdb.org/t/p/w200${movieDetails.poster_path}">
                             <p>${movieDetails.title}</p>
                         </a>
                     `;
