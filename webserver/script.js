@@ -254,8 +254,8 @@ function loadRecommendations() {
                     likedItem.classList.add('liked-item');
                     likedItem.innerHTML = `
                         <a href="moviePage.php?id=${movie}">
-                            <img src="https://image.tmdb.org/t/p/w200${firstLiked.poster_path}" alt="${movie.title} Poster">
-                            <p>${movie.title}</p>
+                            <img src="https://image.tmdb.org/t/p/w200${firstLiked.poster_path}" alt="${firstLiked.title} Poster">
+                            <p>${firstLiked.title}</p>
                         </a>
                     `;
  
