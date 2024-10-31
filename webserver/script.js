@@ -168,6 +168,14 @@ function changePage(direction) {
 }
 
 function setMovieRating(movieId, userId, rating) {
+    const likeIcon = document.getElementById('like-icon');
+
+    if (rating >= 4) {
+        likeIcon.style.display = 'inline';
+    } else {
+        likeIcon.style.display = 'none';
+    }
+
     if (rating < 1 || rating > 5) {
         alert("Please provide a rating between 1 and 5.");
         return;
@@ -186,11 +194,9 @@ function setMovieRating(movieId, userId, rating) {
                 alert(`Failed to submit rating: ${data['message']}`);
             }
         })
-        .catch(error => {
-            console.error('Error submitting rating:', error);
-            return { error: 'Failed to submit rating' };  // Returning an error object
-        });
+        .catch(error => console.error('Error submitting rating:', error));
 }
+
 
 // Add this script to your script.js or inline within topTenPage.php
 document.addEventListener('DOMContentLoaded', loadTopTenMovies);

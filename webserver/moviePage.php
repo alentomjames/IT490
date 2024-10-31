@@ -111,7 +111,11 @@ if ($movie_id) {
                     <option value="4">4 Stars</option>
                     <option value="5">5 Stars</option>
                 </select>
+                <span id="like-icon" style="display: none; margin-left: 10px;">
+                    <i class="fa fa-thumbs-up"></i> You like this movie!
+                </span>
             </div>
+
 
             <button onclick="addToWatchlist(<?php echo $movie_id; ?>)" class="watchlist-button">
                 Add to Watchlist <i class="fa-solid fa-check"></i>
