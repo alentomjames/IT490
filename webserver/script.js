@@ -68,17 +68,16 @@ function loadWatchlist() {
         .then(data => {
             const watchlistContainer = document.querySelector('.watchlist-container');
             watchlistContainer.innerHTML = '';
-            console.log(data['watchlist']);
+            console.log('Data for watchlist: ', data['watchlist']);
             if (data['type'] === 'success' && data['watchlist'].length > 0) {
                 data['watchlist'].forEach(movieId => {
-                    const item = document.createElement('div');
-                    item.className = 'watchlist-item';
-                    item.dataset.movieId = movieId;
-
                     // Fetch movie details from TMDB API
                     fetch(`getMovieDetails.php?movieId=${movieId}`)
                         .then(response => response.json())
                         .then(movie => {
+                            const item = document.createElement('div');
+                            item.className = 'watchlist-item';
+                            item.dataset.movieId = movieId;
                             item.innerHTML = `
                                 <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}">
                                 <p>${movie.title}</p>
@@ -193,8 +192,6 @@ function setMovieRating(movieId, userId, rating) {
 }
 
 
-// Add this script to your script.js or inline within topTenPage.php
-document.addEventListener('DOMContentLoaded', loadTopTenMovies);
 
 function loadTopTenMovies() {
     fetch('fetchTopTen.php', {
