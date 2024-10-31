@@ -30,36 +30,44 @@ $callback = function ($msg) use ($channel) {
         $username = $data['username'];
         $password = $data['password'];
         $response = login($username, $password);
+        echo "Login request received for username: $username\n";
     } elseif ($type === 'register') {
         // register request
         $username = $data['username'];
         $password = $data['password'];
         $name = $data['name'];
         $response = register($name, $username, $password);
+        echo "Register request received for username: $username, name: $name\n";
     } elseif ($type === "add_to_watchlist") {
         $movieId = $data['movie_id'];
         $userId = $data['user_id'];
         // add to watchlist
         $response = addToWatchlist($movieId, $userId);
+        echo "Add to watchlist request received for movie ID: $movieId, user ID: $userId\n";
     } elseif ($type === "remove_from_watchlist") {
         $movieId = $data['movie_id'];
         $userId = $data['user_id'];
         // remove from watchlist
         $response = removeFromWatchlist($movieId, $userId);
+        echo "Remove from watchlist request received for movie ID: $movieId, user ID: $userId\n";
     } elseif ($type === "get_watchlist") {
         $userId = (int) $data['user_id'];
         // get all watchlist
         $response = getFromWatchlist($userId);
+        echo "Get watchlist request received for user ID: $userId\n";
     } elseif ($type === "set_rating") {
         $movieId = (int) $data['movie_id'];
         $userId = (int)$data['user_id'];
         $rating = (int) $data['rating'];
         $response = rateMovie($movieId, $userId, $rating);
+        echo "Set rating request received for movie ID: $movieId, user ID: $userId, rating: $rating\n";
     } elseif ($type === "get_top_ten") {
         $response = getTopTenMovies();
+        echo "Get top ten movies request received\n";
     } elseif ($type === "get_likedMovies") {
         $userId = (int) $data['user_id'];
         $response = getFromRatings($userId);
+        echo "Get liked movies request received for user ID: $userId\n";
     } else {
         echo "Received unknown command or missing required data fields\n";
         return;
