@@ -303,7 +303,7 @@ function loadLikedMovies() {
                         likedItem.className = 'liked-item';
                         likedItem.innerHTML = `
                         <a href="moviePage.php?id=${movie.id}">
-                            <img src="https://image.tmdb.org/t/p/w200${movieDetails.poster_path}" alt="${movieDetails.title}">
+                            <img src="https://image.tmdb.org/t/p/w200${movieDetails.poster_path}">
                             <p>${movieDetails.title}</p>
                         </a>
                     `;
