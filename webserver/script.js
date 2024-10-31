@@ -249,13 +249,12 @@ function loadRecommendations() {
                     fetch(`getMovieDetails.php?movieId=${movie}`)
                     .then(response => response.json())
                     .then(data => {
-                    const firstLiked = data.results[0];
                     const likedItem = document.createElement('div');
                     likedItem.classList.add('liked-item');
                     likedItem.innerHTML = `
                         <a href="moviePage.php?id=${movie}">
-                            <img src="https://image.tmdb.org/t/p/w200${firstLiked.poster_path}" alt="${firstLiked.title} Poster">
-                            <p>${firstLiked.title}</p>
+                            <img src="https://image.tmdb.org/t/p/w200${data.poster_path}" alt="${data.title} Poster">
+                            <p>${data.title}</p>
                         </a>
                     `;
  
