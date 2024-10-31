@@ -158,6 +158,7 @@ function fetchTrending()
             const genreFilter = document.getElementById('genre-filter').value;
 
             if (searchQuery) {
+                console.log("within filteredMovies: ", searchQuery);
                 searchMovies(searchQuery, genreFilter);
             } else {
                 let filteredMovies = allMovies;
@@ -175,6 +176,7 @@ function fetchTrending()
             fetch(`searchMovies.php?query=${encodeURIComponent(query)}`)
                 .then(response => response.json())
                 .then(data => {
+                    console.log("within searchMovies query: ", query);
                     let filteredMovies = data.results;
 
                     if (genreFilter) {
