@@ -130,12 +130,19 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const options = document.querySelectorAll('.trivia-question li');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    selectAnswer(this);
+                });
+            });
+        });
+
         let selectedAnswers = [];
         let correctAnswers = 0;
-
-        function selectAnswer(element, correctAnswer) {
-            if (element.classList.contains('selected')) return;
-
+    
+        function selectAnswer(element) {
             const correctAnswer = element.getAttribute('data-correct-answer');
 
             element.classList.add('selected');
@@ -175,6 +182,8 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
             document.getElementById('genre-select').value = '';
         }
     </script>
+    </body>
+    </html>
 </body>
 
 </html>
