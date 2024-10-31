@@ -120,7 +120,7 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
                 <p><?php echo $question['question']; ?></p>
                 <ul>
                     <?php foreach ($question['options'] as $option): ?>
-                        <li data-correct-answer="<?php echo htmlspecialchars($question['correctAnswer'], ENT_QUOTES); ?>" onclick="selectAnswer(this)">
+                        <li <?php if ($option === $question['correctAnswer']) echo 'data-correct-answer="true"'; ?> onclick="selectAnswer(this)">
                             <?php echo htmlspecialchars($option, ENT_QUOTES); ?>
                         </li>
                     <?php endforeach; ?>
@@ -129,7 +129,7 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
         <?php endforeach; ?>
     </div>
 
-    <script>
+        <script>
         document.addEventListener('DOMContentLoaded', function() {
             const options = document.querySelectorAll('.trivia-question li');
             options.forEach(option => {
@@ -144,7 +144,7 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
 
         function selectAnswer(element) {
             const questionElement = element.closest('.trivia-question');
-            const correctAnswer = questionElement.querySelector('li[data-correct-answer]').getAttribute('data-correct-answer');
+            const isCorrect = element.hasAttribute('data-correct-answer');
 
             element.classList.add('selected');
             element.style.backgroundColor = '#007BFF';
@@ -155,7 +155,7 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
             options.forEach(option => option.style.pointerEvents = 'none');
 
             selectedAnswers.push(element.textContent.trim());
-            if (element.textContent.trim() === correctAnswer) {
+            if (isCorrect) {
                 correctAnswers++;
             }
 
