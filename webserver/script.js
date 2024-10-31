@@ -230,34 +230,51 @@ function loadTopTenMovies() {
         .catch(error => console.error('Error fetching top movies:', error));
 }
 
-// Load recommendations and display
 function loadRecommendations() {
+    const likedMoviesContainer = document.getElementById('liked-movies-container');
+    const recommendationsContainer = document.getElementById('recommendations-container');
+
+    likedMoviesContainer.innerHTML = '';      // Clear any existing liked movies
+    recommendationsContainer.innerHTML = '';  // Clear any existing recommendations
+
+    // Fetch the user's liked movies from getRecommendations.php
     fetch('getRecommendations.php', {
         method: 'GET',
     })
         .then(response => response.json())
         .then(data => {
-            const recommendationsContainer = document.getElementById('recommendations-container');
-            recommendationsContainer.innerHTML = '';
-
             if (data['type'] === 'success' && data.recommendations['liked'].length > 0) {
+                // Display each liked movie in the likedMoviesContainer
                 data.recommendations['liked'].forEach(movie => {
-                    fetch(`fetchRecommendations.php?movieId=${movie}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const firstRecommendation = data.results[0];
-                        const recommendationItem = document.createElement('div');
-                        recommendationItem.classList.add('recommendation-item');
-                        recommendationItem.innerHTML = `
-                        <a href="moviePage.php?id=${firstRecommendation.id}">
-                            <img src="https://image.tmdb.org/t/p/w200${firstRecommendation.poster_path}" alt="${firstRecommendation.title} Poster">
+                    const likedItem = document.createElement('div');
+                    likedItem.classList.add('liked-item');
+                    likedItem.innerHTML = `
+                        <a href="moviePage.php?id=${movie}">
+                            <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title} Poster">
+                            <p>${movie.title}</p>
                         </a>
-                        <p>${firstRecommendation.title}</p>
                     `;
-                    recommendationsContainer.appendChild(recommendationItem);
+                    likedMoviesContainer.appendChild(likedItem);
+
+                    // Fetch recommendations for each liked movie
+                    fetch(`fetchRecommendations.php?movieId=${movie}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const firstRecommendation = data.results[0];
+                            const recommendationItem = document.createElement('div');
+                            recommendationItem.classList.add('recommendation-item');
+                            recommendationItem.innerHTML = `
+                                <a href="moviePage.php?id=${firstRecommendation.id}">
+                                    <img src="https://image.tmdb.org/t/p/w200${firstRecommendation.poster_path}" alt="${firstRecommendation.title} Poster">
+                                    <p>${firstRecommendation.title}</p>
+                                </a>
+                            `;
+                            recommendationsContainer.appendChild(recommendationItem);
+                        })
+                        .catch(error => console.error('Error fetching recommendations:', error));
                 });
-            });
             } else {
+                likedMoviesContainer.innerHTML = '<p>No liked movies found!</p>';
                 recommendationsContainer.innerHTML = '<p>No recommendations found based on your liked movies.</p>';
             }
         })
@@ -265,41 +282,5 @@ function loadRecommendations() {
 }
 
 document.addEventListener('DOMContentLoaded', loadRecommendations);
-
-function loadSimilarMovies(movieId) {
-    const apiKey = '38b40730e9d751a8d47f6e30b11ef937';
-    fetch(`https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${apiKey}&language=en-US&page=1`, {
-        method: 'GET',
-    })
-        .then(response => response.json())
-        .then(data => {
-            const similarMoviesContainer = document.getElementById('similar-movies-container');
-            similarMoviesContainer.innerHTML = '';
-
-            if (data.results && data.results.length > 0) {
-                data.results.forEach(movie => {
-                    const item = document.createElement('div');
-                    item.className = 'movie-item';
-
-                    fetch(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=${apiKey}`)
-                        .then(response => response.json())
-                        .then(movieDetails => {
-                            item.innerHTML = `
-                                <a href="moviePage.php?id=${movie.id}">
-                                    <img src="https://image.tmdb.org/t/p/w200${movieDetails.poster_path}" alt="${movieDetails.title}">
-                                    <p>${movieDetails.title}</p>
-                                    <p class="vote-average">${Math.round(movieDetails.vote_average / 2 * 10) / 10} <i class="fa fa-star"></i></p>
-                                </a>
-                            `;
-                            similarMoviesContainer.appendChild(item);
-                        })
-                        .catch(error => console.error('Error fetching movie details:', error));
-                });
-            } else {
-                similarMoviesContainer.innerHTML = '<p>No similar movies found!</p>';
-            }
-        })
-        .catch(error => console.error('Error fetching similar movies:', error));
-}
 
 

@@ -16,26 +16,20 @@ $userName = $loggedIn ? $_SESSION['name'] : null;
 </head>
 
 <body>
-<nav class="navbar">
+    <nav class="navbar">
         <a href="index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
-                <li>
-                    <button onclick="location.href='Reccomend.php'" class="smoothie-button">
+                <li><button onclick="location.href='Reccomend.php'" class="smoothie-button">
                         <img src="smoothie.png" alt="Movie Smoothie" class="smoothie-icon">
-                    </button>
-                </li>
-               <li><button onclick="location.href='recBasedonLikesPage.php'">Recommended Movies</button></li>
+                    </button></li>
+                <li><button onclick="location.href='recBasedonLikesPage.php'">Recommended Movies</button></li>
                 <li><button onclick="location.href='MovieTrivia.php'">Movie Trivia</button></li>
                 <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
                 <li><button onclick="location.href='topTenPage.php'">Top Movies</button></li>
-                <!-- If they are logged in then display a "Welcome [user]" text at the top where the buttons would usually be and a logout button --->
                 <p class="nav-title">Welcome, <?php echo $_SESSION['name']; ?>!</p>
-                <!-- Logout button that calls logout.php to delete the userID from session and redirects them to the login page --->
                 <li><button onclick="location.href='logout.php'">Logout</button></li>
             <?php else: ?>
-                <!-- If they aren't logged in then display the buttons for login or sign up on the navbar --->
-
                 <li><button onclick="location.href='login.php'">Login</button></li>
                 <li><button onclick="location.href='sign_up.php'">Sign Up</button></li>
             <?php endif; ?>
@@ -43,12 +37,20 @@ $userName = $loggedIn ? $_SESSION['name'] : null;
     </nav>
 
     <div class="welcome-message">
-        <h1>Recommended Movies Based on Your Likes</h1>
+        <h1>Movies You Liked and Recommendations Based on Them</h1>
     </div>
 
-    <div class="recommendations" id="recommendations-container">
-        <!-- Recommendations will be loaded here by JavaScript -->
-    </div>
+    <section>
+        <h2>Your Liked Movies</h2>
+        <div id="liked-movies-container" class="liked-movies">
+        </div>
+    </section>
+
+    <section>
+        <h2>Recommended Movies Based on Your Likes</h2>
+        <div id="recommendations-container" class="recommendations">
+        </div>
+    </section>
 
     <script src="script.js"></script>
 </body>
