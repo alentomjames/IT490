@@ -3,7 +3,7 @@ require_once 'vendor/autoload.php';
 require 'rabbitmq_connection.php';
 
 // Setting page parameter 
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$query = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
 // Setting type thats being sent to the DMZ
 $type = 'search_movie';
