@@ -241,6 +241,7 @@ function loadRecommendations() {
 
             if (data['type'] === 'success' && data.recommendations['liked'].length > 0) {
                 data.recommendations['liked'].forEach(movie => {
+                    let likedMovie = [];
                     const item = document.createElement('div');
                     item.className = 'recommendation-item';
                     item.innerHTML = `
@@ -265,11 +266,17 @@ function loadRecommendations() {
                     recommendationsContainer.appendChild(recommendationItem);
                 });
             });
+
+            
             } else {
                 recommendationsContainer.innerHTML = '<p>No recommendations found based on your liked movies.</p>';
             }
         })
         .catch(error => console.error('Error fetching recommendations:', error));
+
+        const likedContainer = document.getElementById('liked-movies-container');
+        likedContainer.innerHTML = '';
+
 }
 
 document.addEventListener('DOMContentLoaded', loadRecommendations);
