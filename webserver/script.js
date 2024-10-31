@@ -231,10 +231,8 @@ function loadTopTenMovies() {
 }
 
 function loadRecommendations() {
-    const likedMoviesContainer = document.getElementById('liked-movies-container');
     const recommendationsContainer = document.getElementById('recommendations-container');
 
-    likedMoviesContainer.innerHTML = '';      // Clear any existing liked movies
     recommendationsContainer.innerHTML = '';  // Clear any existing recommendations
 
     // Fetch the user's liked movies from getRecommendations.php
@@ -264,7 +262,6 @@ function loadRecommendations() {
                         .catch(error => console.error('Error fetching recommendations:', error));
                 });
             } else {
-                likedMoviesContainer.innerHTML = '<p>No liked movies found!</p>';
                 recommendationsContainer.innerHTML = '<p>No recommendations found based on your liked movies.</p>';
             }
         })

@@ -40,11 +40,6 @@ $userName = $loggedIn ? $_SESSION['name'] : null;
         <h1>Movies You Liked and Recommendations Based on Them</h1>
     </div>
 
-    <section>
-        <h2>Your Liked Movies</h2>
-        <div id="liked-movies-container" class="liked-movies">
-        </div>
-    </section>
 
     <section>
         <h2>Recommended Movies Based on Your Likes</h2>
@@ -52,6 +47,12 @@ $userName = $loggedIn ? $_SESSION['name'] : null;
         </div>
     </section>
 
+    <section>
+        <h2>Your Liked Movies</h2>
+        <div id="liked-movies-container" class="liked-movies">
+        </div>
+    </section>
+    
     <script src="script.js"></script>
 </body>
 
