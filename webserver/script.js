@@ -231,6 +231,11 @@ function loadTopTenMovies() {
         .catch(error => console.error('Error fetching top movies:', error));
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    loadTopTenMovies();
+});
+
+
 function loadRecommendations() {
     fetch('getRecommendations.php', {
         method: 'GET',
