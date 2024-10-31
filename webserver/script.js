@@ -262,7 +262,7 @@ function loadRecommendations() {
                         </a>
                         <p>${firstRecommendation.title}</p>
                     `;
-                    recommendationsContainer.appendChild(item);
+                    recommendationsContainer.appendChild(recommendationItem);
                 });
             });
             } else {
