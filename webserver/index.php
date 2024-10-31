@@ -3,8 +3,6 @@ session_start();
 $loggedIn = isset($_SESSION['userID']);
 
 
-require_once('vendor/autoload.php');
-require_once 'rabbitmq_connection.php';
 
 ?>
 
@@ -48,7 +46,7 @@ require_once 'rabbitmq_connection.php';
 
     <div class="welcome-message">
         <h1>Hello, <?php echo $_SESSION['name']; ?></h1>
-        <p>Welcome to BreadWinners. Here are the top 10 trending movies:</p>
+        <p>Welcome to BreadWinners!</p>
     </div>
 
   
