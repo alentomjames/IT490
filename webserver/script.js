@@ -58,10 +58,7 @@ function moveCarousel(direction) {
     carousel.style.transform = `translateX(-${carouselIndex * itemWidth}px)`;
 }
 
-// display user watchlist
-document.addEventListener('DOMContentLoaded', () => {
-    loadWatchlist();
-});
+
 
 
 // load watchlist and display
@@ -198,7 +195,6 @@ function setMovieRating(movieId, userId, rating) {
 
 
 // Add this script to your script.js or inline within topTenPage.php
-document.addEventListener('DOMContentLoaded', loadTopTenMovies);
 
 function loadTopTenMovies() {
     fetch('fetchTopTen.php', {
@@ -319,10 +315,4 @@ function loadLikedMovies() {
         })
         .catch(error => console.error('Error fetching liked movies:', error));
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    loadLikedMovies();
-    loadRecommendations();
-});
-
 
