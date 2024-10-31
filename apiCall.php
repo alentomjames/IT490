@@ -1,4 +1,5 @@
 <?php
+// Now deprecated, replaced by api_handler.php
 session_start();
 
 require_once '/webserver/vendor/autoload.php';
