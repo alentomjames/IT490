@@ -769,3 +769,32 @@ body {
     margin-top: 5px;
 }
 
+/* Recommendation Item Styling - Matches Existing Movie Cards */
+.recommendation-item {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 200px; /* Adjust as needed */
+    margin: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.recommendation-item img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.recommendation-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.recommendation-item p {
+    font-size: 1rem;
+    color: #333;
+    text-decoration: none;
+}
