@@ -8,7 +8,7 @@
     $logs = [];
     
     $file = fopen($logFile, 'r');
-    //fseek($file, 0, SEEK_END);
+    fseek($file, 0, SEEK_END);
 
     echo "Starting log monitoring for $file\n";
 
@@ -29,7 +29,12 @@
                     'count' => 1,
                     'timestamp' => $timestamp
                 ];
-            }
+            } 
+        } else {
+            sleep(1);
+            clearstatcache();
+            fseek($file, $position ?? 0);
+        }
 
         $logJSON = json_encode([
             'machine' => $machineName,
@@ -42,6 +47,5 @@
         sendLog($logJSON);
     } 
 
-}
 
 ?>
