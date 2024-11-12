@@ -126,7 +126,8 @@ function sendLog($logMessage)
 function recieveLogs()
 {
     list($connection, $channel) = getRabbit();
-    
+    $channel->queue_declare('toFeDev', false, true, false, false);
+
     echo "Waiting for logs. To exit press CTRL+C\n";
 
     $logPath = '/var/log/distributedLogs.txt';
