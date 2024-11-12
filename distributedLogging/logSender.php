@@ -13,6 +13,8 @@
     $file = fopen($logFile, 'r');
     fseek($file, 0, SEEK_END);
 
+    echo "Starting log monitoring";
+    
     while(true){
         $line = fgets($file);
         if ($line !== false ){
