@@ -13,6 +13,8 @@
     $file = fopen($logFile, 'r');
     fseek($file, 0, SEEK_END);
 
+    echo "Starting log monitoring";
+
     while(true){
         $line = fgets($file);
         if ($line !== false ){
@@ -38,10 +40,9 @@
             'message' => $logs[$logEntry]['message'],
             'count' => $logs[$logEntry]['count']
         ]);
+        echo "Error sent from Apache Server to Distrubted Logger: $logJson\n";
 
         sendLog($logJSON);
-        echo "Error sent from Apache Server to Distrubted Logger";
-
     } 
 
     sleep($logInterval);
