@@ -1,9 +1,9 @@
 <?php
-    require_once 'rabbitmq_connection.php';
+    require_once 'webserver/rabbitmq_connection.php';
 
     //Adjust this path variable to what where your guys error logs are
     $logFile = '/var/log/apache2/error.log'; 
-    $machineName = 'Webserver';
+    $machineName = 'DMZ';
 
     // Amount of seconds between checking for logs 
     $logInterval = 5; 
