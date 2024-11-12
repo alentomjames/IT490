@@ -1,3 +1,4 @@
+@ -1,51 +1,47 @@
 <?php
     require_once 'rabbitmq_connection.php';
 
@@ -5,18 +6,22 @@
     $logFile = '/var/log/apache2/error.log'; 
     $machineName = 'Webserver';
 
+    // Amount of seconds between checking for logs 
+    $logInterval = 5; 
+
     $logs = [];
     
     $file = fopen($logFile, 'r');
     fseek($file, 0, SEEK_END);
+    //fseek($file, 0, SEEK_END);
 
+    echo "Starting log monitoring\n";
     echo "Starting log monitoring for $file\n";
 
     while(true) {
         $line = fgets($file);
-        echo 'LINE VARIABLE: $line\n';
-
         if ($line !== false ){
+            
             echo "Read line from Apache log: $line\n";  
             $timestamp = date("F j, Y, g:i a");
             $logEntry = trim($line);
@@ -31,8 +36,7 @@
                     'count' => 1,
                     'timestamp' => $timestamp
                 ];
-            } 
-        
+            }
 
         $logJSON = json_encode([
             'machine' => $machineName,
@@ -43,10 +47,9 @@
         echo "Error sent from Apache Server to Distrubted Logger: $logJSON\n";
 
         sendLog($logJSON);
-        sleep(1);
-        clearstatcache();
-        fseek($file, $position ?? 0);
-        }
     } 
+
+    sleep($logInterval);
+}
 
 ?>
