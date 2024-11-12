@@ -5,20 +5,17 @@
     $logFile = '/var/log/apache2/error.log'; 
     $machineName = 'Webserver';
 
-    // Amount of seconds between checking for logs 
-    $logInterval = 5; 
-
     $logs = [];
     
     $file = fopen($logFile, 'r');
-    fseek($file, 0, SEEK_END);
+    //fseek($file, 0, SEEK_END);
 
-    echo "Starting log monitoring\n";
+    echo "Starting log monitoring for $file\n";
 
     while(true) {
         $line = fgets($file);
         if ($line !== false ){
-            
+            echo "Read line from Apache log: $line\n";  
             $timestamp = date("F j, Y, g:i a");
             $logEntry = trim($line);
             echo "Error recieved from Apache Server\n";
@@ -45,7 +42,6 @@
         sendLog($logJSON);
     } 
 
-    sleep($logInterval);
 }
 
 ?>
