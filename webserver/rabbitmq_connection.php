@@ -140,9 +140,8 @@ function recieveLogs()
     // Wait for the response
     while ($channel->is_consuming()) {
         $channel->wait();
-        if ($data !== null) {
-            break;
-        }
+        echo "Error recieved from Distrubted Logger";
+
     }
     // Close the channel and connection
     closeRabbit($connection, $channel);
