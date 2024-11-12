@@ -2,7 +2,7 @@
     require_once 'webserver/rabbitmq_connection.php';
 
     //Adjust this path variable to what where your guys error logs are
-    $logFile = '/var/log/apache2/error.log'; 
+    $logFile = '/var/log/api_handler/error.log'; 
     $machineName = 'DMZ';
 
     $logs = [];
