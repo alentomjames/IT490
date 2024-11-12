@@ -46,6 +46,6 @@
     } 
 
     sleep($logInterval);
-};
+}
 
 ?>

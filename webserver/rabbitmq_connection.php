@@ -117,7 +117,7 @@ function sendLog($logMessage)
     list($connection, $channel) = getRabbit();
     $channel->exchange_declare('fanoutExchange', 'fanout', false, true, false);
 
-    $msg = new AMQMessage($logMessage, ['delivery_mode' => 2]);
+    $msg = new AMQPMessage($logMessage, ['delivery_mode' => 2]);
     $channel->basic_publish($msg, 'fanoutExchange');
 
     closeRabbit($connection, $channel);
