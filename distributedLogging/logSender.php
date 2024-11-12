@@ -13,15 +13,15 @@
     $file = fopen($logFile, 'r');
     fseek($file, 0, SEEK_END);
 
-    echo "Starting log monitoring";
+    echo "Starting log monitoring\n";
 
-    while(true){
+    while(true) {
         $line = fgets($file);
         if ($line !== false ){
             
             $timestamp = date("F j, Y, g:i a");
             $logEntry = trim($line);
-            echo "Error recieved from Apache Server";
+            echo "Error recieved from Apache Server\n";
 
             if (isset($logs[$logEntry])) {
                 // Counts the amount of times the error showed up
@@ -32,7 +32,7 @@
                     'count' => 1,
                     'timestamp' => $timestamp
                 ];
-            };
+            }
 
         $logJSON = json_encode([
             'machine' => $machineName,
@@ -40,7 +40,7 @@
             'message' => $logs[$logEntry]['message'],
             'count' => $logs[$logEntry]['count']
         ]);
-        echo "Error sent from Apache Server to Distrubted Logger: $logJson\n";
+        echo "Error sent from Apache Server to Distrubted Logger: $logJSON\n";
 
         sendLog($logJSON);
     } 

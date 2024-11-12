@@ -141,7 +141,7 @@ function recieveLogs()
     // Wait for the response
     while ($channel->is_consuming()) {
         $channel->wait();
-        echo "Error recieved from Distrubted Logger";
+        echo "Error recieved from Distrubted Logger\n";
 
     }
     // Close the channel and connection
