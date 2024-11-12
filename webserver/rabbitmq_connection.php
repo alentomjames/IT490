@@ -111,3 +111,39 @@ function recieveDB()
 
     return $data;
 }
+
+function sendLog($logMessage)
+{
+    list($connection, $channel) = getRabbit();
+    $channel->exchange_declare('fanoutExchange', 'fanout', false, true, false);
+
+    $msg = new AMQMessage($logMessage, ['delivery_mode' => 2]);
+    $channel->basic_publish($msg, 'fanoutExchange');
+
+    closeRabbit($connection, $channel);
+}
+
+function recieveLogs()
+{
+    list($connection, $channel) = getRabbit();
+    
+    echo "Waiting for logs. To exit press CTRL+C\n";
+
+    $logPath = '/var/log/distributedLogs.txt';
+
+    $callback = function ($msg) use ($logPath) {
+        file_put_contents($logPath, $msg->body . PHP_EOL, FILE_APPEND);
+    };
+
+    $channel->basic_consume('toFeDev', '', false, true, false, false, $callback);
+
+    // Wait for the response
+    while ($channel->is_consuming()) {
+        $channel->wait();
+        if ($data !== null) {
+            break;
+        }
+    }
+    // Close the channel and connection
+    closeRabbit($connection, $channel);
+}
