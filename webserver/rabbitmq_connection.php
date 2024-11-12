@@ -115,12 +115,16 @@ function recieveDB()
 function sendLog($logMessage)
 {
     list($connection, $channel) = getRabbit();
-    $channel->exchange_declare('fanoutExchange', 'fanout', false, true, false);
-
-    $msg = new AMQPMessage($logMessage, ['delivery_mode' => 2]);
-    $channel->basic_publish($msg, 'fanoutExchange');
-
-    closeRabbit($connection, $channel);
+    try {
+        $channel->exchange_declare('fanoutExchange', 'fanout', false, true, false);
+        $msg = new AMQPMessage($logMessage, ['delivery_mode' => 2]);
+        $channel->basic_publish($msg, 'fanoutExchange');
+        echo "Log message sent to fanoutExchange\n";
+    } catch (Exception $e) {
+        echo "Error publishing message to RabbitMQ: " . $e->getMessage() . "\n";
+    } finally {
+        closeRabbit($connection, $channel);
+    }
 }
 
 function recieveLogs()
