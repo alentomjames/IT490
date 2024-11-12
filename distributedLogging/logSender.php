@@ -1,5 +1,5 @@
 <?php
-    require_once 'rabbitmq_connection.php';
+    require_once(__DIR__ . '/../webserver/rabbitmq_connection.php');
 
     //Adjust this path variable to what where your guys error logs are
     $logFile = '/var/log/apache2/error.log'; 
