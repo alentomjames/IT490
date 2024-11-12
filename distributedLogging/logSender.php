@@ -5,7 +5,7 @@
     $logFile = '/var/log/apache2/error.log'; 
     $machineName = 'Webserver';
 
-    $sentLogs = [];
+    $logs = [];
     
     $file = fopen($logFile, 'r');
     fseek($file, 0, SEEK_END);
@@ -14,36 +14,24 @@
 
     while(true) {
         $line = fgets($file);
-        if ($line !== false) {
-        // Clean the line and create a unique hash for the log entry
-        $logEntry = trim($line);
-        $logHash = md5($logEntry);
+        echo 'LINE VARIABLE: $line\n';
 
-        // Check if this log entry has already been sent
-        if (isset($sentLogs[$logHash])) {
-            echo "Duplicate log detected, skipping: $logEntry\n";
-        } else {
-
+        if ($line !== false ){
             echo "Read line from Apache log: $line\n";  
             $timestamp = date("F j, Y, g:i a");
             $logEntry = trim($line);
             echo "Error recieved from Apache Server\n";
-            $logs[$logEntry] = [
-                'message' => $logEntry,
-                'count' => 1,
-                'timestamp' => $timestamp
-            ];
+
+            if (isset($logs[$logEntry])) {
+                // Counts the amount of times the error showed up
+                $logs[$logEntry]['count']++;
+            } else {
+                $logs[$logEntry] = [
+                    'message' => $logEntry,
+                    'count' => 1,
+                    'timestamp' => $timestamp
+                ];
             } 
-            $sentLogs[$logHash] = true;
-            // Track the current position after reading the line
-            $position = ftell($file);
-
-        } else {
-            sleep(1);
-            clearstatcache();
-            fseek($file, $position ?? 0);
-        }
-
         
 
         $logJSON = json_encode([
@@ -55,7 +43,10 @@
         echo "Error sent from Apache Server to Distrubted Logger: $logJSON\n";
 
         sendLog($logJSON);
+        sleep(1);
+        clearstatcache();
+        fseek($file, $position ?? 0);
+        }
     } 
-
 
 ?>
