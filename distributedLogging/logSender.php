@@ -3,8 +3,8 @@
     require_once 'rabbitmq_connection.php';
 
     //Adjust this path variable to what where your guys error logs are
-    $logFile = '/var/log/apache2/error.log'; 
-    $machineName = 'Webserver';
+    $logFile = '/var/log/deployment/error.log'; 
+    $machineName = 'Deployment';
     
     $file = fopen($logFile, 'r');
     fseek($file, 0, SEEK_END);
@@ -19,12 +19,12 @@
         $line = fgets($file);
         if ($line !== false ){
             
-            echo "Read line from Apache log: $line\n";  
+            echo "Read line from Deployment log: $line\n";  
             $logEntry = trim($line);
             // Creating a unique hash for each log entry 
             $logHash = md5($logEntry);
 
-            echo "Error recieved from Apache Server\n";
+            echo "Error recieved from Deployment Server\n";
 
             if (isset($sentLogs[$logHash])) {
                 echo "Error message already sent to Log Distributer";
@@ -36,7 +36,7 @@
                     'message' => $logEntry,
                     'count' => 1
                 ]);
-                echo "Message sent from Apache Server to Distrubted Logger: $logJSON\n";
+                echo "Message sent from Deployment Server to Distrubted Logger: $logJSON\n";
                 sendLog($logJSON);
 
                 $sentLogs[$logHash] = true;

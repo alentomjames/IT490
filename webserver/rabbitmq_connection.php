@@ -130,7 +130,7 @@ function sendLog($logMessage)
 function recieveLogs()
 {
     list($connection, $channel) = getRabbit();
-    $channel->queue_declare('toFeDev', false, true, false, false);
+    $channel->queue_declare('toDeployment', false, true, false, false);
 
     echo "Waiting for logs. To exit press CTRL+C\n";
 
@@ -140,7 +140,7 @@ function recieveLogs()
         file_put_contents($logPath, $msg->body . PHP_EOL, FILE_APPEND);
     };
 
-    $channel->basic_consume('toFeDev', '', false, true, false, false, $callback);
+    $channel->basic_consume('toDeployment', '', false, true, false, false, $callback);
 
     // Wait for the response
     while ($channel->is_consuming()) {
