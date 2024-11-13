@@ -2,7 +2,7 @@
     require_once(__DIR__ . '/../webserver/rabbitmq_connection.php');
 
     //Adjust this path variable to what where your guys error logs are
-    $logFile = '/IT490/distributedLogging/error.log'; 
+    $logFile = '/var/log/DMZ/error.log'; 
     $machineName = 'DMZ';
  
     $file = fopen($logFile, 'r');
@@ -35,7 +35,7 @@
                     'message' => $logEntry,
                     'count' => 1
                 ]);
-                echo "Message sent from Apache Server to Distrubted Logger: $logJSON\n";
+                echo "Message sent from Apache Server to Distributed Logger: $logJSON\n";
                 sendLog($logJSON);
 
                 $sentLogs[$logHash] = true;
