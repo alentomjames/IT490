@@ -4,44 +4,51 @@
     //Adjust this path variable to what where your guys error logs are
     $logFile = '/IT490/distributedLogging/error.log'; 
     $machineName = 'DMZ';
-
-    $logs = [];
-    
+ 
     $file = fopen($logFile, 'r');
-    //fseek($file, 0, SEEK_END);
+    fseek($file, 0, SEEK_END);
+   
+    echo "Starting log monitoring for $logFile\n";
 
-    echo "Starting log monitoring for $file\n";
+    $sentLogs = [];
+    // Keeping a record of the past 100 logs that were being sent 
+    $logRetention = 100;
 
     while(true) {
         $line = fgets($file);
         if ($line !== false ){
+            
             echo "Read line from Apache log: $line\n";  
-            $timestamp = date("F j, Y, g:i a");
             $logEntry = trim($line);
+            // Creating a unique hash for each log entry 
+            $logHash = md5($logEntry);
+
             echo "Error recieved from Apache Server\n";
 
-            if (isset($logs[$logEntry])) {
-                // Counts the amount of times the error showed up
-                $logs[$logEntry]['count']++;
+            if (isset($sentLogs[$logHash])) {
+                echo "Error message already sent to Log Distributer";
             } else {
-                $logs[$logEntry] = [
+                $timestamp = date("F j, Y, g:i a");
+                $logJSON = json_encode([
+                    'machine' => $machineName,
+                    'timestamp' => $timestamp,
                     'message' => $logEntry,
-                    'count' => 1,
-                    'timestamp' => $timestamp
-                ];
+                    'count' => 1
+                ]);
+                echo "Message sent from Apache Server to Distrubted Logger: $logJSON\n";
+                sendLog($logJSON);
+
+                $sentLogs[$logHash] = true;
+                if (count($sentLogs) > $logRetention) {
+                    array_shift($sentLogs); // Remove the oldest entry
+                }
             }
-
-        $logJSON = json_encode([
-            'machine' => $machineName,
-            'timestamp' => $logs[$logEntry]['timestamp'],
-            'message' => $logs[$logEntry]['message'],
-            'count' => $logs[$logEntry]['count']
-        ]);
-        echo "Error sent from Apache Server to Distrubted Logger: $logJSON\n";
-
-        sendLog($logJSON);
-    } 
-
+            $position = ftell($file);
+    } else {
+        sleep(1);
+        clearstatcache(); // Clear cached information about the file
+        fseek($file, $position ?? 0);
+    }
 }
 
 ?>
