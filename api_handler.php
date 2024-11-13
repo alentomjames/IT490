@@ -28,7 +28,7 @@ $callback = function ($msg) use ($channel) {
     $parameter = $data['parameter'] ?? null;
 
     if (!$type || !$parameter) {
-        error_log("Missing 'type' or 'parameter' in the message", 3, '/var/log/api_handler/error.log');
+        error_log("Missing 'type' or 'parameter' in the message", 3, '/var/log/DMZ/error.log');
         echo "Error: Missing 'type' or 'parameter'\n";
         return;
     }
@@ -141,7 +141,7 @@ function fetchDetails($type, $parameter, $url) {
         }
         
         // Log other exceptions or handle them accordingly
-        error_log("Error fetching details: " . $e->getMessage(), 3, '/var/log/api_handler/error.log');
+        error_log("Error fetching details: " . $e->getMessage(), 3, '/var/log/DMZ/error.log');
         echo "Error message: " . $e->getMessage() . "\n";
         return json_encode([
             'type' => 'failure',
