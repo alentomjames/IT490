@@ -170,6 +170,7 @@ function fetchTrending()
             }
         }
 
+
         function searchMovies(query, genreFilter) {
             fetch(`searchMovies.php?query=${encodeURIComponent(query)}`)
                 .then(response => response.json())

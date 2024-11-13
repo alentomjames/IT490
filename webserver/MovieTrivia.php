@@ -2,7 +2,6 @@
 session_start();
 $loggedIn = isset($_SESSION['userID']);
 
-
 require_once 'vendor/autoload.php';
 require_once 'rabbitmq_connection.php';
 
@@ -120,7 +119,7 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
                 <p><?php echo $question['question']; ?></p>
                 <ul>
                     <?php foreach ($question['options'] as $option): ?>
-                        <li data-correct-answer="<?php echo htmlspecialchars($question['correctAnswer'], ENT_QUOTES); ?>" onclick="selectAnswer(this)">
+                        <li <?php if ($option === $question['correctAnswer']) echo 'data-correct-answer="true"'; ?> onclick="selectAnswer(this)">
                             <?php echo htmlspecialchars($option, ENT_QUOTES); ?>
                         </li>
                     <?php endforeach; ?>
@@ -130,34 +129,55 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const options = document.querySelectorAll('.trivia-question li');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    selectAnswer(this);
+                });
+            });
+        });
+
         let selectedAnswers = [];
         let correctAnswers = 0;
 
-        function selectAnswer(element, correctAnswer) {
-            if (element.classList.contains('selected')) return;
+        function selectAnswer(element) {
+            const questionElement = element.closest('.trivia-question');
+            const isCorrect = element.hasAttribute('data-correct-answer');
 
-            const correctAnswer = element.getAttribute('data-correct-answer');
+            // Prevent multiple selections for the same question
+            if (questionElement.classList.contains('answered')) {
+                return;
+            }
+            questionElement.classList.add('answered');
 
             element.classList.add('selected');
             element.style.backgroundColor = '#007BFF';
             element.style.color = 'white';
             element.style.pointerEvents = 'none';
 
-            const questionElement = element.closest('.trivia-question');
             const options = questionElement.querySelectorAll('li');
             options.forEach(option => option.style.pointerEvents = 'none');
 
             selectedAnswers.push(element.textContent.trim());
-            if (element.textContent.trim() === correctAnswer) {
-                correctAnswers++;
+            console.log("Selected answer:", element.textContent.trim());
+            if (isCorrect) {
+                correctAnswers += 1;
+                console.log("Correct answer selected. Total correct answers:", correctAnswers);
+            } else {
+                console.log("Incorrect answer selected.");
             }
 
-            if (selectedAnswers.length === document.querySelectorAll('.trivia-question').length) {
+            // Check if all questions have been answered
+            const totalQuestions = document.querySelectorAll('.trivia-question').length;
+            console.log("Selected answers count:", selectedAnswers.length, "Total questions:", totalQuestions);
+            if (selectedAnswers.length === totalQuestions) {
                 setTimeout(showScore, 500);
             }
         }
 
         function showScore() {
+            console.log("Showing score. Correct answers:", correctAnswers, "Total questions:", selectedAnswers.length);
             const scorePopup = document.createElement('div');
             scorePopup.classList.add('score-popup');
             scorePopup.innerHTML = `
@@ -170,6 +190,7 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
         }
 
         function restartTrivia() {
+            console.log("Restarting trivia.");
             document.querySelector('.score-popup').remove();
             document.getElementById('trivia-container').innerHTML = '';
             document.getElementById('genre-select').value = '';

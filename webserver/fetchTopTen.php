@@ -2,9 +2,8 @@
 
 session_start();
 header('Content-Type: application/json');
-require_once './vendor/autoload.php';
-require_once './db_connection.php';
-require_once './rabbitmq_connection.php';
+require_once 'vendor/autoload.php';
+require_once 'rabbitmq_connection.php';
 
 use PhpAmqpLib\Message\AMQPMessage;
 

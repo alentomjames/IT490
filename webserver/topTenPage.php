@@ -53,7 +53,7 @@ $userName = $loggedIn ? $_SESSION['name'] : null;
                 <li><button onclick="location.href='recBasedonLikesPage.php'">Recommended Movies</button></li>
                 <li><button onclick="location.href='MovieTrivia.php'">Movie Trivia</button></li>
                 <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
-                <li><button onclick="location.href='topTen.php'">Top Movies</button></li>
+                <li><button onclick="location.href='topTenPage.php'">Top Movies</button></li>
                 <p class="nav-title">Welcome, <?php echo htmlspecialchars($userName); ?>!</p>
                 <li><button onclick="location.href='logout.php'">Logout</button></li>
             <?php else: ?>

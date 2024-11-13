@@ -20,7 +20,6 @@ $userName = $loggedIn ? $_SESSION['name'] : null;
         document.addEventListener('DOMContentLoaded', () => {
             loadWatchlist();
         });
-
     </script>
 </head>
 

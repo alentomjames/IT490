@@ -35,7 +35,7 @@ function validateLoginForm() {
     return true;
 }
 
-// Carousel For Recommended Movies 
+// Carousel For Recommended Movies
 let carouselIndex = 0;
 
 function moveCarousel(direction) {
@@ -59,6 +59,8 @@ function moveCarousel(direction) {
 }
 
 
+
+
 // load watchlist and display
 function loadWatchlist() {
     fetch('fetchWatchlist.php', {
@@ -68,7 +70,6 @@ function loadWatchlist() {
         .then(data => {
             const watchlistContainer = document.querySelector('.watchlist-container');
             watchlistContainer.innerHTML = '';
-            console.log(data['watchlist']);
             if (data['type'] === 'success' && data['watchlist'].length > 0) {
                 data['watchlist'].forEach(movieId => {
                     const item = document.createElement('div');
@@ -134,7 +135,7 @@ function removeFromWatchlist(movieId) {
 }
 
 
-// Code for Reccomended Movies Page 
+// Code for Reccomended Movies Page
 
 function filterMovies() {
     searchQuery = document.getElementById('search-bar').value.toLowerCase();
@@ -194,7 +195,6 @@ function setMovieRating(movieId, userId, rating) {
 
 
 // Add this script to your script.js or inline within topTenPage.php
-document.addEventListener('DOMContentLoaded', loadTopTenMovies);
 
 function loadTopTenMovies() {
     fetch('fetchTopTen.php', {
@@ -230,6 +230,11 @@ function loadTopTenMovies() {
         })
         .catch(error => console.error('Error fetching top movies:', error));
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadTopTenMovies();
+});
+
 
 function loadRecommendations() {
     fetch('getRecommendations.php', {
@@ -292,21 +297,21 @@ function loadLikedMovies() {
                 console.log('Movies liked: ', data.recommendations['liked']);
                 data.recommendations['liked'].forEach(movie => {
                     fetch(`getMovieDetails.php?movieId=${movie}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Movie Details', data);
-                        const movieDetails = data;
-                        const likedItem = document.createElement('div');
-                        likedItem.className = 'liked-item';
-                        likedItem.innerHTML = `
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Movie Details', data);
+                            const movieDetails = data;
+                            const likedItem = document.createElement('div');
+                            likedItem.className = 'liked-item';
+                            likedItem.innerHTML = `
                         <a href="moviePage.php?id=${movie.id}">
                             <img src="https://image.tmdb.org/t/p/w200${movieDetails.poster_path}">
                             <p>${movieDetails.title}</p>
                         </a>
                     `;
-                    likedContainer.appendChild(likedItem);
+                            likedContainer.appendChild(likedItem);
 
-                    });
+                        });
 
                 });
             } else {
@@ -315,5 +320,4 @@ function loadLikedMovies() {
         })
         .catch(error => console.error('Error fetching liked movies:', error));
 }
-
 
