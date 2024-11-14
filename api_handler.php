@@ -27,8 +27,13 @@ $callback = function ($msg) use ($channel) {
     $type = $data['type'] ?? null;
     $parameter = $data['parameter'] ?? null;
 
+    // The following commands are a test to see if errors are actually appended to error.log
+    trigger_error("Oh no, there is an error! This message should be in the error.log file.");
+    error_log("There was an error!", 3, '/var/log/DMZ/error.log');
+
     if (!$type || !$parameter) {
         error_log("Missing 'type' or 'parameter' in the message", 3, '/var/log/DMZ/error.log');
+        
         echo "Error: Missing 'type' or 'parameter'\n";
         return;
     }
