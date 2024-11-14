@@ -3,28 +3,28 @@
     require_once 'rabbitmq_connection.php';
 
     //Adjust this path variable to what where your guys error logs are
-    $logFile = '/var/log/rabbitmq/rabbit@IT490.log';
-    $machineName = 'RabbitMQ';
-
+    $logFile = '/var/log/apache2/error.log'; 
+    $machineName = 'Webserver';
+    
     $file = fopen($logFile, 'r');
     fseek($file, 0, SEEK_END);
-
+   
     echo "Starting log monitoring for $logFile\n";
 
     $sentLogs = [];
-    // Keeping a record of the past 100 logs that were being sent
+    // Keeping a record of the past 100 logs that were being sent 
     $logRetention = 100;
 
     while(true) {
         $line = fgets($file);
         if ($line !== false ){
-
-            echo "Read line from RabbitMQ log: $line\n";
+            
+            echo "Read line from Apache log: $line\n";  
             $logEntry = trim($line);
-            // Creating a unique hash for each log entry
+            // Creating a unique hash for each log entry 
             $logHash = md5($logEntry);
 
-            echo "Error recieved from RabbitMQ Server\n";
+            echo "Error recieved from Apache Server\n";
 
             if (isset($sentLogs[$logHash])) {
                 echo "Error message already sent to Log Distributer";
@@ -36,7 +36,7 @@
                     'message' => $logEntry,
                     'count' => 1
                 ]);
-                echo "Message sent from RabbitMQ to Distrubted Logger: $logJSON\n";
+                echo "Message sent from Apache Server to Distrubted Logger: $logJSON\n";
                 sendLog($logJSON);
 
                 $sentLogs[$logHash] = true;
