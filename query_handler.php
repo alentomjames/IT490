@@ -2,7 +2,7 @@
 
 require_once 'db_connection.php'; // file has db connection
 require_once 'rabbitmq_connection.php'; // how I connect to RabbitMQ
-require_once '/webserver/vendor/autoload.php';
+require_once 'webserver/vendor/autoload.php';
 
 use PhpAmpqLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
