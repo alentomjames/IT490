@@ -1,5 +1,5 @@
 <?php
-    require_once (__DIR__ . '/../webserver/rabbitmq_connection.php');
+    require_once '../webserver/rabbitmq_connection.php';
 
     recieveLogs();
 ?>

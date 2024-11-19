@@ -130,23 +130,17 @@ function sendLog($logMessage)
 function recieveLogs()
 {
     list($connection, $channel) = getRabbit();
-    $channel->queue_declare('toDMZDev', false, true, false, false);
+    $channel->queue_declare('toDmzDev', false, true, false, false);
 
     echo "Waiting for logs. To exit press CTRL+C\n";
 
     $logPath = '/var/log/DMZ/distributedLogs.txt';
 
     $callback = function ($msg) use ($logPath) {
-	    try {
-		    echo 'try worked';
-		    file_put_contents($logPath, $msg->body . PHP_EOL, FILE_APPEND);
-	    }
-	    catch(Exception $e) {
-	    	echo 'Message:' .$e->getMessage();
-	    }
+        file_put_contents($logPath, $msg->body . PHP_EOL, FILE_APPEND);
     };
 
-    $channel->basic_consume('toDMZDev', '', false, true, false, false, $callback);
+    $channel->basic_consume('toDmzDev', '', false, true, false, false, $callback);
 
     // Wait for the response
     while ($channel->is_consuming()) {
