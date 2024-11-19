@@ -6,6 +6,8 @@ require_once 'vendor/autoload.php';
 
 use PhpAmpqLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+use function GlobalNamespace\getRabbit;
+use function GlobalNamespace\closeRabbit;
 
 require_once 'auth/login.php';
 require_once 'auth/register.php';

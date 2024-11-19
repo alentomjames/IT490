@@ -1,4 +1,5 @@
 <?php
+namespace Webserver;
 
 require_once 'vendor/autoload.php';
 
