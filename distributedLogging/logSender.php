@@ -1,4 +1,3 @@
-@ -1,51 +1,47 @@
 <?php
     require_once 'rabbitmq_connection.php';
 
@@ -34,7 +33,6 @@
                     'machine' => $machineName,
                     'timestamp' => $timestamp,
                     'message' => $logEntry,
-                    'count' => 1
                 ]);
                 echo "Message sent from Apache Server to Distrubted Logger: $logJSON\n";
                 sendLog($logJSON);
