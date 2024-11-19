@@ -43,8 +43,10 @@ function recieveDMZ(){
     list($connection, $channel) = getRabbit();
     // Declare the response channel
     $channel->queue_declare('dmzQueue', false, true, false, false);
+    // Initialize the data variable
+    $data = null;
     // Function waiting for the response from RabbitMQ
-    $callback = function($msg) {
+    $callback = function($msg) use (&$data) {
         $response = json_decode($msg->body, true);
         // Checks the status variable in the message to see if it's a success or failure
         if ($response['type'] === 'success'){
