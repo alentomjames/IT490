@@ -134,10 +134,16 @@ function recieveLogs()
 
     echo "Waiting for logs. To exit press CTRL+C\n";
 
-    $logPath = '/var/log/distributedLogs.txt';
+    $logPath = '/var/log/DMZ/distributedLogs.txt';
 
     $callback = function ($msg) use ($logPath) {
-        file_put_contents($logPath, $msg->body . PHP_EOL, FILE_APPEND);
+	    try {
+		    echo 'try worked';
+		    file_put_contents($logPath, $msg->body . PHP_EOL, FILE_APPEND);
+	    }
+	    catch(Exception $e) {
+	    	echo 'Message:' .$e->getMessage();
+	    }
     };
 
     $channel->basic_consume('toDMZDev', '', false, true, false, false, $callback);

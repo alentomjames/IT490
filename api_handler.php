@@ -17,8 +17,8 @@ $channel->queue_declare('frontendForDMZ', false, true, false, false);
 echo "Declared queue 'frontendQueue'\n";
 
 // The following commands are a test to see if errors are actually appended to error.log
-//trigger_error("Oh no, there is an error! This message should be in the error.log file.");
-// error_log("There was an error!", 3, '/var/log/DMZ/error.log');
+trigger_error("This error is a test to see if the distributedLog.txt file is being appended to.");
+error_log("Error has occurred.\n", 3, '/var/log/DMZ/error.log');
 
 // Process the login/register requests
 $callback = function ($msg) use ($channel) {
