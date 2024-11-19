@@ -63,12 +63,3 @@ function getMovieRating(int $movieId, int $userId)
         return json_encode(['type' => 'failure', 'reason' => 'No rating found for this movie and user']);
     }
 }
-
-// testing
-echo rateMovie(222, 1, 1) . "\n";
-echo rateMovie(222, 2, 1) . "\n";
-echo rateMovie(222, 3, 1) . "\n";
-
-
-echo getMovieRating(222, 1) . "\n";
-echo getMovieRating(222, 2) . "\n";
