@@ -11,14 +11,14 @@ function getTopTenMovies()
 
     // Query to get top 10 movies based on average rating
     $query = "
-        SELECT 
+        SELECT
             movie_id,
             AVG(rating) AS average_rating
-        FROM 
+        FROM
             rating
-        GROUP BY 
+        GROUP BY
             movie_id
-        ORDER BY 
+        ORDER BY
             average_rating DESC
         LIMIT 10;
     ";
@@ -42,6 +42,7 @@ function getTopTenMovies()
     if (!empty($topMovies)) {
         return json_encode(['type' => 'success', 'top_movies' => $topMovies]);
     } else {
+        error_log("No movies found", 3, "/var/log/database/error.log");
         return json_encode(['type' => 'failure', 'message' => 'No movies found']);
     }
 }
