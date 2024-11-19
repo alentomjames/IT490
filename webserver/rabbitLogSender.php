@@ -3,7 +3,7 @@
     require_once 'rabbitmq_connection.php';
 
     //Adjust this path variable to what where your guys error logs are
-    $logFile = '/var/log/rabbitmq/rabbit@IT490.log';
+    $logFile = '/var/log/rabbitmq/rabbitmq-server.error.log';
     $machineName = 'RabbitMQ';
 
     $file = fopen($logFile, 'r');
