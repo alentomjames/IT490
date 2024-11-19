@@ -11,10 +11,11 @@ function rateMovie(int $movieId, int $userId, int $rating)
     global $dbConnection;
 
     if ($rating > 5 || $rating < 1) {
+        error_log("Invalid rating value: $rating\n", 3, '/var/log/database/error.log');
         return json_encode(['type' => 'failure', 'reason' => 'Invalid rating value\n']);
     }
 
-    //closes any other stmt objects 
+    //closes any other stmt objects
     if (isset($stmt) && $stmt instanceof mysqli_stmt) {
         $stmt->close();
     }
@@ -40,6 +41,7 @@ function rateMovie(int $movieId, int $userId, int $rating)
     if ($stmt->affected_rows > 0) {
         return json_encode(['type' => 'success']);
     } else {
+        error_log("Unable to add/update rating for movie_id: $movieId, user_id: $userId\n", 3, '/var/log/database/error.log');
         return json_encode(['type' => 'failure', 'reason' => 'Unable to add/update rating']);
     }
 }
