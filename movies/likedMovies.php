@@ -27,6 +27,7 @@ function getFromRatings(int $userId)
         $response = json_encode(['type' => 'success', 'liked' => $liked]);
     } else {
         $response = json_encode(['type' => 'failure', 'message' => 'Liked movies is empty']);
+        error_log("Liked movies is empty", 3, "/var/log/database/error.log");
     }
 
     return $response;
