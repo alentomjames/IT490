@@ -19,12 +19,14 @@ function addToWatchlist(int $movieId, int $userId)
         if ($stmt->affected_rows > 0) {
             $response = json_encode(['type' => 'success', 'message' => 'Movie added to watchlist']);
         } else {
+            error_log("Failed to add movie to watchlist\n", 3, '/var/log/database/error.log');
             $response = json_encode(['type' => 'failure', 'message' => 'Failed to add movie to watchlist']);
         }
     } catch (mysqli_sql_exception $e) {
         if ($e->getCode() == 1062) { // duplicate entry error code
             $response = json_encode(['type' => 'failure', 'message' => 'Movie already exists in watchlist']);
         } else {
+            error_log("Error adding movie: " . $e->getMessage() . "\n", 3, '/var/log/database/error.log');
             $response = json_encode(['type' => 'failure', 'message' => 'Error adding movie: ' . $e->getMessage()]);
         }
     }
@@ -45,6 +47,7 @@ function removeFromWatchlist(int $movieId, int $userId)
     if ($stmt->affected_rows > 0) {
         $response = json_encode(['type' => 'success', 'message' => 'Movie removed from watchlist']);
     } else {
+        error_log("Movie does not exist in watchlist\n", 3, '/var/log/database/error.log');
         $response = json_encode(['type' => 'failure', 'message' => 'Movie does not exist in watchlist']);
     }
 
@@ -72,6 +75,7 @@ function getFromWatchlist(int $userId)
     if (!empty($watchlist)) {
         $response = json_encode(['type' => 'success', 'watchlist' => $watchlist]);
     } else {
+        error_log("Watchlist is empty\n", 3, "/var/log/database/error.log");
         $response = json_encode(['type' => 'failure', 'message' => 'Watchlist is empty']);
     }
 
