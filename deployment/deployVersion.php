@@ -59,8 +59,14 @@ echo "Copied files to apache_$newVersion from $sourcePath to $newVersionPath\n";
 // Comparing all files in the new version to the latest previous version in archive to create a changeLog.txt
 if (is_dir($archiveVersionPath)) {
     $changelogPath = "$newVersionPath/changeLog_${newVersion}.txt";
-    $command = "diff -r $archiveVersionPath $newVersionPath > $changelogPath";
-    exec($command);
+    $command = "diff -ru $archiveVersionPath $newVersionPath > $changelogPath";
+    exec($command, $output, $return);
+
+    if ($return === 0) {
+        echo "No differences found! No changeLog created.\n";
+    } else {
+        echo "Differences found, created a changelog: changeLog_${newVersion}.txt\n";
+    }
 }
 
 
