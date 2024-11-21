@@ -54,7 +54,15 @@ function copyDirectory($source, $destination) {
 
 // Copying the new files from sourcePath to the new version directory
 copyDirectory($sourcePath, $newVersionPath);
-echo "Copied files to apache_$newVersion.\n";
+echo "Copied files to apache_$newVersion from $sourcePath to $newVersionPath\n";
+
+// Comparing all files in the new version to the latest previous version in archive to create a changeLog.txt
+if (is_dir($archiveVersionPath)) {
+    $changelogPath = "$newVersionPath/changeLog_${newVersion}.txt";
+    $command = "diff -r $archiveVersionPath $newVersionPath > $changelogPath";
+    exec($command);
+}
+
 
 
 ?> 
