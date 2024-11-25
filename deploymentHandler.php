@@ -1,7 +1,7 @@
 <?php
 
 require_once 'db_connection.php';
-require_once 'rmq_connection.php';
+require_once 'rabbitmq_connection.php';
 require_once 'vendor/autoload.php';
 
 use PhpAmqpLib\Message\AMQPMessage;

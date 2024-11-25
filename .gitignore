@@ -8,3 +8,4 @@ webserver/vendor
 /vendor
 schemas.sql
 vendor
+*.env
