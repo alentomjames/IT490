@@ -1,0 +1,43 @@
+{
+    "alwaysSent": [
+        "rabbitmq_connection.php",
+        "script.js",
+        "styles.css",
+        "composer.json"
+    ],
+    "loginBundle": [
+        "login.php",
+        "logout.php",
+        "login_chk.php"
+    ],
+    "loginBundleDB": [
+        "/auth/login.php",
+        "/auth/register.php",
+        "/auth/constraints.php",
+        "/auth/session.php",
+    ],
+    "moviesDB": [
+        "/movies/likedMovies.php",
+        "/movies/rating.php",
+        "/movies/topTen.php",
+        "/movies/watchlist.php"
+    ],
+    "signupBundle": [
+        "sign_up_chk.php",
+        "sign_up.php"
+    ],
+    "moviePage": [
+        "moviePage.php",
+        "loadMovieDetails.php",
+        "loadMovies.php",
+        "loadReccomendations.php"
+    ],
+    "dmzBundle": [
+        "api_handler.php",
+        "DMZ.sh"
+    ],
+    "backendBundle": [
+        "db_connection.php",
+        "db_config.env"
+    ]
+}
