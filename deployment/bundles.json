@@ -1,14 +1,14 @@
 {
     "alwaysSent": [
-        "rabbitmq_connection.php",
-        "script.js",
-        "styles.css",
-        "composer.json"
+        "webserver/rabbitmq_connection.php",
+        "webserver/script.js",
+        "webserver/styles.css",
+        "webserver/composer.json"
     ],
     "loginBundle": [
-        "login.php",
-        "logout.php",
-        "login_chk.php"
+        "webserver/login.php",
+        "webserver/logout.php",
+        "webserver/login_chk.php"
     ],
     "loginBundleDB": [
         "auth/login.php",
@@ -23,14 +23,14 @@
         "movies/watchlist.php"
     ],
     "signupBundle": [
-        "sign_up_chk.php",
-        "sign_up.php"
+        "webserver/sign_up_chk.php",
+        "webserver/sign_up.php"
     ],
     "moviePage": [
-        "moviePage.php",
-        "loadMovieDetails.php",
-        "loadMovies.php",
-        "loadReccomendations.php"
+        "webserver/moviePage.php",
+        "webserver/loadMovieDetails.php",
+        "webserver/loadMovies.php",
+        "webserver/loadReccomendations.php"
     ],
     "dmzBundle": [
         "api_handler.php",
