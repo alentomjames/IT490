@@ -34,6 +34,7 @@
     ],
     "dmzBundle":[
         "api_handler.php",
+	"DMZ.sh"
     ],
     "backendBundle": [
         "db_connection.php",
