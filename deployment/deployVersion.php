@@ -69,6 +69,29 @@ if (is_dir($archiveVersionPath)) {
     }
 }
 
+// Adding functionality to send the currentVersion to the deployment machine using scp command
+$deploymentUser = 'philzerin';
+$deploymentHost = '172.29.82.171';
+$deploymentPath = '/var/log/archive';
 
+// Compress the file to be sent
+$compressedFile = "apache_$newVersion.zip";
+$compressedFilePath = "$currentPath/$compressedFile";
+$command = "zip -r $compressedFilePath $newVersionPath";
+exec($command, $output, $return);
+if ($return === 0) {
+    echo "Compressed apache_$newVersion to $compressedFile\n";
+} else {
+    echo "Failed to compress apache_$newVersion\n";
+}
+
+// Transfer the compressed file to the deployment machine using scp
+$scpCommand = "scp $compressedFilePath $deploymentUser@$deploymentHost:$deploymentPath";
+exec($scpCommand, $output, $return);
+if ($return === 0){
+    echo "Transferred $compressedFile to $deploymentUser@$deploymentHost:$deploymentPath\n";
+} else {
+    echo "Failed to transfer $compressedFile to $deploymentUser@$deploymentHost:$deploymentPath\n";
+}
 
 ?> 
