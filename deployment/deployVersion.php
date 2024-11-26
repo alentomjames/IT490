@@ -92,6 +92,7 @@ if ($return === 0){
     echo "Transferred $compressedFile to $deploymentUser@$deploymentHost:$deploymentPath\n";
 } else {
     echo "Failed to transfer $compressedFile to $deploymentUser@$deploymentHost:$deploymentPath\n";
+    exit(1);
 }
 
 ?> 
