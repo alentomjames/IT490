@@ -1,8 +1,8 @@
 <?php
 
-require_once './webserver/vendor/autoload.php';
+require_once './vendor/autoload.php';
 require_once './db_connection.php'; // file has db connection
-require_once './webserver/rabbitmq_connection.php'; // how I connect to RabbitMQ
+require_once './rabbitmq_connection.php'; // how I connect to RabbitMQ
 
 $dbConnection = getDbConnection();
 
@@ -11,10 +11,11 @@ function rateMovie(int $movieId, int $userId, int $rating)
     global $dbConnection;
 
     if ($rating > 5 || $rating < 1) {
+        error_log("Invalid rating value: $rating\n", 3, '/var/log/database/error.log');
         return json_encode(['type' => 'failure', 'reason' => 'Invalid rating value\n']);
     }
 
-    //closes any other stmt objects 
+    //closes any other stmt objects
     if (isset($stmt) && $stmt instanceof mysqli_stmt) {
         $stmt->close();
     }
@@ -40,6 +41,7 @@ function rateMovie(int $movieId, int $userId, int $rating)
     if ($stmt->affected_rows > 0) {
         return json_encode(['type' => 'success']);
     } else {
+        error_log("Unable to add/update rating for movie_id: $movieId, user_id: $userId\n", 3, '/var/log/database/error.log');
         return json_encode(['type' => 'failure', 'reason' => 'Unable to add/update rating']);
     }
 }
@@ -61,12 +63,3 @@ function getMovieRating(int $movieId, int $userId)
         return json_encode(['type' => 'failure', 'reason' => 'No rating found for this movie and user']);
     }
 }
-
-// testing
-echo rateMovie(222, 1, 1) . "\n";
-echo rateMovie(222, 2, 1) . "\n";
-echo rateMovie(222, 3, 1) . "\n";
-
-
-echo getMovieRating(222, 1) . "\n";
-echo getMovieRating(222, 2) . "\n";

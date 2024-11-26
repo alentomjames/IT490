@@ -1,11 +1,13 @@
 <?php
 
 require_once 'db_connection.php'; // file has db connection
-require_once 'rmq_connection.php'; // how I connect to RabbitMQ
+require_once 'rabbitmq_connection.php'; // how I connect to RabbitMQ
 require_once 'vendor/autoload.php';
 
 use PhpAmpqLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+use function GlobalNamespace\getRabbit;
+use function GlobalNamespace\closeRabbit;
 
 require_once 'auth/login.php';
 require_once 'auth/register.php';
@@ -19,6 +21,9 @@ list($connection, $channel) = getRabbit();
 
 // queue where i'll consume login/register requests
 $channel->queue_declare('frontendForDB', false, true, false, false);
+
+trigger_error("Oh no, there was an error! This message should be in the error.log file.\n");
+error_log("This is a test error\n", 3, '/var/log/database/error.log');
 
 // process the login/register requests
 $callback = function ($msg) use ($channel) {
@@ -69,7 +74,7 @@ $callback = function ($msg) use ($channel) {
         $response = getFromRatings($userId);
         echo "Get liked movies request received for user ID: $userId\n";
     } else {
-        echo "Received unknown command or missing required data fields\n";
+        error_log("Received unknown command or missing required data fields\n", 3, '/var/log/database/error.log');
         return;
     }
     $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);

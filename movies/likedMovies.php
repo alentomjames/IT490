@@ -1,8 +1,8 @@
 <?php
 
-require_once './webserver/vendor/autoload.php';
+require_once './vendor/autoload.php';
 require_once './db_connection.php'; // file has db connection
-require_once './webserver/rabbitmq_connection.php'; // how I connect to RabbitMQ
+require_once './rabbitmq_connection.php'; // how I connect to RabbitMQ
 
 $dbConnection = getDbConnection();
 
@@ -27,6 +27,7 @@ function getFromRatings(int $userId)
         $response = json_encode(['type' => 'success', 'liked' => $liked]);
     } else {
         $response = json_encode(['type' => 'failure', 'message' => 'Liked movies is empty']);
+        error_log("Liked movies is empty", 3, "/var/log/database/error.log");
     }
 
     return $response;

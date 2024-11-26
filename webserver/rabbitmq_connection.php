@@ -1,4 +1,5 @@
 <?php
+namespace Webserver;
 
 require_once 'vendor/autoload.php';
 
@@ -110,4 +111,44 @@ function recieveDB()
     closeRabbit($connection, $channel);
 
     return $data;
+}
+
+function sendLog($logMessage)
+{
+    list($connection, $channel) = getRabbit();
+    try {
+        $channel->exchange_declare('fanoutExchange', 'fanout', false, true, false);
+        $msg = new AMQPMessage($logMessage, ['delivery_mode' => 2]);
+        $channel->basic_publish($msg, 'fanoutExchange');
+        echo "Log message sent to fanoutExchange\n";
+    } catch (Exception $e) {
+        echo "Error publishing message to RabbitMQ: " . $e->getMessage() . "\n";
+    } finally {
+        closeRabbit($connection, $channel);
+    }
+}
+
+function recieveLogs()
+{
+    list($connection, $channel) = getRabbit();
+    $channel->queue_declare('toBeDev', false, true, false, false);
+
+    echo "Waiting for logs. To exit press CTRL+C\n";
+
+    $logPath = '/var/log/distributedLogs/distributedLogs.txt';
+
+    $callback = function ($msg) use ($logPath) {
+        file_put_contents($logPath, $msg->body . PHP_EOL, FILE_APPEND);
+    };
+
+    $channel->basic_consume('toBeDev', '', false, true, false, false, $callback);
+
+    // Wait for the response
+    while ($channel->is_consuming()) {
+        $channel->wait();
+        echo "Error recieved from Distrubted Logger\n";
+
+    }
+    // Close the channel and connection
+    closeRabbit($connection, $channel);
 }
