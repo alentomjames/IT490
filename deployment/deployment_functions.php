@@ -1,17 +1,19 @@
 <?php
+
 require_once './webserver/vendor/autoload.php';
 require_once './db_connection.php'; // file has db connection
 require_once './webserver/rabbitmq_connection.php'; // how I connect to RabbitMQ
 
 $db = getDbConnection();
 
-function deployUpdate($targetVMiP, $bundlePackage)
+//deployUpdate: target IP and package info (json). Compares versions in try/catch block. 
+function deployUpdate($targetVMiP, $packageInfo)
 {
     global $db;
 
-    $bundleName = $bundlePackage['name'];
-    $versionNumber = $bundlePackage['version'];
-    $filePath = $bundlePackage['path'];
+    $bundleName = $packageInfo['name'];
+    $versionNumber = $packageInfo['version'];
+    $filePath = $packageInfo['path'];
     $timestamp = time();
 
     try {
@@ -69,3 +71,5 @@ function deployUpdate($targetVMiP, $bundlePackage)
         ]);
     }
 }
+
+// 

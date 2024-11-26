@@ -20,8 +20,8 @@ $callback = function ($msg) use ($channel) {
 
     if ($type === 'deploy_update') {
         $targetVM = $data['target_vm'];
-        $bundlePackage = $data['bundle_package'];
-        $response = deployUpdate($targetVM, $bundlePackage);
+        $bundle = $data['bundle_name'];
+        $response = deployUpdate($targetVM, $bundle);
         echo "Deploy update request received for VM: $targetVM\n";
     } elseif ($type === 'rollback_update') {
         $targetVM = $data['target_vm'];
@@ -29,8 +29,9 @@ $callback = function ($msg) use ($channel) {
         $response = rollbackUpdate($targetVM, $version);
         echo "Rollback update request received for VM: $targetVM, version: $version\n";
     } elseif ($type === 'status_update') {
-        $updateDetails = $data['details'];
-        $response = logUpdate($updateDetails);
+        $bundle = $data['bundle_name'];
+        $updateStatus = $data['status'];
+        $response = logUpdate($bundle, $updateStatus);
         echo "Log update request received\n";
     } else {
         echo "Received unknown deployment command or missing required data fields\n";
