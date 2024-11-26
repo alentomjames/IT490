@@ -14,7 +14,7 @@
         "/auth/login.php",
         "/auth/register.php",
         "/auth/constraints.php",
-        "/auth/session.php",
+        "/auth/session.php"
     ],
     "moviesDB": [
         "/movies/likedMovies.php",
