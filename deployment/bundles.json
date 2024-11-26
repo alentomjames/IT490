@@ -11,16 +11,16 @@
         "login_chk.php"
     ],
     "loginBundleDB": [
-        "/auth/login.php",
-        "/auth/register.php",
-        "/auth/constraints.php",
-        "/auth/session.php"
+        "auth/login.php",
+        "auth/register.php",
+        "auth/constraints.php",
+        "auth/session.php"
     ],
     "moviesDB": [
-        "/movies/likedMovies.php",
-        "/movies/rating.php",
-        "/movies/topTen.php",
-        "/movies/watchlist.php"
+        "movies/likedMovies.php",
+        "movies/rating.php",
+        "movies/topTen.php",
+        "movies/watchlist.php"
     ],
     "signupBundle": [
         "sign_up_chk.php",
