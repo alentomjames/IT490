@@ -3,7 +3,7 @@
 // Initialize paths
 $currentPath = '/var/log/current';
 $archivePath = '/var/log/archive';
-$sourcePath = '/home/git/IT490';
+$sourcePath = '/home/ppetroski/git/IT490';
 $jsonConfig = 'bundles.json';
 
 // Parse JSON file
