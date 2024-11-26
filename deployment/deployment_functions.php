@@ -5,7 +5,7 @@ require_once './webserver/rabbitmq_connection.php'; // how I connect to RabbitMQ
 
 $db = getDbConnection();
 
-function deployUpdate($targetVM, $bundlePackage)
+function deployUpdate($targetVMiP, $bundlePackage)
 {
     global $db;
 
@@ -24,23 +24,23 @@ function deployUpdate($targetVM, $bundlePackage)
         $latestVersion = $result['version_number'] ?? null;
         $latestStatus = $result['status'] ?? 'new';
 
-        if ($latestVersion && version_compare($versionNumber, $latestVersion, '<=')) {
+        if ($latestVersion && version_compare($versionNumber, $latestVersion, '<=')) { //version_compare returns -1 if lower, 0 equal, 1 if higher
             return json_encode([
-                'status' => 'fail',
+                'status' => 'failure',
                 'message' => "Version $versionNumber is not newer than the current version $latestVersion"
             ]);
         }
 
         if ($latestStatus === 'pass') {
-            $archivePath = "/deployments/archive/{$bundleName}_{$latestVersion}.tar.gz";
-            $currentPath = "/deployments/current/{$bundleName}";
+            $archivePath = "/var/log/archive/{$bundleName}_{$latestVersion}.tar.gz";
+            $currentPath = "/var/log/current/{$bundleName}";
             if (file_exists($currentPath)) {
                 rename($currentPath, $archivePath);
             }
         }
 
-        $currentPath = "/deployments/current/{$bundleName}";
-        $scpCommand = "scp $filePath user@$targetVM:$currentPath";
+        $currentPath = "/var/log/current/{$bundleName}";
+        $scpCommand = "scp $filePath user@$targetVMiP:$currentPath";
         $output = [];
         $returnVar = 0;
         exec($scpCommand, $output, $returnVar);
@@ -59,11 +59,11 @@ function deployUpdate($targetVM, $bundlePackage)
 
         return json_encode([
             'status' => 'success',
-            'message' => "Successfully deployed version $versionNumber of $bundleName to $targetVM"
+            'message' => "Successfully deployed version $versionNumber of $bundleName to $targetVMiP"
         ]);
     } catch (Exception $e) {
         return json_encode([
-            'status' => 'fail',
+            'status' => 'failure',
             'message' => "Deployment failed",
             'error' => $e->getMessage()
         ]);
