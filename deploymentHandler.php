@@ -1,46 +1,47 @@
 <?php
 
 require_once 'db_connection.php';
-require_once 'rabbitmq_connection.php';
+require_once 'rmq_connection.php';
 require_once 'vendor/autoload.php';
 
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+
+require_once 'deployment/update.php';
 
 list($connection, $channel) = getRabbit();
 
-$channel->queue_declare('devToDeployment', false, true, false, false);
+$channel->queue_declare('toDeployment', false, true, false, false);
 
 $callback = function ($msg) use ($channel) {
     $data = json_decode($msg->body, true);
+    $type = $data['type'];
+    $queueName = $data['queue'];
 
-    $bundleName = $data['bundle_name'] ?? null;
-    $version = $data['version'] ?? null;
-    $status = 'new';
-
-    if (!$bundleName || !$version) {
-        echo "Invalid deployment messages received\n";
+    if ($type === 'deploy_update') {
+        $targetVM = $data['target_vm'];
+        $bundlePackage = $data['bundle_package'];
+        $response = deployUpdate($targetVM, $bundlePackage);
+        echo "Deploy update request received for VM: $targetVM\n";
+    } elseif ($type === 'rollback_update') {
+        $targetVM = $data['target_vm'];
+        $version = $data['version'];
+        $response = rollbackUpdate($targetVM, $version);
+        echo "Rollback update request received for VM: $targetVM, version: $version\n";
+    } elseif ($type === 'status_update') {
+        $updateDetails = $data['details'];
+        $response = logUpdate($updateDetails);
+        echo "Log update request received\n";
+    } else {
+        echo "Received unknown deployment command or missing required data fields\n";
         return;
     }
 
-    echo "Received deployment request: Bundle: $bundleName, Version: $version\n";
-
-    $db = getDbConnection();
-    $stmt = $db->prepare("INSERT INTO deployments (bundle_name, version_number, status, created_at) VALUES (?, ?, ?, NOW())");
-    $stmt->bind_param("sss", $bundleName, $version, $status);
-
-    if ($stmt->execute()) {
-        echo "Deployment saved to database successfully\n";
-        // we probably use rsync here??
-        // triggerDeployment($bundleName, $data['target']);
-    } else {
-        echo "Failed to save deployment to database: " . $stmt->error . "\n";
-    }
-
-    $stmt->close();
-    $db->close();
+    $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
+    $channel->basic_publish($responseMsg, 'directExchange', $queueName);
 };
 
-$channel->basic_consume('devToDeployment', '', false, true, false, false, $callback);
+$channel->basic_consume('toDeployment', '', false, true, false, false, $callback);
 
 while ($channel->is_consuming()) {
     $channel->wait();
