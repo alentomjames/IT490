@@ -1,0 +1,11 @@
+[Unit]
+Description=Bundle Notifier
+
+[Service]
+ExecStart=/usr/bin/php /home/alen/git/IT490/bundleListener.php
+WorkingDirectory=/home/alen/git/IT490
+User=alen
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
