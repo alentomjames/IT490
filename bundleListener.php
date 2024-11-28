@@ -12,8 +12,10 @@ $config = file_exists($iniFile) ? parse_ini_file($iniFile, true) : [];
 $inotify = inotify_init();
 
 // Add watches
+$watchDescriptors = [];
 foreach ($directories as $dir) {
-    inotify_add_watch($inotify, $dir, IN_CREATE | IN_MOVED_TO);
+    $wd = inotify_add_watch($inotify, $dir, IN_CREATE | IN_MOVED_TO);
+    $watchDescriptors[$wd] = $dir;
 }
 
 // Non-blocking mode
@@ -24,11 +26,28 @@ while (true) {
     $events = inotify_read($inotify);
     if ($events) {
         foreach ($events as $event) {
-            $dir = $event['name'] ? dirname($event['name']) : '';
+            $wd = $event['wd'];
+            // Get the directory from the watch descriptor
+            $dir = $watchDescriptors[$wd]; 
+            $filename = $event['name'];
+            // Full path to the new file
+            $filePath = $dir . '/' . $filename; 
+
             $section = basename($dir);
-            $filePath = $dir . '/' . $event['name'];
-            $config[$section][] = $filePath;
-            file_put_contents($iniFile, build_ini_string($config));
+
+            // Make the file path 
+            $relativePath = str_replace('/home/alen/git/IT490', '', $filePath);
+
+            // Initialize the section if it doesn't exist
+            if (!isset($config[$section])) {
+                $config[$section] = [];
+            }
+
+            // Ensure the file is not already in the config
+            if (!in_array($relativePath, $config[$section])) {
+                $config[$section][] = $relativePath;
+                file_put_contents($iniFile, build_ini_string($config));
+            }
         }
     }
     // To prevent it from constantly checking
