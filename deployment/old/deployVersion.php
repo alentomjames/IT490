@@ -1,10 +1,10 @@
 <?php
+
 // Get the bundle name from the command line arguments
 $bundleName = $argv[1];
 
 if ($argc < 2) {
-    echo "Please type it in the following format :D : php deployVersion.php [bundle]\n
-    Example: php deployVersion.php login\n";
+    echo "Please type it in the following format :D : php deployVersion.php [bundle]\n";
     exit(1);
 }
 
@@ -13,25 +13,11 @@ $currentPath = '/var/log/current';
 $archivePath = '/var/log/archive';
 $sourcePath = '/var/www/it490';
 
-// Path to the config.ini file
-$configIniPath = '/var/log/config.ini';
-
-// Parse the config.ini file and check if the bundle exists 
-$config = parse_ini_file($configIniPath, true);
-if (!isset($config[$bundleName])) {
-    echo "Bundle '$bundleName' not found in config file.\n";
-    exit(1);
-}
-
-// Get the list of files for the bundle
-$filesToDeploy = (array) $config[$bundleName];
 // Finding the latest version number
 $latestVersion = 0;
 $directoryHandle = opendir($currentPath);
-$versionPattern = '/^' . preg_quote($bundleName, '/') . '_(\d+)$/';
-
 while (($entry = readdir($directoryHandle)) !== false) {
-    if (preg_match($versionPattern, $entry, $matches)) {
+    if (preg_match('/^apache_(\d+)$/', $entry, $matches)) {
         $versionNumber = (int)$matches[1];
         if ($versionNumber > $latestVersion) {
             $latestVersion = $versionNumber;
@@ -40,28 +26,43 @@ while (($entry = readdir($directoryHandle)) !== false) {
 }
 closedir($directoryHandle);
 
-// Changing copyDirectory to copyFiles to only get the files that are within the requested bundle
-function copyFiles($files, $sourceBasePath, $destinationBasePath) {
-    foreach ($files as $relativePath) {
-        $sourceFile = $sourceBasePath . $relativePath;
-        $destinationFile = $destinationBasePath . $relativePath;
+// Setting the previous version and the new version for comparison later
+$previousVersion = $latestVersion;
+$newVersion = $latestVersion + 1;
 
-        // Ensure the destination directory exists
-        $destinationDir = dirname($destinationFile);
-        if (!is_dir($destinationDir)) {
-            mkdir($destinationDir, 0755, true);
-        }
+// Moving the current version folder to the archive
+$currentVersionPath = "$currentPath/apache_$previousVersion";
+$newVersionPath = "$currentPath/apache_$newVersion";
 
-        if (!copy($sourceFile, $destinationFile)) {
-            echo "Failed to copy $sourceFile to $destinationFile\n";
-        } else {
-            echo "Copied $sourceFile to $destinationFile\n";
+if (is_dir($currentVersionPath)) {
+    $archiveVersionPath = "$archivePath/apache_$previousVersion";
+    rename($currentVersionPath, $archiveVersionPath);
+    echo "Moved apache_$previousVersion to archive.\n";
+}
+
+
+// Function to copy directories
+function copyDirectory($source, $destination) {
+    if (!is_dir($destination)) {
+        mkdir($destination, 0755, true);
+    }
+    $files = scandir($source);
+    foreach ($files as $file) {
+        if ($file !== '.' && $file !== '..') {
+            $sourceFile = $source . '/' . $file;
+            $destinationFile = $destination . '/' . $file;
+            if (is_dir($sourceFile)) {
+                copyDirectory($sourceFile, $destinationFile);
+            } else {
+                copy($sourceFile, $destinationFile);
+            }
         }
     }
 }
 
-copyFiles($filesToDeploy, $sourcePath, $newVersionPath);
-echo "Copied bundle '$bundleName' files to {$bundleName}_$newVersion in $newVersionPath\n";
+// Copying the new files from sourcePath to the new version directory
+copyDirectory($sourcePath, $newVersionPath);
+echo "Copied files to apache_$newVersion from $sourcePath to $newVersionPath\n";
 
 // Comparing all files in the new version to the latest previous version in archive to create a changeLog.txt
 if (is_dir($archiveVersionPath)) {
@@ -82,17 +83,14 @@ $deploymentHost = '172.29.82.171';
 $deploymentPath = '/var/log/archive';
 
 // Compress the file to be sent
-$compressedFile = "{$bundleName}_{$newVersion}.zip";
+$compressedFile = "apache_$newVersion.zip";
 $compressedFilePath = "$currentPath/$compressedFile";
-
-// Create a zip archive of the new version folder
-$command = "cd $currentPath && zip -r $compressedFile {$bundleName}_$newVersion";
+$command = "zip -r $compressedFilePath $newVersionPath";
 exec($command, $output, $return);
 if ($return === 0) {
-    echo "Compressed {$bundleName}_$newVersion to $compressedFile\n";
+    echo "Compressed apache_$newVersion to $compressedFile\n";
 } else {
-    echo "Failed to compress {$bundleName}_$newVersion\n";
-    exit(1);
+    echo "Failed to compress apache_$newVersion\n";
 }
 
 // Transfer the compressed file to the deployment machine using scp
@@ -105,4 +103,4 @@ if ($return === 0){
     exit(1);
 }
 
-?>
+?> 

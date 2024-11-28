@@ -1,7 +1,9 @@
 <?php
 // Directories to monitor
 $root = '/home/alen/git/IT490';
-$directories = ['/home/alen/git/IT490/login']; // Add directories as needed
+$directories = [
+    '/home/alen/git/IT490/login',
+]; // Add directories as needed
 
 // Path to the ini file
 $iniFile = '/var/log/config.ini';
@@ -64,7 +66,7 @@ while (true) {
             if (should_skip_file($filename)) {
                 continue;
             }
-            
+
             // Full path to the new file
             $filePath = $dir . '/' . $filename; 
 
