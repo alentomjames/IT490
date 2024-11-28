@@ -59,6 +59,12 @@ while (true) {
             // Get the directory from the watch descriptor
             $dir = $watchDescriptors[$wd]; 
             $filename = $event['name'];
+
+            // Skip unwanted files
+            if (should_skip_file($filename)) {
+                continue;
+            }
+            
             // Full path to the new file
             $filePath = $dir . '/' . $filename; 
 
