@@ -1,5 +1,4 @@
 <?php
-namespace Webserver;
 
 require_once 'vendor/autoload.php';
 
@@ -14,7 +13,30 @@ function getRabbit()
 
     return [$connection, $channel];
 }
+function getDeployRabbit()
+{
+    // Connect to RABBITMQ HERE and add better error handling
+    $connection = new AMQPStreamConnection('172.29.82.171', 5672, 'dm692', 'password', 'it490');
+    $channel = $connection->channel();
 
+    return [$connection, $channel];
+}
+function getQARabbit()
+{
+    // Connect to RABBITMQ HERE and add better error handling
+    $connection = new AMQPStreamConnection('172.29.87.41', 5672, 'admin', 'admin', 'IT490_Host');
+    $channel = $connection->channel();
+
+    return [$connection, $channel];
+}
+function getProdRabbit()
+{
+    // Connect to RABBITMQ HERE and add better error handling
+    $connection = new AMQPStreamConnection('172.29.4.30', 5672, 'admin', 'admin', 'IT490_Host');
+    $channel = $connection->channel();
+
+    return [$connection, $channel];
+}
 function closeRabbit($connection, $channel)
 {
     if ($channel) {
@@ -115,7 +137,7 @@ function recieveDB()
 
 function sendLog($logMessage)
 {
-    list($connection, $channel) = getRabbit();
+    list($connection, $channel) = getDeployRabbit();
     try {
         $channel->exchange_declare('fanoutExchange', 'fanout', false, true, false);
         $msg = new AMQPMessage($logMessage, ['delivery_mode' => 2]);
@@ -130,7 +152,7 @@ function sendLog($logMessage)
 
 function recieveLogs()
 {
-    list($connection, $channel) = getRabbit();
+    list($connection, $channel) = getDeployRabbit();
     $channel->queue_declare('toBeDev', false, true, false, false);
 
     echo "Waiting for logs. To exit press CTRL+C\n";
