@@ -1,88 +1,144 @@
 <?php
+require_once '../webserver/rabbitmq_connection.php'; // RabbitMQ connection
+require_once '../webserver/vendor/autoload.php';
+use PhpAmpqLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
-// Initialize paths
+// Get the bundle name from the command line arguments
+$bundleName = $argv[1];
+
+if ($argc < 2) {
+    echo "Please type it in the following format :D : php deployVersion.php [bundle]\n
+    Example: php deployVersion.php login\n";
+    exit(1);
+}
+
+// Initalizing the path for the deployment paths
 $currentPath = '/var/log/current';
 $archivePath = '/var/log/archive';
-$sourcePath = '/home/ppetroski/git/IT490';
-$jsonConfig = 'bundles.json';
+$sourcePath = '/var/www/it490';
 
-// Parse JSON file
-$jsonData = file_get_contents($jsonConfig);
-$bundles = json_decode($jsonData, true);
-if (!$bundles) {
-    die("Failed to parse bundles JSON.\n");
+// Path to the config.ini file
+$configIniPath = '/var/log/config.ini';
+
+// Parse the config.ini file and check if the bundle exists
+$config = parse_ini_file($configIniPath, true);
+if (!isset($config[$bundleName])) {
+    echo "Bundle '$bundleName' not found in config file.\n";
+    exit(1);
 }
 
-// Helper function to copy directories
-function copyDirectory($source, $destination) {
-    if (!is_dir($destination)) {
-        mkdir($destination, 0755, true);
-    }
-    $files = scandir($source);
-    foreach ($files as $file) {
-        if ($file !== '.' && $file !== '..') {
-            $sourceFile = $source . '/' . $file;
-            $destinationFile = $destination . '/' . $file;
-            if (is_dir($sourceFile)) {
-                copyDirectory($sourceFile, $destinationFile);
-            } else {
-                if (!file_exists(dirname($destinationFile))) {
-                    mkdir(dirname($destinationFile), 0755, true);
-                }
-                copy($sourceFile, $destinationFile);
-            }
+// Get the list of files for the bundle
+$filesToDeploy = (array) $config[$bundleName];
+
+
+list($connection, $channel) = getRabbit();
+
+// Declare the queue
+$channel->queue_declare('beDevToDeploy', false, true, false, false);
+
+// Create the message
+$msg = new AMQPMessage($bundleName, ['delivery_mode' => 2]);
+
+// Send the message to the queue
+$channel->basic_publish($responseMsg, 'directExchange', 'beDevToDeploy');
+echo " [x] Sent '$bundleName'\n";
+// Consume the 'deployToBeDev' queue and wait for the version number
+$callback = function ($msg) use (&$newVersion) {
+    $newVersion = $msg->body;
+    echo " [x] Received version number: $newVersion\n";
+    $msg->ack();
+};
+
+$channel->basic_consume('deployToBeDev', '', false, false, false, false, $callback);
+
+// Wait for the message
+while ($channel->is_consuming()) {
+    $channel->wait();
+}
+
+// Close the RabbitMQ connection
+closeRabbit($connection, $channel);
+
+
+// Finding the latest version number
+$latestVersion = 0;
+$directoryHandle = opendir($currentPath);
+$versionPattern = '/^' . preg_quote($bundleName, '/') . '_(\d+)$/';
+
+while (($entry = readdir($directoryHandle)) !== false) {
+    if (preg_match($versionPattern, $entry, $matches)) {
+        $versionNumber = (int)$matches[1];
+        if ($versionNumber > $latestVersion) {
+            $latestVersion = $versionNumber;
         }
     }
 }
+closedir($directoryHandle);
 
-// Iterate through bundles and create directories
-foreach ($bundles as $bundleName => $files) {
-    $bundlePath = "$currentPath/$bundleName";
+// Changing copyDirectory to copyFiles to only get the files that are within the requested bundle
+function copyFiles($files, $sourceBasePath, $destinationBasePath) {
+    foreach ($files as $relativePath) {
+        $sourceFile = $sourceBasePath . $relativePath;
+        $destinationFile = $destinationBasePath . $relativePath;
 
-    // Create bundle directory
-    if (!is_dir($bundlePath)) {
-        mkdir($bundlePath, 0755, true);
-        echo "Created directory: $bundlePath\n";
-    }
+        // Ensure the destination directory exists
+        $destinationDir = dirname($destinationFile);
+        if (!is_dir($destinationDir)) {
+            mkdir($destinationDir, 0755, true);
+        }
 
-    // Copy specified files into the bundle directory
-    foreach ($files as $file) {
-        $sourceFile = "$sourcePath/$file";
-        $destinationFile = "$bundlePath/" . basename($file);
-
-        if (file_exists($sourceFile)) {
-            if (!file_exists(dirname($destinationFile))) {
-                mkdir(dirname($destinationFile), 0755, true);
-            }
-            copy($sourceFile, $destinationFile);
-            echo "Copied $sourceFile to $destinationFile\n";
+        if (!copy($sourceFile, $destinationFile)) {
+            echo "Failed to copy $sourceFile to $destinationFile\n";
         } else {
-            echo "Warning: $sourceFile does not exist.\n";
+            echo "Copied $sourceFile to $destinationFile\n";
         }
     }
+}
 
-    // Optional: Compress the bundle
-    $compressedFile = "$bundleName.zip";
-    $compressedFilePath = "$currentPath/$compressedFile";
-    $command = "zip -r $compressedFilePath $bundlePath";
+copyFiles($filesToDeploy, $sourcePath, $newVersionPath);
+echo "Copied bundle '$bundleName' files to {$bundleName}_$newVersion in $newVersionPath\n";
+
+// Comparing all files in the new version to the latest previous version in archive to create a changeLog.txt
+if (is_dir($archiveVersionPath)) {
+    $changelogPath = "$newVersionPath/changeLog_${newVersion}.txt";
+    $command = "diff -ru $archiveVersionPath $newVersionPath > $changelogPath";
     exec($command, $output, $return);
-    if ($return === 0) {
-        echo "Compressed $bundleName to $compressedFile\n";
-    } else {
-        echo "Failed to compress $bundleName\n";
-    }
 
-    // Optional: Transfer the bundle to the deployment machine
-    $deploymentUser = 'philzerin';
-    $deploymentHost = '172.29.82.171';
-    $deploymentPath = '/var/log/archive';
-    $scpCommand = "scp $compressedFilePath $deploymentUser@$deploymentHost:$deploymentPath";
-    exec($scpCommand, $output, $return);
     if ($return === 0) {
-        echo "Transferred $compressedFile to $deploymentUser@$deploymentHost:$deploymentPath\n";
+        echo "No differences found! No changeLog created.\n";
     } else {
-        echo "Failed to transfer $compressedFile to $deploymentUser@$deploymentHost:$deploymentPath\n";
+        echo "Differences found, created a changelog: changeLog_${newVersion}.txt\n";
     }
+}
+
+// Adding functionality to send the currentVersion to the deployment machine using scp command
+$deploymentUser = 'philzerin';
+$deploymentHost = '172.29.82.171';
+$deploymentPath = '/var/log/archive';
+
+// Compress the file to be sent
+$compressedFile = "{$bundleName}_{$newVersion}.zip";
+$compressedFilePath = "$currentPath/$compressedFile";
+
+// Create a zip archive of the new version folder
+$command = "cd $currentPath && zip -r $compressedFile {$bundleName}_$newVersion";
+exec($command, $output, $return);
+if ($return === 0) {
+    echo "Compressed {$bundleName}_$newVersion to $compressedFile\n";
+} else {
+    echo "Failed to compress {$bundleName}_$newVersion\n";
+    exit(1);
+}
+
+// Transfer the compressed file to the deployment machine using scp
+$scpCommand = "scp $compressedFilePath $deploymentUser@$deploymentHost:$deploymentPath";
+exec($scpCommand, $output, $return);
+if ($return === 0){
+    echo "Transferred $compressedFile to $deploymentUser@$deploymentHost:$deploymentPath\n";
+} else {
+    echo "Failed to transfer $compressedFile to $deploymentUser@$deploymentHost:$deploymentPath\n";
+    exit(1);
 }
 
 ?>
