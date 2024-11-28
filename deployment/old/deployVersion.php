@@ -17,10 +17,6 @@ $configIniPath = '/var/log/config.ini';
 
 // Parse the config.ini file and check if the bundle exists
 $config = parse_ini_file($configIniPath, true);
-if ($config === false) {
-    echo "Failed to parse config file at $configIniPath\n";
-    exit(1);
-}
 if (!isset($config[$bundleName])) {
     echo "Bundle '$bundleName' not found in config file.\n";
     exit(1);
@@ -53,35 +49,16 @@ closedir($directoryHandle);
 $previousVersion = $latestVersion;
 $newVersion = $latestVersion + 1;
 
-// Debugging statements
-echo "Latest Version: $latestVersion\n";
-echo "Previous Version: $previousVersion\n";
-echo "New Version: $newVersion\n";
-
+// Moving the current version folder to the archive
 $currentVersionPath = "$currentPath/{$bundleName}_$previousVersion";
 $newVersionPath = "$currentPath/{$bundleName}_$newVersion";
 
-echo "Current Version Path: $currentVersionPath\n";
-echo "New Version Path: $newVersionPath\n";
-
-// Moving the current version folder to the archive
 if (is_dir($currentVersionPath)) {
     $archiveVersionPath = "$archivePath/{$bundleName}_$previousVersion";
-    if (!rename($currentVersionPath, $archiveVersionPath)) {
-        echo "Failed to move {$bundleName}_$previousVersion to archive.\n";
-        exit(1);
-    }
+    rename($currentVersionPath, $archiveVersionPath);
     echo "Moved {$bundleName}_$previousVersion to archive.\n";
 } else {
     echo "No current version found for bundle '$bundleName'. Proceeding to create version $newVersion.\n";
-}
-
-// Ensure the new version directory exists
-if (!is_dir($newVersionPath)) {
-    if (!mkdir($newVersionPath, 0755, true)) {
-        echo "Failed to create directory $newVersionPath\n";
-        exit(1);
-    }
 }
 
 // Function to copy files with directory structure
@@ -93,10 +70,7 @@ function copyFilesWithStructure($files, $sourceBasePath, $destinationBasePath) {
         // Ensure the destination directory exists
         $destinationDir = dirname($destinationFile);
         if (!is_dir($destinationDir)) {
-            if (!mkdir($destinationDir, 0755, true)) {
-                echo "Failed to create directory $destinationDir\n";
-                continue;
-            }
+            mkdir($destinationDir, 0755, true);
         }
 
         if (!copy($sourceFile, $destinationFile)) {
@@ -127,7 +101,7 @@ if (isset($archiveVersionPath) && is_dir($archiveVersionPath)) {
                 $differencesFound = true;
                 file_put_contents($changelogPath, implode("\n", $output) . "\n", FILE_APPEND);
             }
-        } elseif (file_exists($newFile)) {
+        } else {
             $differencesFound = true;
             file_put_contents($changelogPath, "File added: $relativePath\n", FILE_APPEND);
         }
