@@ -1,5 +1,4 @@
 <?php
-namespace GlobalNamespace;
 
 require_once 'vendor/autoload.php';
 
