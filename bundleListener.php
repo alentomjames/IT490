@@ -1,5 +1,6 @@
 <?php
 // Directories to monitor
+$root = '/home/alen/git/IT490';
 $directories = ['/home/alen/git/IT490/login']; // Add directories as needed
 
 // Path to the ini file
@@ -7,6 +8,34 @@ $iniFile = '/var/log/config.ini';
 
 // Load existing config or initialize
 $config = file_exists($iniFile) ? parse_ini_file($iniFile, true) : [];
+
+// Adds exisiting files to the config file
+foreach ($directories as $dir) {
+    $section = basename($dir);
+
+    if (!isset($config[$section])) {
+        $config[$section] = [];
+    }
+
+    $files = array_diff(scandir($dir), array('.', '..'));
+
+    foreach ($files as $filename) {
+        // Skip unwanted files
+        if (should_skip_file($filename)) {
+            continue;
+        }
+
+        $filePath = $dir . '/' . $filename;
+        $relativePath = str_replace($root, '', $filePath);
+
+        if (!in_array($relativePath, $config[$section])) {
+            $config[$section][] = $relativePath;
+        }
+    }
+}
+
+file_put_contents($iniFile, build_ini_string($config));
+
 
 // Initialize inotify
 $inotify = inotify_init();
@@ -61,5 +90,22 @@ function build_ini_string($assoc_arr) {
         $content .= "[$key]\n" . implode("\n", array_unique($items)) . "\n\n";
     }
     return $content;
+}
+
+// Helper function to see if a file should be skipped
+function should_skip_file($filename) {
+    if ($filename[0] === '.') {
+        return true;
+    }
+
+    // Skip files ending with unwanted extensions
+    $fileTypes = array('.swp');
+    foreach ($fileTypes as $ext) {
+        if (substr($filename, -strlen($ext)) === $ext) {
+            return true;
+        }
+    }
+
+    return false;
 }
 ?>
