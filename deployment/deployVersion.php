@@ -10,7 +10,7 @@ $bundleName = $argv[1];
 // Initializing the paths for deployment
 $currentPath = '/var/log/current';
 $archivePath = '/var/log/archive';
-$sourcePath = '/var/www/it490';
+$sourcePath = '/home/IT490/';
 
 // Path to the config.ini file
 $configIniPath = '/var/log/config.ini';
