@@ -30,10 +30,10 @@ $callback = function ($msg) use ($channel) {
         $version = $data['version'];
         $response = rollbackUpdate($targetVMiP, $version);
         echo "Rollback update request received for VM: $targetVMiP, version: $version\n";
-    } elseif ($type === 'bundle') {
-        $bundleName = $data['bundle_name'];
+    } elseif ($type === 'get_version') {
+        $bundleName = $data['bundle'];
         $response = getVersion($bundleName);
-        echo "Log update request received\n";
+        echo "Version number request received\n";
     } else {
         echo "Received unknown deployment command or missing required data fields\n";
         return;

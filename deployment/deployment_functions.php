@@ -79,10 +79,7 @@ function getVersion($bundleName)
     global $db;
 
     try {
-        $query = "SELECT version_number, file_path, status, updated_at 
-              FROM deployments 
-              WHERE bundle_name = :bundle_name 
-              ORDER BY created_at DESC LIMIT 1";
+        $query = "SELECT version_number FROM deployments WHERE bundle_name = :bundle_name ORDER BY created_at DESC LIMIT 1";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':bundle_name', $bundleName);
         $stmt->execute();
@@ -92,25 +89,34 @@ function getVersion($bundleName)
         if ($result) {
             return json_encode([
                 'status' => 'success',
-                'data' => [
-                    'version_number' => $result['version_number'],
-                    'file_path' => $result['file_path'],
-                    'status' => $result['status'],
-                    'updated_at' => $result['updated_at']
-                ]
+                'version_number' => $result['version_number']
             ]);
         } else {
+            $initialVersion = '1';
+            $filePath = '';
+            $status = 'new';
+
+            $insertQuery = "INSERT INTO deployments (bundle_name, version_number, file_path, status) 
+                            VALUES (:bundle_name, :version_number, :file_path, :status)";
+            $insertStmt = $db->prepare($insertQuery);
+            $insertStmt->bindParam(':bundle_name', $bundleName);
+            $insertStmt->bindParam(':version_number', $initialVersion);
+            $insertStmt->bindParam(':file_path', $filePath);
+            $insertStmt->bindParam(':status', $status);
+            $insertStmt->execute();
+
             return json_encode([
-                'status' => 'fail',
-                'message' => "No version found for bundle: $bundleName"
+                'status' => 'success',
+                'version_number' => $initialVersion
             ]);
         }
     } catch (Exception $e) {
         return json_encode([
             'status' => 'fail',
-            'message' => 'Error fetching version',
+            'message' => 'Error fetching or inserting bundle',
             'error' => $e->getMessage()
         ]);
     }
 }
+
 // 
