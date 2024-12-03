@@ -81,7 +81,7 @@ function getVersion($bundleName)
     try {
         $query = "SELECT version_number FROM deployments WHERE bundle_name = ? ORDER BY created_at DESC LIMIT 1";
         $stmt = $db->prepare($query);
-        $stmt->bindParam('s', $bundleName);
+        $stmt->bind_param('s', $bundleName);
         $stmt->execute();
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
