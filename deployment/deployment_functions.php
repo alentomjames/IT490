@@ -93,13 +93,13 @@ function getVersion($bundleName)
             echo $versionNumber;
             return $versionNumber;
         } else {
-            $initialVersion = '1';
+            $initialVersion = 1;
             $filePath = '';
             $status = 'new';
 
             $insertQuery = "INSERT INTO deployments (bundle_name, version_number, file_path, status) VALUES (?, ?, ?, ?)";
             $insertStmt = $db->prepare($insertQuery);
-            $insertStmt->bind_param('ssss', $bundleName, $initialVersion, $filePath, $status);
+            $insertStmt->bind_param('siss', $bundleName, $initialVersion, $filePath, $status);
             $insertStmt->execute();
 
             // return json_encode([
