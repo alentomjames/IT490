@@ -40,6 +40,7 @@ $callback = function ($msg) use ($channel) {
     };
 
     $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
+	$channel->queue_purge($queueName);
     $channel->basic_publish($responseMsg, 'directExchange', $queueName);
 };
 
