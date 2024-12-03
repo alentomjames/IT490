@@ -17,6 +17,7 @@ foreach ($directories as $dir) {
 
     if (!isset($config[$section])) {
         $config[$section] = [];
+        $config[$section]['file'] = [];
     }
 
     $files = array_diff(scandir($dir), array('.', '..'));
@@ -78,11 +79,12 @@ while (true) {
             // Initialize the section if it doesn't exist
             if (!isset($config[$section])) {
                 $config[$section] = [];
+                $config[$section]['file'] = [];
             }
 
             // Ensure the file is not already in the config
             if (!in_array($relativePath, $config[$section])) {
-                $config[$section][] = $relativePath;
+                $config[$section]['file'][] = $relativePath;
                 file_put_contents($iniFile, build_ini_string($config));
             }
         }
@@ -94,12 +96,19 @@ while (true) {
 // Helper function to build ini string to add to the config file
 function build_ini_string($assoc_arr) {
     $content = '';
-    foreach ($assoc_arr as $key => $items) {
-        $content .= "[$key]\n";
-        foreach ($items as $value) {
-            $content .= "file[] = " . $value . "\n";
+    foreach ($assoc_arr as $sectionName => $sectionData) {
+        $content .= "[$sectionName]\n";
+        foreach ($sectionData as $key => $values) {
+            if (is_array($values)) {
+                foreach ($values as $value) {
+                    $content .= $key . "[] = " . $value . "\n";
+                }
+            } else {
+                $content .= "$key = $values\n";
+            }
         }
-        $content .= "\n";    }
+        $content .= "\n";
+    }
     return $content;
 }
 
