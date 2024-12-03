@@ -7,7 +7,7 @@ require_once 'vendor/autoload.php';
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-require_once 'deployment/update.php';
+require_once 'deployment/deployment_functions.php';
 
 list($connection, $channel) = getRabbit();
 
