@@ -21,7 +21,7 @@ function storePackage($targetVMiP, $bundleName, $versionNumber, $filePath)
         $stmt = $db->prepare($query);
         $stmt->bindParam(':bundle_name', $bundleName);
         $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
 
         $latestVersion = $result['version_number'] ?? null;
         $latestStatus = $result['status'] ?? 'new';
@@ -84,7 +84,7 @@ function getVersion($bundleName)
         $stmt->bind_param('s', $bundleName);
         $stmt->execute();
 
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch();
         echo $result;
         if ($result) {
             // return json_encode([
