@@ -11,7 +11,7 @@ require_once 'deployment/deployment_functions.php';
 
 list($connection, $channel) = getRabbit();
 
-$channel->queue_declare('toDeployment', false, true, false, false);
+$channel->queue_declare('toDeploy', false, true, false, false);
 
 $callback = function ($msg) use ($channel) {
     $data = json_decode($msg->body, true);
@@ -43,7 +43,7 @@ $callback = function ($msg) use ($channel) {
     $channel->basic_publish($responseMsg, 'directExchange', $queueName);
 };
 
-$channel->basic_consume('toDeployment', '', false, true, false, false, $callback);
+$channel->basic_consume('toDeploy', '', false, true, false, false, $callback);
 
 while ($channel->is_consuming()) {
     $channel->wait();
