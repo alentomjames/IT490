@@ -49,27 +49,27 @@ $latestVersion = 0;
 list($connection, $channel) = getDeployRabbit();
 switch ($machineName) {
     case 'beDev':
-        $queueName = 'beDevToDeploy';
+        $queueName = 'toDeploy';
         $responseQueue = 'deployToBeDev';
         break;
     case 'beQA':
-        $queueName = 'beQAToDeploy';
+        $queueName = 'toDeploy';
         $responseQueue = 'deployToBeQA';
         break;
     case 'feDev':
-        $queueName = 'feDevToDeploy';
+        $queueName = 'toDeploy';
         $responseQueue = 'deployToFeDev';
         break;
     case 'feQA':
-        $queueName = 'feQAToDeploy';
+        $queueName = 'toDeploy';
         $responseQueue = 'deployToFeQA';
         break;
     case 'dmzDev':
-        $queueName = 'dmzDevToDeploy';
+        $queueName = 'toDeploy';
         $responseQueue = 'deployToDmzDev';
         break;
     case 'dmzQA':
-        $queueName = 'dmzQAToDeploy';
+        $queueName = 'toDeploy';
         $responseQueue = 'deployToDmzQA';
         break;
     default:
@@ -80,7 +80,8 @@ switch ($machineName) {
 $channel->queue_declare($queueName, false, true, false, false);
 $data = json_encode([
     'type' => 'get_version',
-    'bundle' => $bundleName
+    'bundle' => $bundleName,
+    'queue' => $responseQueue
 ]);
 
 // Create the message
