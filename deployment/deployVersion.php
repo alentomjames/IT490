@@ -92,6 +92,8 @@ $channel->basic_publish($msg, 'directExchange', $queueName);
 echo " [x] Sent '$bundleName'\n";
 // Consume the 'deployToBeDev' queue and wait for the version number
 $callback = function ($msg) use (&$latestVersion) {
+    echo "Received a message\n";
+    echo $msg->body;
     $latestVersion = $msg->body;
     echo " [x] Received version number: $latestVersion\n";
     $msg->ack();
