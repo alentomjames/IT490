@@ -79,9 +79,9 @@ function getVersion($bundleName)
     global $db;
 
     try {
-        $query = "SELECT version_number FROM deployments WHERE bundle_name = :bundle_name ORDER BY created_at DESC LIMIT 1";
+        $query = "SELECT version_number FROM deployments WHERE bundle_name = ? ORDER BY created_at DESC LIMIT 1";
         $stmt = $db->prepare($query);
-        $stmt->bindParam(':bundle_name', $bundleName);
+        $stmt->bindParam('s', $bundleName);
         $stmt->execute();
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -99,12 +99,9 @@ function getVersion($bundleName)
             $status = 'new';
 
             $insertQuery = "INSERT INTO deployments (bundle_name, version_number, file_path, status) 
-                            VALUES (:bundle_name, :version_number, :file_path, :status)";
+                            VALUES (?, ?, ?, ?)";
             $insertStmt = $db->prepare($insertQuery);
-            $insertStmt->bindParam(':bundle_name', $bundleName);
-            $insertStmt->bindParam(':version_number', $initialVersion);
-            $insertStmt->bindParam(':file_path', $filePath);
-            $insertStmt->bindParam(':status', $status);
+            $stmt->bind_param('siss', $bundleName, $initialVersion, $filePath, $status);
             $insertStmt->execute();
 
             // return json_encode([
