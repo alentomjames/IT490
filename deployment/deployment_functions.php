@@ -79,20 +79,19 @@ function getVersion($bundleName)
     global $db;
 
     try {
+
         $query = "SELECT version_number FROM deployments WHERE bundle_name = ? ORDER BY created_at DESC LIMIT 1";
         $stmt = $db->prepare($query);
         $stmt->bind_param('s', $bundleName);
         $stmt->execute();
 
-        $result = $stmt->fetch();
-        echo $result;
-        if ($result) {
-            // return json_encode([
-            //     'status' => 'success',
-            //     'version_number' => $result['version_number']
-            // ]);
-            echo $result['version_number'];
-            return $result['version_number'];
+        $versionNumber = null;
+        $stmt->bind_result($versionNumber);
+        $fetchResult = $stmt->fetch();
+
+        if ($fetchResult) {
+            echo $versionNumber;
+            return $versionNumber;
         } else {
             $initialVersion = '1';
             $filePath = '';
