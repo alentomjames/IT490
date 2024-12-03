@@ -4,7 +4,7 @@ require_once '../webserver/vendor/autoload.php';
 use PhpAmpqLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-if ($argc < 5) {
+if ($argc < 3) {
     echo "Please type it in the following format: php deployVersion.php [bundle] [machine]\n";
     exit(1);
 }
