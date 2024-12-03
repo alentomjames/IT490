@@ -100,7 +100,7 @@ function getVersion($bundleName)
 
             $insertQuery = "INSERT INTO deployments (bundle_name, version_number, file_path, status) VALUES (?, ?, ?, ?)";
             $insertStmt = $db->prepare($insertQuery);
-            $stmt->bind_param('ssss', $bundleName, $initialVersion, $filePath, $status);
+            $insertStmt->bind_param('ssss', $bundleName, $initialVersion, $filePath, $status);
             $insertStmt->execute();
 
             // return json_encode([
