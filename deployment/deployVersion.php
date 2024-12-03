@@ -10,7 +10,7 @@ $bundleName = $argv[1];
 // Initializing the paths for deployment
 $currentPath = '/var/log/current';
 $archivePath = '/var/log/archive';
-$sourcePath = '/home/IT490/';
+$sourcePath = '/home/alen/git/IT490/';
 
 // Path to the config.ini file
 $configIniPath = '/var/log/config.ini';
@@ -27,12 +27,17 @@ if (!isset($config[$bundleName])) {
 }
 
 // Get the list of files for the bundle
-$filesToDeploy = (array) $config[$bundleName];
+if (isset($config[$bundleName]['file'])) {
+    $filesToDeploy = $config[$bundleName]['file'];
+} else {
+    echo "No files to deploy for bundle '$bundleName'.\n";
+    exit(1);
+}
+
 echo "Files to deploy for bundle '$bundleName':\n";
 foreach ($filesToDeploy as $file) {
     echo " - $file\n";
 }
-echo "\n";
 
 // Finding the latest version number for this bundle
 $latestVersion = 0;
