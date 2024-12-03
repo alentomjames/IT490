@@ -85,7 +85,7 @@ function getVersion($bundleName)
         $stmt->execute();
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
+        echo $result;
         if ($result) {
             // return json_encode([
             //     'status' => 'success',
@@ -120,6 +120,8 @@ function getVersion($bundleName)
         //     'message' => 'Error fetching or inserting bundle',
         //     'error' => $e->getMessage()
         // ]);
+        echo $e;
+        echo $e->getMessage();
         return "error";
     }
 }
