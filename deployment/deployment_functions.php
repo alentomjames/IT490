@@ -7,13 +7,13 @@ require_once './webserver/rabbitmq_connection.php'; // how I connect to RabbitMQ
 $db = getDbConnection();
 
 //deployUpdate: target IP and package info (json). Compares versions in try/catch block. 
-function deployUpdate($targetVMiP, $packageInfo)
+function storePackage($targetVMiP, $bundleName, $versionNumber, $filePath)
 {
     global $db;
 
-    $bundleName = $packageInfo['name'];
-    $versionNumber = $packageInfo['version'];
-    $filePath = $packageInfo['path'];
+    // $bundleName = $packageInfo['name'];
+    // $versionNumber = $packageInfo['version'];
+    // $filePath = $packageInfo['path'];
     $timestamp = time();
 
     try {
@@ -72,4 +72,45 @@ function deployUpdate($targetVMiP, $packageInfo)
     }
 }
 
+function rollbackUpdate() {}
+
+function getVersion($bundleName)
+{
+    global $db;
+
+    try {
+        $query = "SELECT version_number, file_path, status, updated_at 
+              FROM deployments 
+              WHERE bundle_name = :bundle_name 
+              ORDER BY created_at DESC LIMIT 1";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':bundle_name', $bundleName);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($result) {
+            return json_encode([
+                'status' => 'success',
+                'data' => [
+                    'version_number' => $result['version_number'],
+                    'file_path' => $result['file_path'],
+                    'status' => $result['status'],
+                    'updated_at' => $result['updated_at']
+                ]
+            ]);
+        } else {
+            return json_encode([
+                'status' => 'fail',
+                'message' => "No version found for bundle: $bundleName"
+            ]);
+        }
+    } catch (Exception $e) {
+        return json_encode([
+            'status' => 'fail',
+            'message' => 'Error fetching version',
+            'error' => $e->getMessage()
+        ]);
+    }
+}
 // 

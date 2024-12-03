@@ -18,20 +18,21 @@ $callback = function ($msg) use ($channel) {
     $type = $data['type'];
     $queueName = $data['queue'];
 
-    if ($type === 'deploy_update') {
-        $targetVM = $data['target_vm'];
-        $bundle = $data['bundle_name'];
-        $response = deployUpdate($targetVM, $bundle);
-        echo "Deploy update request received for VM: $targetVM\n";
+    if ($type === 'store_package') {
+        $targetVMiP = $data['target_vm'];
+        $bundleName = $data['bundle_name'];
+        $versionNumber = $data['version_number'];
+        $filePath = $data['file_path'];
+        $response = storePackage($targetVMiP, $bundleName, $versionNumber, $filePath);
+        echo "Deploy update request received for VM: $targetVMiP\n";
     } elseif ($type === 'rollback_update') {
-        $targetVM = $data['target_vm'];
+        $targetVMiP = $data['target_vm'];
         $version = $data['version'];
-        $response = rollbackUpdate($targetVM, $version);
-        echo "Rollback update request received for VM: $targetVM, version: $version\n";
-    } elseif ($type === 'status_update') {
-        $bundle = $data['bundle_name'];
-        $updateStatus = $data['status'];
-        $response = logUpdate($bundle, $updateStatus);
+        $response = rollbackUpdate($targetVMiP, $version);
+        echo "Rollback update request received for VM: $targetVMiP, version: $version\n";
+    } elseif ($type === 'bundle') {
+        $bundleName = $data['bundle_name'];
+        $response = getVersion($bundleName);
         echo "Log update request received\n";
     } else {
         echo "Received unknown deployment command or missing required data fields\n";
