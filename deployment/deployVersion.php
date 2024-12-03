@@ -170,7 +170,7 @@ if ($return === 0) {
 }
 
 // Transfer the compressed file to the deployment machine using scp
-$scpCommand = "scp $compressedFilePath $deploymentUser@$deploymentHost:$deploymentPath";
+$scpCommand = "scp -O $compressedFilePath $deploymentUser@$deploymentHost:$deploymentPath";
 exec($scpCommand, $output, $return);
 if ($return === 0){
     echo "Transferred $compressedFile to $deploymentUser@$deploymentHost:$deploymentPath\n";
