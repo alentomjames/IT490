@@ -79,6 +79,7 @@ switch ($machineName) {
 // Declare the queue
 $channel->queue_declare($queueName, false, true, false, false);
 $data = json_encode([
+    'type' => 'get_version',
     'bundle' => $bundleName
 ]);
 
@@ -86,7 +87,7 @@ $data = json_encode([
 $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
 
 // Send the message to the queue
-$channel->basic_publish($responseMsg, 'directExchange', 'beDevToDeploy');
+$channel->basic_publish($msg, 'directExchange', $queueName);
 echo " [x] Sent '$bundleName'\n";
 // Consume the 'deployToBeDev' queue and wait for the version number
 $callback = function ($msg) use (&$latestVersion) {
