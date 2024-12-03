@@ -121,4 +121,6 @@ function getVersion($bundleName)
     }
 }
 
+getVersion("login");
+
 // 
