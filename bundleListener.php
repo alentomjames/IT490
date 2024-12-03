@@ -95,7 +95,7 @@ while (true) {
 function build_ini_string($assoc_arr) {
     $content = '';
     foreach ($assoc_arr as $key => $items) {
-        $content .= "[$section]\n";
+        $content .= "[$key]\n";
         foreach ($items as $value) {
             $content .= "file[] = " . $value . "\n";
         }
