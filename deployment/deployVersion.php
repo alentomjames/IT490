@@ -91,12 +91,14 @@ $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
 $channel->basic_publish($msg, 'directExchange', $queueName);
 echo " [x] Sent '$bundleName'\n";
 // Consume the 'deployToBeDev' queue and wait for the version number
-$callback = function ($msg) use (&$latestVersion) {
+$callback = function ($msg) use (&$latestVersion, $channel) {
     echo "Received a message\n";
     echo $msg->body;
-    $latestVersion = $msg->body;
+    $latestVersion = (int)$msg->body;
     echo " [x] Received version number: $latestVersion\n";
     $msg->ack();
+    $channel->basic_cancel($msg->delivery_info['consumer_tag']);
+
 };
 
 $channel->basic_consume($responseQueue, '', false, false, false, false, $callback);
