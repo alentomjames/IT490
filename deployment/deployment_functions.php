@@ -91,6 +91,7 @@ function getVersion($bundleName)
             //     'status' => 'success',
             //     'version_number' => $result['version_number']
             // ]);
+            echo $result['version_number'];
             return $result['version_number'];
         } else {
             $initialVersion = 1;
@@ -110,6 +111,7 @@ function getVersion($bundleName)
             //     'status' => 'success',
             //     'version_number' => $initialVersion
             // ]);
+            echo $initialVersion;
             return $initialVersion;
         }
     } catch (Exception $e) {
