@@ -1,12 +1,16 @@
 <?php
+require_once '../webserver/rabbitmq_connection.php'; // RabbitMQ connection
+require_once '../webserver/vendor/autoload.php';
+use PhpAmpqLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
-if ($argc < 2) {
-    echo "Please type it in the following format: php deployVersion.php [bundle]\n";
+if ($argc < 5) {
+    echo "Please type it in the following format: php deployVersion.php [bundle] [machine]\n";
     exit(1);
 }
 
 $bundleName = $argv[1];
-
+$machineName = $argv[2];
 // Initializing the paths for deployment
 $currentPath = '/var/log/current';
 $archivePath = '/var/log/archive';
@@ -39,25 +43,67 @@ foreach ($filesToDeploy as $file) {
     echo " - $file\n";
 }
 
-// Finding the latest version number for this bundle
+
 $latestVersion = 0;
-$directoryHandle = opendir($currentPath);
-if ($directoryHandle === false) {
-    echo "Failed to open directory $currentPath\n";
-    exit(1);
+
+list($connection, $channel) = getDeployRabbit();
+switch ($machineName) {
+    case 'beDev':
+        $queueName = 'beDevToDeploy';
+        $responseQueue = 'deployToBeDev';
+        break;
+    case 'beQA':
+        $queueName = 'beQAToDeploy';
+        $responseQueue = 'deployToBeQA';
+        break;
+    case 'feDev':
+        $queueName = 'feDevToDeploy';
+        $responseQueue = 'deployToFeDev';
+        break;
+    case 'feQA':
+        $queueName = 'feQAToDeploy';
+        $responseQueue = 'deployToFeQA';
+        break;
+    case 'dmzDev':
+        $queueName = 'dmzDevToDeploy';
+        $responseQueue = 'deployToDmzDev';
+        break;
+    case 'dmzQA':
+        $queueName = 'dmzQAToDeploy';
+        $responseQueue = 'deployToDmzQA';
+        break;
+    default:
+        echo "Invalid machine name '$machineName'.\n";
+        exit(1);
+}
+// Declare the queue
+$channel->queue_declare($queueName, false, true, false, false);
+$data = json_encode([
+    'bundle' => $bundleName
+]);
+
+// Create the message
+$msg = new AMQPMessage($data, ['delivery_mode' => 2]);
+
+// Send the message to the queue
+$channel->basic_publish($responseMsg, 'directExchange', 'beDevToDeploy');
+echo " [x] Sent '$bundleName'\n";
+// Consume the 'deployToBeDev' queue and wait for the version number
+$callback = function ($msg) use (&$latestVersion) {
+    $latestVersion = $msg->body;
+    echo " [x] Received version number: $latestVersion\n";
+    $msg->ack();
+};
+
+$channel->basic_consume($responseQueue, '', false, false, false, false, $callback);
+
+// Wait for the message
+while ($channel->is_consuming()) {
+    $channel->wait();
 }
 
-$versionPattern = '/^' . preg_quote($bundleName, '/') . '_(\d+)$/';
-
-while (($entry = readdir($directoryHandle)) !== false) {
-    if (preg_match($versionPattern, $entry, $matches)) {
-        $versionNumber = (int)$matches[1];
-        if ($versionNumber > $latestVersion) {
-            $latestVersion = $versionNumber;
-        }
-    }
-}
-closedir($directoryHandle);
+// Close the RabbitMQ connection
+closeRabbit($connection, $channel);
 
 // Setting the previous version and the new version for comparison later
 $previousVersion = $latestVersion;
