@@ -87,10 +87,11 @@ function getVersion($bundleName)
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($result) {
-            return json_encode([
-                'status' => 'success',
-                'version_number' => $result['version_number']
-            ]);
+            // return json_encode([
+            //     'status' => 'success',
+            //     'version_number' => $result['version_number']
+            // ]);
+            return $result['version_number'];
         } else {
             $initialVersion = '1';
             $filePath = '';
@@ -105,17 +106,19 @@ function getVersion($bundleName)
             $insertStmt->bindParam(':status', $status);
             $insertStmt->execute();
 
-            return json_encode([
-                'status' => 'success',
-                'version_number' => $initialVersion
-            ]);
+            // return json_encode([
+            //     'status' => 'success',
+            //     'version_number' => $initialVersion
+            // ]);
+            return $initialVersion;
         }
     } catch (Exception $e) {
-        return json_encode([
-            'status' => 'fail',
-            'message' => 'Error fetching or inserting bundle',
-            'error' => $e->getMessage()
-        ]);
+        // return json_encode([
+        //     'status' => 'fail',
+        //     'message' => 'Error fetching or inserting bundle',
+        //     'error' => $e->getMessage()
+        // ]);
+        return "error";
     }
 }
 
