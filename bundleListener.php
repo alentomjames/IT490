@@ -31,8 +31,8 @@ foreach ($directories as $dir) {
         $filePath = $dir . '/' . $filename;
         $relativePath = str_replace($root, '', $filePath);
 
-        if (!in_array($relativePath, $config[$section])) {
-            $config[$section][] = $relativePath;
+        if (!in_array($relativePath, $config[$section]['file'])) {
+            $config[$section]['file'][] = $relativePath;
         }
     }
 }
@@ -83,7 +83,7 @@ while (true) {
             }
 
             // Ensure the file is not already in the config
-            if (!in_array($relativePath, $config[$section])) {
+            if (!in_array($relativePath, $config[$section]['file'])) {
                 $config[$section]['file'][] = $relativePath;
                 file_put_contents($iniFile, build_ini_string($config));
             }
