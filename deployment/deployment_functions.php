@@ -103,7 +103,7 @@ function getVersion($bundleName)
             echo $versionNumber;
             return $versionNumber;
         } else {
-            $initialVersion = 1;
+            $initialVersion = 0;
             $filePath = '';
             $status = 'new';
 
