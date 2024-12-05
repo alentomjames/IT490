@@ -23,13 +23,8 @@ function storePackage($targetVMiP, $bundleName, $versionNumber, $filePath)
         $stmt->execute();
         $result = $stmt->fetch();
 
-        if (is_array($result)) {
-            $latestVersion = $result['version_number'] ?? null;
-            $latestStatus = $result['status'] ?? 'new';
-        } else {
-            $latestVersion = null;
-            $latestStatus = 'new';
-        }
+        $latestVersion = $result['version_number'] ?? null;
+        $latestStatus = $result['status'] ?? 'new';
 
         if ($latestVersion && version_compare($versionNumber, $latestVersion, '<=')) { //version_compare returns -1 if lower, 0 equal, 1 if higher
             return json_encode([
@@ -104,13 +99,14 @@ function getVersion($bundleName)
 
             if (file_exists($currentFilePath)) {
                 rename($currentFilePath, $archivedFilePath);
-                $nextVersion = $versionNumber + 1;
                 echo "Archived current bundle: $currentFilePath to $archivedFilePath\n";
             } else {
                 echo "Current bundle file $currentFilePath does not exist, skipping archive step.\n";
             }
 
-            $filePath = "$currentDir/{$bundleName}_{$nextVersion}.zip";
+            $nextVersion = $versionNumber + 1;
+
+            $filePath = '';
             $status = 'new';
 
             $insertQuery = "INSERT INTO deployments (bundle_name, version_number, file_path, status) VALUES (?, ?, ?, ?)";
