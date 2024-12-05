@@ -99,13 +99,12 @@ function getVersion($bundleName)
 
             if (file_exists($currentFilePath)) {
                 rename($currentFilePath, $archivedFilePath);
+                $nextVersion = $versionNumber + 1;
                 echo "Archived current bundle: $currentFilePath to $archivedFilePath\n";
             } else {
                 echo "Current bundle file $currentFilePath does not exist, skipping archive step.\n";
                 return "File does not exist in current directory on Deployment Machine\n";
             }
-
-            $nextVersion = $versionNumber + 1;
 
             $filePath = '';
             $status = 'new';
