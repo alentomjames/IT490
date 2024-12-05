@@ -6,7 +6,7 @@ require_once './webserver/rabbitmq_connection.php'; // how I connect to RabbitMQ
 
 $db = getDbConnection();
 
-//deployUpdate: target IP and package info (json). Compares versions in try/catch block. 
+//deployUpdate: target IP and package info (json). Compares versions in try/catch block.
 function storePackage($targetVMiP, $bundleName, $versionNumber, $filePath)
 {
     global $db;
@@ -19,12 +19,17 @@ function storePackage($targetVMiP, $bundleName, $versionNumber, $filePath)
     try {
         $query = "SELECT version_number, status FROM deployments WHERE bundle_name = :bundle_name ORDER BY created_at DESC LIMIT 1";
         $stmt = $db->prepare($query);
-        $stmt->bindParam(':bundle_name', $bundleName);
+        $stmt->bind_param(':bundle_name', $bundleName);
         $stmt->execute();
         $result = $stmt->fetch();
 
-        $latestVersion = $result['version_number'] ?? null;
-        $latestStatus = $result['status'] ?? 'new';
+        if (is_array($result)) {
+            $latestVersion = $result['version_number'] ?? null;
+            $latestStatus = $result['status'] ?? 'new';
+        } else {
+            $latestVersion = null;
+            $latestStatus = 'new';
+        }
 
         if ($latestVersion && version_compare($versionNumber, $latestVersion, '<=')) { //version_compare returns -1 if lower, 0 equal, 1 if higher
             return json_encode([
@@ -51,12 +56,12 @@ function storePackage($targetVMiP, $bundleName, $versionNumber, $filePath)
             throw new Exception("SCP command failed: " . implode("\n", $output));
         }
 
-        $insertQuery = "INSERT INTO deployments (bundle_name, version_number, file_path, status) 
+        $insertQuery = "INSERT INTO deployments (bundle_name, version_number, file_path, status)
                         VALUES (:bundle_name, :version_number, :file_path, 'new')";
         $insertStmt = $db->prepare($insertQuery);
-        $insertStmt->bindParam(':bundle_name', $bundleName);
-        $insertStmt->bindParam(':version_number', $versionNumber);
-        $insertStmt->bindParam(':file_path', $filePath);
+        $insertStmt->bind_param(':bundle_name', $bundleName);
+        $insertStmt->bind_param(':version_number', $versionNumber);
+        $insertStmt->bind_param(':file_path', $filePath);
         $insertStmt->execute();
 
         return json_encode([
@@ -139,4 +144,4 @@ function getVersion($bundleName)
 
 getVersion("tested");
 
-// 
+//
