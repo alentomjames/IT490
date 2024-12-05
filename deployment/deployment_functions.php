@@ -89,6 +89,7 @@ function getVersion($bundleName)
         $fetchResult = $stmt->fetch();
 
         if ($fetchResult) {
+            $stmt->close();
             $nextVersion = $versionNumber + 1;
 
             $filePath = '';
