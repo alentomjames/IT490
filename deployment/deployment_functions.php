@@ -112,8 +112,9 @@ function getVersion($bundleName)
             $insertStmt->bind_param('siss', $bundleName, $initialVersion, $filePath, $status);
             $insertStmt->execute();
 
-            echo $initialVersion;
-            return $initialVersion;
+            echo "initial version: 0";
+            //return $initialVersion;
+            return "initial version: 0";
         }
     } catch (Exception $e) {
         echo $e->getMessage();
