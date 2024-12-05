@@ -8,12 +8,35 @@ use PhpAmqpLib\Message\AMQPMessage;
 function getRabbit()
 {
     // Connect to RABBITMQ HERE and add better error handling
+    $connection = new AMQPStreamConnection('172.29.4.30', 5672, 'admin', 'admin', 'IT490_Host');
+    $channel = $connection->channel();
+
+    return [$connection, $channel];
+}
+function getDeployRabbit()
+{
+    // Connect to RABBITMQ HERE and add better error handling
     $connection = new AMQPStreamConnection('172.29.82.171', 5672, 'dm692', 'password', 'it490');
     $channel = $connection->channel();
 
     return [$connection, $channel];
 }
+function getQARabbit()
+{
+    // Connect to RABBITMQ HERE and add better error handling
+    $connection = new AMQPStreamConnection('172.29.87.41', 5672, 'admin', 'admin', 'IT490_Host');
+    $channel = $connection->channel();
 
+    return [$connection, $channel];
+}
+function getProdRabbit()
+{
+    // Connect to RABBITMQ HERE and add better error handling
+    $connection = new AMQPStreamConnection('172.29.4.30', 5672, 'admin', 'admin', 'IT490_Host');
+    $channel = $connection->channel();
+
+    return [$connection, $channel];
+}
 function closeRabbit($connection, $channel)
 {
     if ($channel) {
@@ -114,7 +137,7 @@ function recieveDB()
 
 function sendLog($logMessage)
 {
-    list($connection, $channel) = getRabbit();
+    list($connection, $channel) = getDeployRabbit();
     try {
         $channel->exchange_declare('fanoutExchange', 'fanout', false, true, false);
         $msg = new AMQPMessage($logMessage, ['delivery_mode' => 2]);
@@ -129,23 +152,24 @@ function sendLog($logMessage)
 
 function recieveLogs()
 {
-    list($connection, $channel) = getRabbit();
-    $channel->queue_declare('toDeployment', false, true, false, false);
+    list($connection, $channel) = getDeployRabbit();
+    $channel->queue_declare('toBeDev', false, true, false, false);
 
     echo "Waiting for logs. To exit press CTRL+C\n";
 
-    $logPath = '/var/log/distributedLogs.txt';
+    $logPath = '/var/log/distributedLogs/distributedLogs.txt';
 
     $callback = function ($msg) use ($logPath) {
         file_put_contents($logPath, $msg->body . PHP_EOL, FILE_APPEND);
     };
 
-    $channel->basic_consume('toDeployment', '', false, true, false, false, $callback);
+    $channel->basic_consume('toBeDev', '', false, true, false, false, $callback);
 
     // Wait for the response
     while ($channel->is_consuming()) {
         $channel->wait();
         echo "Error recieved from Distrubted Logger\n";
+
     }
     // Close the channel and connection
     closeRabbit($connection, $channel);
