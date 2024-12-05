@@ -73,36 +73,6 @@ function storePackage($targetVMiP, $bundleName, $versionNumber, $filePath)
 }
 
 function rollbackUpdate() {
-    function rollbackUpdate($bundleName, $versionNumber)
-    {
-        try {
-            $archivePath = "/var/log/archive/{$bundleName}_{$versionNumber}.tar.gz";
-            $currentPath = "/var/log/current/{$bundleName}";
-
-            if (!file_exists($archivePath)) {
-                throw new Exception("Archived version $versionNumber of $bundleName does not exist.");
-            }
-
-            // Remove current files
-            if (file_exists($currentPath)) {
-                exec("rm -rf $currentPath");
-            }
-
-            // Unzip the archived version to the current path
-            exec("mkdir -p $currentPath && tar -xzf $archivePath -C $currentPath");
-
-            return json_encode([
-                'status' => 'success',
-                'message' => "Successfully rolled back to version $versionNumber of $bundleName"
-            ]);
-        } catch (Exception $e) {
-            return json_encode([
-                'status' => 'failure',
-                'message' => "Rollback failed",
-                'error' => $e->getMessage()
-            ]);
-        }
-    }
 }
 
 function getVersion($bundleName)
