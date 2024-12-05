@@ -88,8 +88,22 @@ function getVersion($bundleName)
         $stmt->bind_result($versionNumber);
         $fetchResult = $stmt->fetch();
 
+        $currentDir = "/var/log/current";
+        $archiveDir = "/var/log/archive";
+
         if ($fetchResult) {
             $stmt->close();
+
+            $currentFilePath = "$currentDir/{$bundleName}_{$versionNumber}.zip";
+            $archivedFilePath = "$archiveDir/{$bundleName}_{$versionNumber}.zip";
+
+            if (file_exists($currentFilePath)) {
+                rename($currentFilePath, $archivedFilePath);
+                echo "Archived current bundle: $currentFilePath to $archivedFilePath\n";
+            } else {
+                echo "Current bundle file $currentFilePath does not exist, skipping archive step.\n";
+            }
+
             $nextVersion = $versionNumber + 1;
 
             $filePath = '';
