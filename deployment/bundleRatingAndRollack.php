@@ -8,7 +8,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 if ($argc < 4) {
     echo "Usage: php script.php <bundleName> <status> <machine>\n";
-    echo "Example: php script.php login good QADev\n";
+    echo "Example: php script.php login good feDev\n";
     exit(1);
 }
 
@@ -31,7 +31,7 @@ function rollbackFunction($bundleName, $versionNumber, $machine)
 
         // Remove current files
         if (file_exists($repoPath)) {
-            $jsonFilePath = "path/to/bundle_files.json"; // Path to the JSON file containing bundle names and files
+            $jsonFilePath = "bundles.json"; // Path to the JSON file containing bundle names and files
 
             if (!file_exists($jsonFilePath)) {
                 throw new Exception("JSON file with bundle names and files does not exist.");
@@ -75,21 +75,27 @@ $channel->queue_declare('toDeploy', false, true, false, false);
 switch ($machine) {
     case 'feQA':
         $returnQueue = 'deployToFeQA';
+        $target_vm = '172.29.87.169';
         break;
     case 'beQA':
         $returnQueue = 'deployToBeQA';
+        $target_vm = '172.29.87.41';
         break;
     case 'dmzQA':
         $returnQueue = 'deployToDmzQA';
+        $target_vm = '172.29.63.70';
         break;
     case 'feProd':
         $returnQueue = 'deployToFeProd';
+        $target_vm = '172.29.87.169';
         break;
     case 'beProd':
         $returnQueue = 'deployToBeProd';
+        $target_vm = '172.29.87.41';
         break;
     case 'dmzProd':
         $returnQueue = 'deployToDmzProd';
+        $target_vm = '172.29.87.70';
         break;
     default:
         echo "Invalid machine\n";
@@ -97,9 +103,11 @@ switch ($machine) {
 }
 // Create the message
 $data = json_encode([
+
     'bundle' => $bundleName,
     'status' => $status,
-    'return_queue' => $returnQueue
+    'return_queue' => $returnQueue,
+    'target_vm' => $target_vm
 ]);
 $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
 

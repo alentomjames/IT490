@@ -27,7 +27,11 @@ $callback = function ($msg) use ($channel) {
         echo "Deploy update request received for VM: $targetVMiP\n";
     } elseif ($type === 'rollback_update') {
         $targetVMiP = $data['target_vm'];
+        $bundle = $data['bundle'];
         $version = $data['version'];
+        $status = $data['status'];
+        $returnQueue = $data['return_queue'];
+        
         $response = rollbackUpdate($targetVMiP, $version);
         echo "Rollback update request received for VM: $targetVMiP, version: $version\n";
     } elseif ($type === 'get_version') {
