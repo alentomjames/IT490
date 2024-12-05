@@ -239,7 +239,7 @@ $currentDeploymentPath = '/var/log/current';
 $scpCommand = "scp -O $compressedFilePath $deploymentUser@$deploymentHost:$currentDeploymentPath";
 exec($scpCommand, $output, $return);
 if ($return === 0){
-    echo "Transferred $compressedFile to $deploymentUser@$deploymentHost:$deploymentPath\n";
+    echo "Transferred $compressedFile to $deploymentUser@$deploymentHost:$currentDeploymentPath\n";
 } else {
     echo "Failed to transfer $compressedFile to $deploymentUser@$deploymentHost:$deploymentPath\n";
     exit(1);
