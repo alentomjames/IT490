@@ -18,22 +18,19 @@ $callback = function ($msg) use ($channel) {
     $type = $data['type'];
     $queueName = $data['queue'];
     echo "hit callback\n";
-    if ($type === 'store_package') {
-        $targetVMiP = $data['target_vm'];
-        $bundleName = $data['bundle_name'];
-        $versionNumber = $data['version_number'];
-        $filePath = $data['file_path'];
-        $response = storePackage($targetVMiP, $bundleName, $versionNumber, $filePath);
-        echo "Deploy update request received for VM: $targetVMiP\n";
+
+    if ($type === 'get_version') {
+        $bundleName = $data['bundle'];
+        $response = getVersion($bundleName);
+        echo "Version number request received\n";
+    } elseif ($type === 'pull_version') {
+        $bundleName = $data['bundle'];
+        $response = pullVersion($bundleName);
     } elseif ($type === 'rollback_update') {
         $targetVMiP = $data['target_vm'];
         $version = $data['version'];
         $response = rollbackUpdate($targetVMiP, $version);
         echo "Rollback update request received for VM: $targetVMiP, version: $version\n";
-    } elseif ($type === 'get_version') {
-        $bundleName = $data['bundle'];
-        $response = getVersion($bundleName);
-        echo "Version number request received\n";
     } else {
         echo "Received unknown deployment command or missing required data fields\n";
         return;
