@@ -79,7 +79,6 @@ function getVersion($bundleName)
     global $db;
 
     try {
-
         $query = "SELECT version_number FROM deployments WHERE bundle_name = ? ORDER BY created_at DESC LIMIT 1";
         $stmt = $db->prepare($query);
         $stmt->bind_param('s', $bundleName);
@@ -90,6 +89,16 @@ function getVersion($bundleName)
         $fetchResult = $stmt->fetch();
 
         if ($fetchResult) {
+            $nextVersion = $versionNumber + 1;
+
+            $filePath = '';
+            $status = 'new';
+
+            $insertQuery = "INSERT INTO deployments (bundle_name, version_number, file_path, status) VALUES (?, ?, ?, ?)";
+            $insertStmt = $db->prepare($insertQuery);
+            $insertStmt->bind_param('siss', $bundleName, $nextVersion, $filePath, $status);
+            $insertStmt->execute();
+
             echo $versionNumber;
             return $versionNumber;
         } else {
@@ -102,25 +111,16 @@ function getVersion($bundleName)
             $insertStmt->bind_param('siss', $bundleName, $initialVersion, $filePath, $status);
             $insertStmt->execute();
 
-            // return json_encode([
-            //     'status' => 'success',
-            //     'version_number' => $initialVersion
-            // ]);
             echo $initialVersion;
             return $initialVersion;
         }
     } catch (Exception $e) {
-        // return json_encode([
-        //     'status' => 'fail',
-        //     'message' => 'Error fetching or inserting bundle',
-        //     'error' => $e->getMessage()
-        // ]);
-        echo $e;
         echo $e->getMessage();
         return "error";
     }
 }
 
-//getVersion("login");
+
+getVersion("tested");
 
 // 

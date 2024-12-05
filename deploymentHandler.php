@@ -17,7 +17,7 @@ $callback = function ($msg) use ($channel) {
     $data = json_decode($msg->body, true);
     $type = $data['type'];
     $queueName = $data['queue'];
-    echo "hit callback";
+    echo "hit callback\n";
     if ($type === 'store_package') {
         $targetVMiP = $data['target_vm'];
         $bundleName = $data['bundle_name'];
@@ -40,7 +40,7 @@ $callback = function ($msg) use ($channel) {
     };
 
     $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
-	$channel->queue_purge($queueName);
+    $channel->queue_purge($queueName);
     $channel->basic_publish($responseMsg, 'directExchange', $queueName);
 };
 
