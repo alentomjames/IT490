@@ -16,6 +16,57 @@ $bundleName = $argv[1];
 $status = $argv[2];
 $machine = $argv[3];
 
+function rollbackFunction($bundleName, $versionNumber, $machine)
+{
+    try {
+        if (strpos($machine, 'fe') === 0) {
+            $repoPath = "var/www/it490/{$bundleName}_{$versionNumber}.zip";
+        } else {
+            $repoPath = "home/ppetroski/git/IT490/{$bundleName}_{$versionNumber}.zip";
+        }
+
+        if (!file_exists($repoPath)) {
+            throw new Exception("Archived version $versionNumber of $bundleName does not exist.");
+        }
+
+        // Remove current files
+        if (file_exists($repoPath)) {
+            $jsonFilePath = "path/to/bundle_files.json"; // Path to the JSON file containing bundle names and files
+
+            if (!file_exists($jsonFilePath)) {
+                throw new Exception("JSON file with bundle names and files does not exist.");
+            }
+
+            $jsonData = file_get_contents($jsonFilePath);
+            $bundleFiles = json_decode($jsonData, true);
+
+            if (isset($bundleFiles[$bundleName])) {
+                foreach ($bundleFiles[$bundleName] as $file) {
+                    if (file_exists($file)) {
+                        exec("rm -rf $file");
+                    }
+                }
+            } else {
+                throw new Exception("No files found for bundle $bundleName in the JSON file.");
+            }
+        }
+
+        // Unzip the archived version to the current path
+        exec("unzip $repoPath .");
+
+        return json_encode([
+            'status' => 'success',
+            'message' => "Successfully rolled back to version $versionNumber of $bundleName"
+        ]);
+    } catch (Exception $e) {
+        return json_encode([
+            'status' => 'failure',
+            'message' => "Rollback failed",
+            'error' => $e->getMessage()
+        ]);
+    }
+}
+
 list($connection, $channel) = getDeployRabbit();
 
 // Declare the queue
@@ -25,19 +76,19 @@ switch ($machine) {
     case 'feQA':
         $returnQueue = 'deployToFeQA';
         break;
-    case 'BeQA':
+    case 'beQA':
         $returnQueue = 'deployToBeQA';
         break;
-    case 'DmzQA':
+    case 'dmzQA':
         $returnQueue = 'deployToDmzQA';
         break;
     case 'feProd':
         $returnQueue = 'deployToFeProd';
         break;
-    case 'BeProd':
+    case 'beProd':
         $returnQueue = 'deployToBeProd';
         break;
-    case 'DmzProd':
+    case 'dmzProd':
         $returnQueue = 'deployToDmzProd';
         break;
     default:
@@ -60,7 +111,7 @@ if ($status === 'bad') {
     // Listen for a message on the return queue
     $channel->queue_declare($returnQueue, false, true, false, false);
 
-    $callback = function ($msg) use ($bundleName, $channel) {
+    $callback = function ($msg) use ($bundleName, $channel, $machine) {
         $data = json_decode($msg->body, true);
         $sendStatus = $data['status'];
         $bundleName = $data['bundle'];
@@ -70,7 +121,12 @@ if ($status === 'bad') {
         if ($sendStatus === 'sent') {
             echo " [x] Received '$bundleName' with status '$sendStatus'\n";
             echo " [x] Rolling back to version $previousVersion\n";
-            rollbackUpdate($bundleName, $previousVersion);
+
+            try {
+                rollbackFunction($bundleName, $previousVersion, $machine);
+            } catch (Exception $e) {
+                echo " [x] Rollback failed: " . $e->getMessage() . "\n";
+            }
         } else {
             echo " [x] Received '$bundleName' with status '$sendStatus'\n";
             echo " [x] No previous good version found, cannot rollback\n";
