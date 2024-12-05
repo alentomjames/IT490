@@ -234,4 +234,14 @@ if ($return === 0){
     exit(1);
 }
 
+$currentDeploymentPath = '/var/log/current';
+// Transfer the compressed file to the deployment machine using scp for their current directory
+$scpCommand = "scp -O $compressedFilePath $deploymentUser@$deploymentHost:$currentDeploymentPath";
+exec($scpCommand, $output, $return);
+if ($return === 0){
+    echo "Transferred $compressedFile to $deploymentUser@$deploymentHost:$deploymentPath\n";
+} else {
+    echo "Failed to transfer $compressedFile to $deploymentUser@$deploymentHost:$deploymentPath\n";
+    exit(1);
+}
 ?>
