@@ -155,6 +155,7 @@ function pullVersion($bundleName, $queueName)
         }
 
         return json_encode([
+            'type' => 'sent',
             'status' => 'success',
             'message' => "File {$currentFilePath} sent to $targetMachine:$remotePath",
             'bundle' => $bundleName,
