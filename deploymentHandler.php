@@ -25,7 +25,8 @@ $callback = function ($msg) use ($channel) {
         echo "Version number request received\n";
     } elseif ($type === 'pull_version') {
         $bundleName = $data['bundle'];
-        $response = pullVersion($bundleName);
+        $response = pullVersion($bundleName, $queueName);
+        echo "Pull request received from queue: $queueName .\n";
     } elseif ($type === 'rollback_update') {
         $targetVMiP = $data['target_vm'];
         $version = $data['version'];
