@@ -49,9 +49,6 @@ switch ($machineName) {
 $channel->queue_declare($queueName, false, true, false, false);
 
 
-// Establish RabbitMQ connection
-list($connection, $channel) = getDeployRabbit();
-
 // Declare the request queue
 $requestQueue = 'toDeploy';
 $channel->queue_declare($requestQueue, false, true, false, false);
@@ -69,33 +66,34 @@ $requestMsg = new AMQPMessage($requestData, ['delivery_mode' => 2]);
 $channel->basic_publish($requestMsg, 'directExchange', $requestQueue);
 echo " Sent pull request for bundle '$bundleName' to deployment.\n";
 
+$bundlePath = "/var/log/current/";
+
+// Remove the existing bundle file or folder starting with $bundleName_
+foreach (glob($bundlePath . $bundleName . '_*') as $file) {
+    $command = "rm -r " . escapeshellarg($file);
+    exec($command, $output, $returnVar);
+    if ($returnVar === 0) {
+        echo "Removed existing bundle at '$file'.\n";
+    } else {
+        echo "Failed to remove existing bundle at '$file'.\n";
+        exit(1);
+    }
+}
+
 // Declare the response queue
 $channel->queue_declare($responseQueue, false, true, false, false);
 
 // Callback function to wait for the 'sent' message from deployment
 $callback = function ($msg) use ($bundleName, $channel) {
     $data = json_decode($msg->body, true);
+    
 
     if (isset($data['type']) && $data['type'] == 'sent' && $data['bundle'] == $bundleName) {
         echo " Received 'sent' confirmation for bundle '$bundleName'.\n";
 
-        $bundlePath = "/var/log/current/";
-
-        // Remove the existing bundle file or folder starting with $bundleName_
-        foreach (glob($bundlePath . $bundleName . '_*') as $file) {
-            $command = "rm -r " . escapeshellarg($file);
-            exec($command, $output, $returnVar);
-            if ($returnVar === 0) {
-                echo "Removed existing bundle at '$file'.\n";
-            } else {
-                echo "Failed to remove existing bundle at '$file'.\n";
-                exit(1);
-            }
-        }
-
         // Wait for the deployment machine to SCP the new version
         echo "Waiting for the new version to be deployed...\n";
-
+        $bundleFileName = $bundleName . '.zip';
         // Assuming SCP is done, unzip the new version
         $zipFilePath = $bundlePath . $bundleFileName;
 

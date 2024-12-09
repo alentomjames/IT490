@@ -1,6 +1,9 @@
 <?php
 require_once '../webserver/rabbitmq_connection.php'; // RabbitMQ connection
+
 require_once '../webserver/vendor/autoload.php';
+//require_once '/var/www/it490/vendor/autoload.php';
+
 use PhpAmpqLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
