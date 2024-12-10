@@ -183,8 +183,10 @@ function pullVersion($bundleName, $queueName)
 function rollbackUpdate($bundleName, $previousVersion, $targetVMiP, $returnQueue, $user)
 {
     $previousBundle = "/var/log/archive/{$bundleName}_{$previousVersion}.zip";
+    echo "Previous bundle is: $previousBundle\n";
     $destinationPath = "/var/log/current";
     $scpCommand = "scp -C $previousBundle $user@$targetVMiP:$destinationPath";
+    echo "scpCommand is: $scpCommand\n";
     $returnVar = 0;
     exec($scpCommand, $output, $returnVar);
 
@@ -197,6 +199,7 @@ function rollbackUpdate($bundleName, $previousVersion, $targetVMiP, $returnQueue
         echo "Failed to deploy previous version $previousVersion of $bundleName to $targetVMiP\n";
         throw new Exception("SCP command failed: " . implode("\n", $output));
     } else {
+        echo "Passed scp!\n";
         return json_encode([
             'status' => 'sent',
             'bundle' => $bundleName,
@@ -253,14 +256,14 @@ function updateStatus($data)
 
             if ($previousVersion !== null) {
                 echo "Rolling back to version $previousVersion for $bundleName\n";
-                rollbackUpdate($bundleName, $previousVersion, $targetVMiP, $returnQueue, $user);
+                $response = rollbackUpdate($bundleName, $previousVersion, $targetVMiP, $returnQueue, $user);
             } else {
                 echo "No previous 'pass' version found for $bundleName. Rollback not performed.\n";
             }
         }
 
         echo "Status updated successfully\n";
-        return "Status updated successfully";
+        return $response;
     } catch (Exception $e) {
         echo "Error updating status: " . $e->getMessage() . "\n";
         return "Error updating status: " . $e->getMessage();
