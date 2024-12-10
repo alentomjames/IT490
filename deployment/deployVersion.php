@@ -118,7 +118,7 @@ closeRabbit($connection, $channel);
 $previousVersion = $latestVersion;
 
 if ($latestVersion === 0) {
-    $newVersion = 1;
+    $newVersion = 0;
 } else {
     $newVersion = $latestVersion + 1;
 }
