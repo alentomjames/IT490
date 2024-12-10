@@ -18,38 +18,12 @@ function getVersion($bundleName)
 
         $versionNumber = null;
         $stmt->bind_result($versionNumber);
-        echo $versionNumber;
-        $fetchResult = $stmt->fetch();
+        $stmt->fetch();
+        $stmt->close();
 
-        $currentDir = "/var/log/current";
-        $archiveDir = "/var/log/archive";
-
-        if ($fetchResult) {
-            $stmt->close();
-
-            $currentFilePath = "$currentDir/{$bundleName}_{$versionNumber}.zip";
-            $archivedFilePath = "$archiveDir/{$bundleName}_{$versionNumber}.zip";
-
-            if (file_exists($currentFilePath)) {
-                rename($currentFilePath, $archivedFilePath);
-                $nextVersion = $versionNumber + 1;
-                echo "Archived current bundle: $currentFilePath to $archivedFilePath\n";
-            } else {
-                echo "Current bundle file $currentFilePath does not exist, skipping archive step.\n";
-                return "File does not exist in current directory on Deployment Machine\n";
-            }
-
-            $filePath = '';
-            $status = 'new';
-
-            $insertQuery = "INSERT INTO deployments (bundle_name, version_number, file_path, status) VALUES (?, ?, ?, ?)";
-            $insertStmt = $db->prepare($insertQuery);
-            $insertStmt->bind_param('siss', $bundleName, $nextVersion, $filePath, $status);
-            $insertStmt->execute();
-
-            echo $versionNumber . "\n";
-            return $versionNumber;
-        } else {
+        // Check if versionNumber is NULL
+        if ($versionNumber === null) {
+            // Initialize the first version if no rows exist for the bundleName
             $initialVersion = 1;
             $filePath = '';
             $status = 'new';
@@ -69,6 +43,32 @@ function getVersion($bundleName)
             echo $nextVersion;
             return $initialVersion;
         }
+
+        $currentDir = "/var/log/current";
+        $archiveDir = "/var/log/archive";
+
+        $currentFilePath = "$currentDir/{$bundleName}_{$versionNumber}.zip";
+        $archivedFilePath = "$archiveDir/{$bundleName}_{$versionNumber}.zip";
+
+        if (file_exists($currentFilePath)) {
+            rename($currentFilePath, $archivedFilePath);
+            $nextVersion = $versionNumber + 1;
+            echo "Archived current bundle: $currentFilePath to $archivedFilePath\n";
+        } else {
+            echo "Current bundle file $currentFilePath does not exist, skipping archive step.\n";
+            return "File does not exist in current directory on Deployment Machine\n";
+        }
+
+        $filePath = '';
+        $status = 'new';
+
+        $insertQuery = "INSERT INTO deployments (bundle_name, version_number, file_path, status) VALUES (?, ?, ?, ?)";
+        $insertStmt = $db->prepare($insertQuery);
+        $insertStmt->bind_param('siss', $bundleName, $nextVersion, $filePath, $status);
+        $insertStmt->execute();
+
+        echo $versionNumber . "\n";
+        return $versionNumber;
     } catch (Exception $e) {
         echo $e->getMessage();
         return "error";
