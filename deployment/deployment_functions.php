@@ -58,8 +58,13 @@ function getVersion($bundleName)
             $insertStmt->bind_param('siss', $bundleName, $initialVersion, $filePath, $status);
             $insertStmt->execute();
 
+            $nextVersion = $initialVersion + 1;
+            $insertQuery = "INSERT INTO deployments (bundle_name, version_number, file_path, status) VALUES (?, ?, ?, ?)";
+            $insertStmt = $db->prepare($insertQuery);
+            $insertStmt->bind_param('siss', $bundleName, $nextVersion, $filePath, $status);
+            $insertStmt->execute();
+
             echo $initialVersion;
-            //return $initialVersion;
             return $initialVersion;
         }
     } catch (Exception $e) {
