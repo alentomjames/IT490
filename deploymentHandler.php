@@ -23,7 +23,7 @@ $callback = function ($msg) use ($channel) {
     if ($type === 'get_version') {
         $bundleName = $data['bundle'];
         $response = getVersion($bundleName);
-        echo "Version number request received\n";
+        echo "Version number being sent: $response request received\n";
     } elseif ($type === 'pull_version') {
         $bundleName = $data['bundle'];
         $response = pullVersion($bundleName, $queueName);
