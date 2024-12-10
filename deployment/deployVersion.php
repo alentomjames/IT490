@@ -1,6 +1,9 @@
 <?php
 require_once '../webserver/rabbitmq_connection.php'; // RabbitMQ connection
+
 require_once '../webserver/vendor/autoload.php';
+//require_once '/var/www/it490/vendor/autoload.php';
+
 use PhpAmpqLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -113,7 +116,12 @@ closeRabbit($connection, $channel);
 
 // Setting the previous version and the new version for comparison later
 $previousVersion = $latestVersion;
-$newVersion = $latestVersion + 1;
+
+if ($latestVersion === 0) {
+    $newVersion = 0;
+} else {
+    $newVersion = $latestVersion + 1;
+}
 
 // Debugging statements
 echo "Latest Version: $latestVersion\n";
@@ -126,25 +134,7 @@ $newVersionPath = "$currentPath/{$bundleName}_$newVersion";
 echo "Current Version Path: $currentVersionPath\n";
 echo "New Version Path: $newVersionPath\n";
 
-// Moving the current version folder to the archive
-if (is_dir($currentVersionPath)) {
-    $archiveVersionPath = "$archivePath/{$bundleName}_$previousVersion";
-    if (!rename($currentVersionPath, $archiveVersionPath)) {
-        echo "Failed to move {$bundleName}_$previousVersion to archive.\n";
-        exit(1);
-    }
-    echo "Moved {$bundleName}_$previousVersion to archive.\n";
-} else {
-    echo "No current version found for bundle '$bundleName'. Proceeding to create version $newVersion.\n";
-}
 
-// Ensure the new version directory exists
-if (!is_dir($newVersionPath)) {
-    if (!mkdir($newVersionPath, 0755, true)) {
-        echo "Failed to create directory $newVersionPath\n";
-        exit(1);
-    }
-}
 
 // Function to copy files with directory structure
 function copyFilesWithStructure($files, $sourceBasePath, $destinationBasePath) {
@@ -222,7 +212,7 @@ if ($return === 0) {
 }
 
 // Transfer the compressed file to the deployment machine using scp
-$scpCommand = "scp -O $compressedFilePath $deploymentUser@$deploymentHost:$deploymentPath";
+$scpCommand = "scp -C $compressedFilePath $deploymentUser@$deploymentHost:$deploymentPath";
 exec($scpCommand, $output, $return);
 if ($return === 0){
     echo "Transferred $compressedFile to $deploymentUser@$deploymentHost:$deploymentPath\n";
@@ -231,4 +221,14 @@ if ($return === 0){
     exit(1);
 }
 
+$currentDeploymentPath = '/var/log/current';
+// Transfer the compressed file to the deployment machine using scp for their current directory
+$scpCommand = "scp -C $compressedFilePath $deploymentUser@$deploymentHost:$currentDeploymentPath";
+exec($scpCommand, $output, $return);
+if ($return === 0){
+    echo "Transferred $compressedFile to $deploymentUser@$deploymentHost:$currentDeploymentPath\n";
+} else {
+    echo "Failed to transfer $compressedFile to $deploymentUser@$deploymentHost:$deploymentPath\n";
+    exit(1);
+}
 ?>
