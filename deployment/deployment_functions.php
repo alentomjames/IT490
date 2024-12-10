@@ -21,9 +21,7 @@ function getVersion($bundleName)
         $stmt->fetch();
         $stmt->close();
 
-        // Check if versionNumber is NULL
         if ($versionNumber === null) {
-            // Initialize the first version if no rows exist for the bundleName
             $initialVersion = 1;
             $filePath = '';
             $status = 'new';
