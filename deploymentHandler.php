@@ -16,7 +16,8 @@ $channel->queue_declare('toDeploy', false, true, false, false);
 $callback = function ($msg) use ($channel) {
     $data = json_decode($msg->body, true);
     $type = $data['type'];
-    $queueName = $data['queue'];
+    $queueName = isset($data['queue']) ? $data['queue'] : null;
+    $returnQueue = isset($data['return_queue']) ? $data['return_queue'] : null;
     echo "hit callback\n";
 
     if ($type === 'get_version') {
