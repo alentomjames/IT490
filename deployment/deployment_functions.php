@@ -208,6 +208,7 @@ function rollbackUpdate($bundleName, $previousVersion, $targetVMiP, $returnQueue
 function updateStatus($data)
 {
     global $db;
+
     $status = $data['status'];
     $bundleName = $data['bundle'];
     $returnQueue = $data['return_queue'];
@@ -215,37 +216,63 @@ function updateStatus($data)
     $user = $data['user'];
 
     try {
-        $query = "UPDATE deployments d1 JOIN (SELECT MAX(version_number) AS max_version FROM deployments WHERE bundle_name = ?) d2 ON d1.version_number = d2.max_version SET d1.status = ? WHERE d1.bundle_name = ?";
-        $stmt = $db->prepare($query);
-        $stmt->bind_param('sss', $status, $bundleName, $bundleName);
-        $stmt->execute();
+        $updateQuery = "
+            UPDATE deployments d
+            JOIN (
+                SELECT MAX(version_number) AS max_version
+                FROM deployments
+                WHERE bundle_name = ?
+            ) AS sub
+            ON d.bundle_name = ? AND d.version_number = sub.max_version
+            SET d.status = ?
+        ";
+        $updateStmt = $db->prepare($updateQuery);
+        $updateStmt->bind_param('sss', $bundleName, $bundleName, $status);
+        $updateStmt->execute();
+        $updateStmt->close();
+
         echo "Status updated to $status for $bundleName\n";
+
+        if ($status === 'fail') {
+            $rollbackQuery = "
+                SELECT version_number
+                FROM deployments
+                WHERE bundle_name = ?
+                AND status = 'pass'
+                ORDER BY version_number DESC
+                LIMIT 1
+            ";
+            $rollbackStmt = $db->prepare($rollbackQuery);
+            $rollbackStmt->bind_param('s', $bundleName);
+            $rollbackStmt->execute();
+
+            $previousVersion = null;
+            $rollbackStmt->bind_result($previousVersion);
+            $rollbackStmt->fetch();
+            $rollbackStmt->close();
+
+            if ($previousVersion !== null) {
+                echo "Rolling back to version $previousVersion for $bundleName\n";
+                rollbackUpdate($bundleName, $previousVersion, $targetVMiP, $returnQueue, $user);
+            } else {
+                echo "No previous 'pass' version found for $bundleName. Rollback not performed.\n";
+            }
+        }
+
+        echo "Status updated successfully\n";
+        return "Status updated successfully";
     } catch (Exception $e) {
-        echo "Error updating status: " . $e->getMessage();
+        echo "Error updating status: " . $e->getMessage() . "\n";
         return "Error updating status: " . $e->getMessage();
     }
-    if ($status === 'fail') {
-        $query = "
-        SELECT version_number
-        FROM deployments
-        WHERE bundle_name = ?
-        AND status = 'pass'
-        ORDER BY version_number DESC
-        LIMIT 1
-        ";
-        $stmt = $db->prepare($query);
-        $stmt->bind_param('s', $bundleName);
-        $stmt->execute();
-        $previousVersion = null;
-        $stmt->bind_result($previousVersion);
-        $stmt->fetch();
-        echo "Rolling back to version $previousVersion\n";
-        rollbackUpdate($bundleName, $previousVersion, $targetVMiP, $returnQueue, $user);
-    }
-    echo "Status updated successfully\n";
-    return "Status updated successfully";
 }
 
+
+// $status = 'pass';
+// $bundleName = 'login';
+// $returnQueue = 'deployToBeDev';
+// $targetVMiP = 
+// $user = 'philzerin';
 
 
 
