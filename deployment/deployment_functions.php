@@ -182,8 +182,6 @@ function pullVersion($bundleName, $queueName)
 
 function rollbackUpdate($bundleName, $previousVersion, $targetVMiP, $returnQueue, $user)
 {
-    list($connection, $channel) = getRabbit();
-    $channel->queue_declare($returnQueue, false, true, false, false);
     $previousBundle = "/var/log/archive/{$bundleName}_{$previousVersion}.zip";
     $destinationPath = "/var/log/current";
     $scpCommand = "scp -C $previousBundle $user@$targetVMiP:$destinationPath";
@@ -191,24 +189,19 @@ function rollbackUpdate($bundleName, $previousVersion, $targetVMiP, $returnQueue
     exec($scpCommand, $output, $returnVar);
 
     if ($returnVar !== 0) {
-        $failresponse = json_encode([
+        return json_encode([
             'status' => 'fail',
             'bundle' => $bundleName,
             'previous_version' => $previousVersion
         ]);
-        $msg = new AMQPMessage($failresponse, ['delivery_mode' => 2]);
-        $channel->basic_publish($msg, 'directExchange', $returnQueue);
         echo "Failed to deploy previous version $previousVersion of $bundleName to $targetVMiP\n";
         throw new Exception("SCP command failed: " . implode("\n", $output));
     } else {
-        $response = json_encode([
+        return json_encode([
             'status' => 'sent',
             'bundle' => $bundleName,
             'previous_version' => $previousVersion
         ]);
-        $msg = new AMQPMessage($response, ['delivery_mode' => 2]);
-        $channel->basic_publish($msg, 'directExchange', $returnQueue);
-        echo "Successfully deployed previous version $previousVersion of $bundleName to $targetVMiP\n";
     }
 }
 
