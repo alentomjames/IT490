@@ -32,6 +32,9 @@ $callback = function ($msg) use ($channel) {
         $version = $data['version'];
         $response = rollbackUpdate($targetVMiP, $version);
         echo "Rollback update request received for VM: $targetVMiP, version: $version\n";
+    } elseif ($type === 'status_update') {
+        $response = updateStatus($data);
+        echo "Status request received\n";
     } else {
         echo "Received unknown deployment command or missing required data fields\n";
         return;

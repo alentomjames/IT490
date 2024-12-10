@@ -4,6 +4,9 @@ require_once './webserver/vendor/autoload.php';
 require_once './db_connection.php'; // file has db connection
 require_once './webserver/rabbitmq_connection.php'; // how I connect to RabbitMQ
 
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+
 $db = getDbConnection();
 
 function getVersion($bundleName)
@@ -177,7 +180,78 @@ function pullVersion($bundleName, $queueName)
 }
 
 
-function rollbackUpdate() {}
+function rollbackUpdate($bundleName, $previousVersion, $targetVMiP, $returnQueue, $user)
+{
+    list($connection, $channel) = getRabbit();
+    $channel->queue_declare($returnQueue, false, true, false, false);
+    $previousBundle = "/var/log/archive/{$bundleName}_{$previousVersion}.zip";
+    $destinationPath = "/var/log/current";
+    $scpCommand = "scp -C $previousBundle $user@$targetVMiP:$destinationPath";
+    $returnVar = 0;
+    exec($scpCommand, $output, $returnVar);
+
+    if ($returnVar !== 0) {
+        $failresponse = json_encode([
+            'status' => 'fail',
+            'bundle' => $bundleName,
+            'previous_version' => $previousVersion
+        ]);
+        $msg = new AMQPMessage($failresponse, ['delivery_mode' => 2]);
+        $channel->basic_publish($msg, 'directExchange', $returnQueue);
+        echo "Failed to deploy previous version $previousVersion of $bundleName to $targetVMiP\n";
+        throw new Exception("SCP command failed: " . implode("\n", $output));
+    } else {
+        $response = json_encode([
+            'status' => 'sent',
+            'bundle' => $bundleName,
+            'previous_version' => $previousVersion
+        ]);
+        $msg = new AMQPMessage($response, ['delivery_mode' => 2]);
+        $channel->basic_publish($msg, 'directExchange', $returnQueue);
+        echo "Successfully deployed previous version $previousVersion of $bundleName to $targetVMiP\n";
+    }
+}
+
+function updateStatus($data)
+{
+    global $db;
+    $status = $data['status'];
+    $bundleName = $data['bundle'];
+    $returnQueue = $data['return_queue'];
+    $targetVMiP = $data['target_vm'];
+    $user = $data['user'];
+
+    try {
+        $query = "UPDATE deployments SET status = ? WHERE bundle_name = ? AND version_number = (SELECT MAX(version_number) FROM deployments WHERE bundle_name = ?)";
+        $stmt = $db->prepare($query);
+        $stmt->bind_param('sss', $status, $bundleName, $bundleName);
+        $stmt->execute();
+        echo "Status updated to $status for $bundleName\n";
+    } catch (Exception $e) {
+        echo "Error updating status: " . $e->getMessage();
+        return "Error updating status: " . $e->getMessage();
+    }
+    if ($status === 'fail') {
+        $query = "
+        SELECT version_number
+        FROM deployments
+        WHERE bundle_name = ?
+        AND status = 'pass'
+        ORDER BY version_number DESC
+        LIMIT 1
+        ";
+        $stmt = $db->prepare($query);
+        $stmt->bind_param('s', $bundleName);
+        $stmt->execute();
+        $previousVersion = null;
+        $stmt->bind_result($previousVersion);
+        $stmt->fetch();
+        echo "Rolling back to version $previousVersion\n";
+        rollbackUpdate($bundleName, $previousVersion, $targetVMiP, $returnQueue, $user);
+    }
+    echo "Status updated successfully\n";
+    return "Status updated successfully";
+}
 
 
 
