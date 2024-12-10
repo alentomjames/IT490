@@ -57,7 +57,7 @@ function getVersion($bundleName)
             echo "Archived current bundle: $currentFilePath to $archivedFilePath\n";
         } else {
             echo "Current bundle file $currentFilePath does not exist, skipping archive step.\n";
-            return "File does not exist in current directory on Deployment Machine\n";
+            return;
         }
 
         $filePath = '';
