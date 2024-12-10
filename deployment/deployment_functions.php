@@ -40,8 +40,8 @@ function getVersion($bundleName)
             $insertStmt->bind_param('siss', $bundleName, $nextVersion, $filePath, $status);
             $insertStmt->execute();
 
-            echo $initialVersion;
-            echo $nextVersion;
+            echo "Initial version: $initialVersion";
+            echo "Next version: $nextVersion";
             return $initialVersion;
         }
 
