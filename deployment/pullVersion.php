@@ -35,7 +35,7 @@ switch ($machineName) {
         break;
     case 'fePROD':
         $queueName = 'toDeploy';
-        $responseQueue = 'deployToFePROD';
+        $responseQueue = 'deployToFeProd';
         break;
     case 'dmzDev':
         $queueName = 'toDeploy';
