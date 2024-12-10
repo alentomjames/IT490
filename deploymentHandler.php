@@ -25,20 +25,16 @@ $callback = function ($msg) use ($channel) {
         $filePath = $data['file_path'];
         $response = storePackage($targetVMiP, $bundleName, $versionNumber, $filePath);
         echo "Deploy update request received for VM: $targetVMiP\n";
-    } elseif ($type === 'rollback_update') {
-        $targetVMiP = $data['target_vm'];
-        $bundle = $data['bundle'];
-        $version = $data['version'];
-        $status = $data['status'];
-        $returnQueue = $data['return_queue'];
-        
-        $response = rollbackUpdate($targetVMiP, $version);
-        echo "Rollback update request received for VM: $targetVMiP, version: $version\n";
     } elseif ($type === 'get_version') {
         $bundleName = $data['bundle'];
         $response = getVersion($bundleName);
         echo "Version number request received\n";
-    } else {
+
+    }elseif ($type === 'status_update') {
+        $response = updateStatus($data);
+        echo "Status request received\n";
+    }
+     else {
         echo "Received unknown deployment command or missing required data fields\n";
         return;
     };
