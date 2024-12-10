@@ -18,6 +18,7 @@ function getVersion($bundleName)
 
         $versionNumber = null;
         $stmt->bind_result($versionNumber);
+	echo $versionNumber;
         $fetchResult = $stmt->fetch();
 
         $currentDir = "/var/log/current";
@@ -46,7 +47,7 @@ function getVersion($bundleName)
             $insertStmt->bind_param('siss', $bundleName, $nextVersion, $filePath, $status);
             $insertStmt->execute();
 
-            echo $versionNumber;
+            echo $versionNumber . "\n";
             return $versionNumber;
         } else {
             $initialVersion = 1;
@@ -65,6 +66,7 @@ function getVersion($bundleName)
             $insertStmt->execute();
 
             echo $initialVersion;
+	    echo $nextVersion;
             return $initialVersion;
         }
     } catch (Exception $e) {
