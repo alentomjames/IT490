@@ -125,10 +125,6 @@ $callback = function ($msg) use ($bundleName, $channel, $bundlePath) {
                 $zip->extractTo($bundlePath);
                 $zip->close();
                 echo "Unzipped bundle '$bundleFileName' successfully.\n";
-
-                // Optionally remove the zip file after extraction
-                unlink($zipFilePath);
-                echo "Removed zip file '$bundleFileName'.\n";
             } else {
                 echo "Failed to unzip bundle '$bundleFileName'.\n";
                 exit(1);
