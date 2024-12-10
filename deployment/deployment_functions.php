@@ -49,7 +49,7 @@ function getVersion($bundleName)
             echo $versionNumber;
             return $versionNumber;
         } else {
-            $initialVersion = 0;
+            $initialVersion = 1;
             $filePath = '';
             $status = 'new';
 
@@ -58,9 +58,9 @@ function getVersion($bundleName)
             $insertStmt->bind_param('siss', $bundleName, $initialVersion, $filePath, $status);
             $insertStmt->execute();
 
-            echo "new";
+            echo $initialVersion;
             //return $initialVersion;
-            return "new";
+            return $initialVersion;
         }
     } catch (Exception $e) {
         echo $e->getMessage();
