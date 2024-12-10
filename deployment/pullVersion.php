@@ -94,15 +94,28 @@ $callback = function ($msg) use ($bundleName, $channel, $bundlePath) {
         // Wait for the deployment machine to SCP the new version
         echo "Waiting for the new version to be deployed...\n";
         
-        $zipFiles = glob($bundlePath . $bundleName . '_*.zip');
-        if (empty($zipFiles)) {
-            echo "No zip files found for pattern {$bundlePath}{$bundleName}_*.zip\n";
+        $maxAttempts = 10;
+        $attempt = 0;
+        $zipFilePath = null;
+        
+        while ($attempt < $maxAttempts) {
+            $zipFiles = glob($bundlePath . $bundleName . '_*.zip');
+            if (!empty($zipFiles)) {
+                $zipFilePath = $zipFiles[0];
+                break;
+            }
+            // If not found, wait for a second and try again
+            sleep(1);
+            $attempt++;
+        }
+
+        if ($zipFilePath === null) {
+            echo "No zip files found for pattern {$bundlePath}{$bundleName}_*.zip after waiting.\n";
             exit(1);
         }
-        
-        // Take the first match if multiple found
-        $zipFilePath = $zipFiles[0];
-        $bundleFileName = basename($zipFilePath); // Extract just the filename
+
+        $bundleFileName = basename($zipFilePath);
+
         // Assuming SCP is done, unzip the new version
         $zipFilePath = $bundlePath . $bundleFileName;
 
