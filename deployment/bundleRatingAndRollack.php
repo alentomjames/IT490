@@ -7,51 +7,36 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 if ($argc < 4) {
     echo "Usage: php script.php <bundleName> <status> <machine>\n";
-    echo "Example: php script.php login good feDev\n";
+    echo "Example: php script.php login pass feDev\n";
     exit(1);
 }
 
-$bundleName = $argv[1];
+$bundleName = $argv[1]; // Bundle name
 $status = $argv[2];
 $machine = $argv[3];
 
-function rollbackFunction($bundleName, $versionNumber, $machine)
+function rollbackFunction($bundleName, $versionNumber, $machine, $user)
 {
     try {
-        if (strpos($machine, 'fe') === 0) {
-            $repoPath = "var/www/it490/{$bundleName}_{$versionNumber}.zip";
-        } else {
-            $repoPath = "home/ppetroski/git/IT490/{$bundleName}_{$versionNumber}.zip";
-        }
-
+        // if (strpos($machine, 'fe') === 0) {
+        //     $repoPath = "var/www/it490";
+        // } else {
+        //     $repoPath = "home/{$user}/git/IT490";
+        // }
+        $repoPath = "var/log/current/{$bundleName}";
+        $badBundle = "var/log/current/{$bundleName}_" . ($versionNumber + 1);
+        $rollbackPath = "var/log/current/{$bundleName}_{$versionNumber}.zip";
         if (!file_exists($repoPath)) {
-            throw new Exception("Archived version $versionNumber of $bundleName does not exist.");
+            throw new Exception("Current path does not exist");
         }
 
         // Remove current files
         if (file_exists($repoPath)) {
-            $jsonFilePath = "bundles.json"; // Path to the JSON file containing bundle names and files
-
-            if (!file_exists($jsonFilePath)) {
-                throw new Exception("JSON file with bundle names and files does not exist.");
-            }
-
-            $jsonData = file_get_contents($jsonFilePath);
-            $bundleFiles = json_decode($jsonData, true);
-
-            if (isset($bundleFiles[$bundleName])) {
-                foreach ($bundleFiles[$bundleName] as $file) {
-                    if (file_exists($file)) {
-                        exec("rm -rf $file");
-                    }
-                }
-            } else {
-                throw new Exception("No files found for bundle $bundleName in the JSON file.");
-            }
+            exec("rm -rf $repoPath");
         }
 
         // Unzip the archived version to the current path
-        exec("unzip $repoPath .");
+        exec("unzip $rollbackPath -d $repoPath");
 
         return json_encode([
             'status' => 'success',
@@ -75,26 +60,32 @@ switch ($machine) {
     case 'feQA':
         $returnQueue = 'deployToFeQA';
         $target_vm = '172.29.87.169';
+        $user = 'alen';
         break;
     case 'beQA':
         $returnQueue = 'deployToBeQA';
         $target_vm = '172.29.87.41';
+        $user = 'ppetroski';
         break;
     case 'dmzQA':
         $returnQueue = 'deployToDmzQA';
         $target_vm = '172.29.63.70';
+        $user = 'al643';
         break;
     case 'feProd':
         $returnQueue = 'deployToFeProd';
         $target_vm = '172.29.87.169';
+        $user = 'alen';
         break;
     case 'beProd':
         $returnQueue = 'deployToBeProd';
         $target_vm = '172.29.87.41';
+        $user = 'ppetroski';
         break;
     case 'dmzProd':
         $returnQueue = 'deployToDmzProd';
         $target_vm = '172.29.87.70';
+        $user = 'al643';
         break;
     default:
         echo "Invalid machine\n";
@@ -102,11 +93,13 @@ switch ($machine) {
 }
 // Create the message
 $data = json_encode([
-
+    'type' => 'status_update',
     'bundle' => $bundleName,
     'status' => $status,
     'return_queue' => $returnQueue,
-    'target_vm' => $target_vm
+    'target_vm' => $target_vm,
+    'user' => $user
+
 ]);
 $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
 
@@ -114,11 +107,11 @@ $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
 $channel->basic_publish($msg, '', 'toDeploy');
 echo " [x] Sent '$bundleName' with status '$status'\n";
 
-if ($status === 'bad') {
+if ($status === 'fail') {
     // Listen for a message on the return queue
     $channel->queue_declare($returnQueue, false, true, false, false);
 
-    $callback = function ($msg) use ($bundleName, $channel, $machine) {
+    $callback = function ($msg) use ($bundleName, $channel, $machine, $user) {
         $data = json_decode($msg->body, true);
         $sendStatus = $data['status'];
         $bundleName = $data['bundle'];
@@ -130,7 +123,7 @@ if ($status === 'bad') {
             echo " [x] Rolling back to version $previousVersion\n";
 
             try {
-                rollbackFunction($bundleName, $previousVersion, $machine);
+                rollbackFunction($bundleName, $previousVersion, $machine, $user);
             } catch (Exception $e) {
                 echo " [x] Rollback failed: " . $e->getMessage() . "\n";
             }
