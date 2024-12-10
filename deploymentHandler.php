@@ -30,7 +30,6 @@ $callback = function ($msg) use ($channel) {
         echo "Pull request received from queue: $queueName .\n";
     } elseif ($type === 'status_update') {
         $response = updateStatus($data);
-        echo "Successfully updated status\n";
     } else {
         echo "Received unknown deployment command or missing required data fields\n";
         return;

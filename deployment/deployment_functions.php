@@ -215,7 +215,7 @@ function updateStatus($data)
     $user = $data['user'];
 
     try {
-        $query = "UPDATE deployments SET status = ? WHERE bundle_name = ? AND version_number = (SELECT MAX(version_number) FROM deployments WHERE bundle_name = ?)";
+        $query = "UPDATE deployments d1 JOIN (SELECT MAX(version_number) AS max_version FROM deployments WHERE bundle_name = ?) d2 ON d1.version_number = d2.max_version SET d1.status = ? WHERE d1.bundle_name = ?";
         $stmt = $db->prepare($query);
         $stmt->bind_param('sss', $status, $bundleName, $bundleName);
         $stmt->execute();
