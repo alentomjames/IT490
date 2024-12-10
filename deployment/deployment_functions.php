@@ -11,14 +11,14 @@ function getVersion($bundleName)
     global $db;
 
     try {
-        $query = "SELECT version_number FROM deployments WHERE bundle_name = ? ORDER BY created_at DESC LIMIT 1";
+        $query = "SELECT MAX(version_number) AS version_number FROM deployments WHERE bundle_name = ?";
         $stmt = $db->prepare($query);
         $stmt->bind_param('s', $bundleName);
         $stmt->execute();
 
         $versionNumber = null;
         $stmt->bind_result($versionNumber);
-	echo $versionNumber;
+        echo $versionNumber;
         $fetchResult = $stmt->fetch();
 
         $currentDir = "/var/log/current";
@@ -66,7 +66,7 @@ function getVersion($bundleName)
             $insertStmt->execute();
 
             echo $initialVersion;
-	    echo $nextVersion;
+            echo $nextVersion;
             return $initialVersion;
         }
     } catch (Exception $e) {
