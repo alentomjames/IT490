@@ -84,7 +84,7 @@ foreach (glob($bundlePath . $bundleName . '_*') as $file) {
 $channel->queue_declare($responseQueue, false, true, false, false);
 
 // Callback function to wait for the 'sent' message from deployment
-$callback = function ($msg) use ($bundleName, $channel) {
+$callback = function ($msg) use ($bundleName, $channel, $bundlePath) {
     $data = json_decode($msg->body, true);
     
 
