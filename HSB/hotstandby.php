@@ -22,9 +22,4 @@ if ($return_var == 0) {
         echo "Failed to restart Apache.\n";
         exit(1);
 };
-
-
-
-
-
 ?>
