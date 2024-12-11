@@ -65,5 +65,14 @@
         "/logBundle/logListener.php",
         "/logBundle/dbLogSender.php",
         "/logBundle/rabbitLogSender.php"
+    ],
+    "deploymentClient": [
+        "/deploymentClient/bundleRatingandRollback.php",
+        "/deploymentClient/deployVersion.php",
+        "/deploymentClient/pullVersion.php"
+    ],
+    "deploymentServer": [
+        "/deploymentServer/deployment_functions.php",
+        "/deploymentServer/deploymentHandler.php"
     ]
 }
