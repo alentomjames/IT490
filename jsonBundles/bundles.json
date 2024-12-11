@@ -6,38 +6,64 @@
         "composer.json"
     ],
     "loginBundle": [
-        "login.php",
-        "logout.php",
-        "login_chk.php"
+        "/loginBundle/login.php",
+        "/loginBundle/logout.php",
+        "/loginBundle/login_chk.php",
+        "/loginBundle/sign_up.php",
+        "/loginBundle/sign_up_chk.php"
+
     ],
     "loginBundleDB": [
-        "/auth/login.php",
-        "/auth/register.php",
-        "/auth/constraints.php",
-        "/auth/session.php",
+        "/loginBundleDB/login.php",
+        "/loginBundleDB/register.php",
+        "/loginBundleDB/constraints.php",
+        "/loginBundleDB/session.php"
     ],
     "moviesDB":[
-        "/movies/likedMovies.php",
-        "/movies/rating.php",
-        "/movies/topTen.php",
-        "/movies/watchlist.php"
+        "/moviesDB/likedMovies.php",
+        "/moviesDB/rating.php",
+        "/moviesDB/topTen.php",
+        "/moviesDB/watchlist.php"
     ],
-    "signupBundle":[
-        "sign_up_chk.php",
-        "sign_up.php"
-    ],
-    "moviePage":[
-        "moviePage.php",
-        "loadMovieDetails.php",
-        "loadMovies.php",
-        "loadReccomendations.php"
+    "pagesBundle":[
+        "/pagesBundle/addToWatchlist.php",
+        "/pagesBundle/fetchLikedMovies.php",
+        "/pagesBundle/fetchRecommendations.php",
+        "/pagesBundle/fetchTopTen.php",
+        "/pagesBundle/fetchWatchlist.php",
+        "/pagesBundle/getMovieDetails.php",
+        "/pagesBundle/getRecommendations.php",
+        "/pagesBundle/index.php",
+        "/pagesBundle/loadMovieDetails.php",
+        "/pagesBundle/loadMovies.php",
+        "/pagesBundle/loadReccomendations.php",
+        "/pagesBundle/moviePage.php",
+        "/pagesBundle/MovieTrivia.php",
+        "/pagesBundle/recBasedonLikesPage.php",
+        "/pagesBundle/Reccomend.php",
+        "/pagesBundle/removeFromWatchlist.php",
+        "/pagesBundle/searchMovies.php",
+        "/pagesBundle/setRating.php",
+        "/pagesBundle/smoothie.png",
+        "/pagesBundle/topTenPage.php",
+        "/pagesBundle/watchlistPage.php"
     ],
     "dmzBundle":[
-        "api_handler.php",
-	"DMZ.sh"
+        "/dmzBundle/api_handler.php",
+	    "/dmzBundle/DMZ.sh"
     ],
     "backendBundle": [
-        "db_connection.php",
-        "db_config.env"
+        "/backendBundle/db_connection.php",
+        "/backendBundle/db_config.env"
+    ],
+    "jsonBundle": [
+        "/jsonBundle/bundles.json",
+        "/jsonBundle/trivia.json"
+    ],
+    "logBundle": [
+        "/logBundle/logSender.php",
+        "/logBundle/logListener.php",
+        "/logBundle/dbLogSender.php",
+        "/logBundle/rabbitLogSender.php"
     ]
 }
