@@ -9,3 +9,4 @@ webserver/vendor
 schemas.sql
 vendor
 *.swp
+*.zip
