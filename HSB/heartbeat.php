@@ -13,7 +13,7 @@
             echo "PROD Server is still active.\n";
         } else {
             echo "PROD Server is down.\n";
-            exec('php /git/HSB/hotstandby.php');
+            exec('php ~/git/alen/IT490/HSB/hotstandby.php');
             break;
         }
 
