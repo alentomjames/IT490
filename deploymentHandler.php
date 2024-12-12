@@ -11,8 +11,6 @@ require_once 'deployment/deployment_functions.php';
 
 list($connection, $channel) = getRabbit();
 
-$channel->queue_declare('toDeploy', false, true, false, false);
-
 $callback = function ($msg) use ($channel) {
     $data = json_decode($msg->body, true);
     $type = $data['type'];
@@ -33,12 +31,21 @@ $callback = function ($msg) use ($channel) {
     } else {
         echo "Received unknown deployment command or missing required data fields\n";
         return;
-    };
+    }
 
     $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
-    $channel->queue_purge($queueName);
-    $channel->basic_publish($responseMsg, 'directExchange', $queueName);
+
+    if ($queueName) {
+        $channel->queue_purge($queueName);
+        $channel->basic_publish($responseMsg, 'directExchange', $queueName);
+    } elseif ($returnQueue) {
+        $channel->queue_purge($returnQueue);
+        $channel->basic_publish($responseMsg, 'directExchange', $returnQueue);
+    } else {
+        echo "No valid queue found for response publishing.\n";
+    }
 };
+
 
 $channel->basic_consume('toDeploy', '', false, true, false, false, $callback);
 
