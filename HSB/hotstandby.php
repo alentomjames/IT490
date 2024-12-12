@@ -15,7 +15,7 @@ if ($return_var == 0) {
     // Verify IP was added
     exec("ip addr show $networkInterface", $ipOutput, $ipReturnVar);
     if (strpos(implode("\n", $ipOutput), "172.29.244.200") !== false) {
-        $ipLine = trim($ipOutput[0]);  
+        $ipLine = trim($ipOutput[4]);  
         echo "Verified: VIP $ipLine was successfully added\n";
     } else {
         echo "Error: VIP was not added successfully\n";
