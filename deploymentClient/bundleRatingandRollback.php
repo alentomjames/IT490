@@ -19,14 +19,14 @@ function rollbackFunction($bundleName, $versionNumber, $machine, $user)
 {
     try {
         if (strpos($machine, 'fe') === 0) {
-            $repoPath = "var/www/it490";
-            $bundlePath = "var/www/it490/{$bundleName}";
+            $repoPath = "/var/www/it490";
+            $bundlePath = "/var/www/it490/{$bundleName}";
         } else {
-            $repoPath = "home/{$user}/git/IT490";
-            $bundlePath = "home/{$user}/git/IT490/{$bundleName}";
+            $repoPath = "/home/{$user}/git/IT490";
+            $bundlePath = "/home/{$user}/git/IT490/{$bundleName}";
         }
-        $badBundle = "var/log/current/{$bundleName}_" . ($versionNumber + 1);
-        $rollbackPath = "var/log/current/{$bundleName}_{$versionNumber}";
+        $badBundle = "/var/log/current/{$bundleName}_" . ($versionNumber + 1);
+        $rollbackPath = "/var/log/current/{$bundleName}_{$versionNumber}";
         exec("rm -rf $badBundle");
 
         // Remove current files
