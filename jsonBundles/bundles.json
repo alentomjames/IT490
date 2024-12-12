@@ -11,7 +11,6 @@
         "/loginBundle/login_chk.php",
         "/loginBundle/sign_up.php",
         "/loginBundle/sign_up_chk.php"
-
     ],
     "loginBundleDB": [
         "/loginBundleDB/login.php",
@@ -19,13 +18,13 @@
         "/loginBundleDB/constraints.php",
         "/loginBundleDB/session.php"
     ],
-    "moviesDB":[
+    "moviesDB": [
         "/moviesDB/likedMovies.php",
         "/moviesDB/rating.php",
         "/moviesDB/topTen.php",
         "/moviesDB/watchlist.php"
     ],
-    "pagesBundle":[
+    "pagesBundle": [
         "/pagesBundle/addToWatchlist.php",
         "/pagesBundle/fetchLikedMovies.php",
         "/pagesBundle/fetchRecommendations.php",
@@ -48,9 +47,9 @@
         "/pagesBundle/topTenPage.php",
         "/pagesBundle/watchlistPage.php"
     ],
-    "dmzBundle":[
+    "dmzBundle": [
         "/dmzBundle/api_handler.php",
-	    "/dmzBundle/DMZ.sh"
+        "/dmzBundle/DMZ.sh"
     ],
     "backendBundle": [
         "/backendBundle/db_connection.php",
@@ -68,6 +67,7 @@
     ],
     "deploymentClient": [
         "/deploymentClient/bundleRatingandRollback.php",
+        "/deploymentClient/bundleListener.php",
         "/deploymentClient/deployVersion.php",
         "/deploymentClient/pullVersion.php"
     ],
