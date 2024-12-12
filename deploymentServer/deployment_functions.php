@@ -191,13 +191,13 @@ function rollbackUpdate($bundleName, $previousVersion, $targetVMiP, $returnQueue
     exec($scpCommand, $output, $returnVar);
 
     if ($returnVar !== 0) {
+        echo "Failed to deploy previous version $previousVersion of $bundleName to $targetVMiP\n";
+
         return json_encode([
             'status' => 'fail',
             'bundle' => $bundleName,
             'previous_version' => $previousVersion
         ]);
-        echo "Failed to deploy previous version $previousVersion of $bundleName to $targetVMiP\n";
-        throw new Exception("SCP command failed: " . implode("\n", $output));
     } else {
         echo "Passed scp!\n";
         return json_encode([

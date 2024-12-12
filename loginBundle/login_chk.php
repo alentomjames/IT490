@@ -5,7 +5,19 @@ session_start();
 // Script to conenct to RabbitMQ
 require_once '../rabbitmq_connection.php';
 require_once '../vendor/autoload.php';
+$getenv = parse_ini_file('../.env');
 
+if ($getenv === false) {
+    error_log('Failed to parse .env file');
+    exit;
+}
+
+$cluster = isset($getenv['CLUSTER']) ? $getenv['CLUSTER'] : null;
+
+if ($cluster === null) {
+    error_log('CLUSTER not set in .env file');
+    exit;
+}
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -15,7 +27,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $type = 'login';
 
     // Get RabbitMQ connection from rabbitmq_connection.php
-    list($connection, $channel) = getRabbit();
+    if ($cluster == 'QA') {
+        list($connection, $channel) = getQARabbit();
+    } else if ($cluster == 'PROD') {
+        list($connection, $channel) = getProdRabbit();
+    } else {
+        list($connection, $channel) = getRabbit();
+    }
 
     // Declaring the channel its being sent on
     $channel->queue_declare('frontendForDB', false, true, false, false);
@@ -40,7 +58,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 function receiveRabbitMQResponse(){
-    list($connection, $channel) = getRabbit();
+    global $cluster;
+    if ($cluster == 'QA') {
+        list($connection, $channel) = getQARabbit();
+    } else if ($cluster == 'PROD') {
+        list($connection, $channel) = getProdRabbit();
+    } else {
+        list($connection, $channel) = getRabbit();
+    }
 
     // Declare the response channel
     $channel->queue_declare('databaseForFrontend', false, true, false, false);

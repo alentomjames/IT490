@@ -9,15 +9,29 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 $client = new \GuzzleHttp\Client();
+$getenv = parse_ini_file('../.env');
 
+if ($getenv === false) {
+    error_log('Failed to parse .env file');
+    exit;
+}
+
+$cluster = isset($getenv['CLUSTER']) ? $getenv['CLUSTER'] : null;
+
+if ($cluster === null) {
+    error_log('CLUSTER not set in .env file');
+    exit;
+}
 $triviaJson = file_get_contents('../jsonBundle/trivia.json');
 $triviaData = json_decode($triviaJson, true);
 
 function fetchMoviePoster($movieTitle)
 {
+    global $cluster;
+
     $type = 'search_movie';
-    sendRequest($type, $movieTitle, 'frontendForDMZ');
-    return recieveDMZ();
+    sendRequest($type, $movieTitle, 'frontendForDMZ', $cluster);
+    return recieveDMZ($cluster);
 }
 
 function getTriviaQuestions($triviaData, $genre)

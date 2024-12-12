@@ -9,7 +9,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 require_once 'deployment/deployment_functions.php';
 
-list($connection, $channel) = getRabbit();
+list($connection, $channel) = getDeployRabbit();
 
 $channel->queue_declare('toDeploy', false, true, false, false);
 

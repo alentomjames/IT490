@@ -6,10 +6,28 @@ require_once '../vendor/autoload.php';
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use GuzzleHttp\Exception\RequestException;
+$getenv = parse_ini_file('../.env');
 
+if ($getenv === false) {
+    error_log('Failed to parse .env file');
+    exit;
+}
+
+$cluster = isset($getenv['CLUSTER']) ? $getenv['CLUSTER'] : null;
+
+if ($cluster === null) {
+    error_log('CLUSTER not set in .env file');
+    exit;
+}
 // Get the RabbitMQ connection
 
-list($connection, $channel) = getRabbit();
+if ($cluster == 'QA') {
+    list($connection, $channel) = getQARabbit();
+} else if ($cluster == 'PROD') {
+    list($connection, $channel) = getProdRabbit();
+} else {
+    list($connection, $channel) = getRabbit();
+}
 echo "Connected to RabbitMQ\n";
 
 // Declare the queue to listen to

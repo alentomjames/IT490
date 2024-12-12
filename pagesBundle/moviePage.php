@@ -6,7 +6,19 @@ $loggedIn = isset($_SESSION['userID']);
 
 require_once '../rabbitmq_connection.php';
 require_once('../vendor/autoload.php');
+$getenv = parse_ini_file('../.env');
 
+if ($getenv === false) {
+    error_log('Failed to parse .env file');
+    exit;
+}
+
+$cluster = isset($getenv['CLUSTER']) ? $getenv['CLUSTER'] : null;
+
+if ($cluster === null) {
+    error_log('CLUSTER not set in .env file');
+    exit;
+}
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -16,11 +28,11 @@ $movie_id = isset($_GET['id']) ? $_GET['id'] : null;
 if ($movie_id) {
     $type = 'movie_details';
     //Sends request to rabbitMQ_connection.php to call API
-    sendRequest($type, $movie_id, 'frontendForDMZ');
+    sendRequest($type, $movie_id, 'frontendForDMZ', $cluster);
 
 
     //Sends request to rabbitMQ_connection.php to recieve API movie data
-    $movie = recieveDMZ();
+    $movie = recieveDMZ($cluster);
 
     // Movie data
     if ($movie) {
@@ -38,8 +50,8 @@ if ($movie_id) {
 
     // Adding reccomendations
     $type = 'reccomendations';
-    sendRequest($type, $movie_id, 'frontendForDMZ');
-    $recommendationsData = recieveDMZ();
+    sendRequest($type, $movie_id, 'frontendForDMZ', $cluster);
+    $recommendationsData = recieveDMZ($cluster);
 
     error_log("Recommendations response: " . print_r($recommendationsData, true));
 
@@ -82,14 +94,16 @@ if ($movie_id) {
                 <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
                 <li><button onclick="location.href='topTenPage.php'">Top Movies</button></li>
                 <!-- If they are logged in then display a "Welcome [user]" text at the top where the buttons would usually be and a logout button --->
-                <p class="nav-title">Welcome, <?php echo $_SESSION['name']; ?>!</p>
-                <!-- Logout button that calls logout.php to delete the userID from session and redirects them to the login page --->
-                <li><button onclick="location.href='../loginBundle/logout.php'">Logout</button></li>
+            <p class="nav-title">Welcome,
+                <?php echo $_SESSION['name']; ?>!
+            </p>
+            <!-- Logout button that calls logout.php to delete the userID from session and redirects them to the login page --->
+            <li><button onclick="location.href='../loginBundle/logout.php'">Logout</button></li>
             <?php else: ?>
-                <!-- If they aren't logged in then display the buttons for login or sign up on the navbar --->
+            <!-- If they aren't logged in then display the buttons for login or sign up on the navbar --->
 
-                <li><button onclick="location.href='../loginBundle/login.php'">Login</button></li>
-                <li><button onclick="location.href='../loginBundle/sign_up.php'">Sign Up</button></li>
+            <li><button onclick="location.href='../loginBundle/login.php'">Login</button></li>
+            <li><button onclick="location.href='../loginBundle/sign_up.php'">Sign Up</button></li>
             <?php endif; ?>
         </ul>
     </nav>
@@ -103,7 +117,8 @@ if ($movie_id) {
             <!-- Rating Selection Dropdown -->
             <div class="rating-container">
                 <label for="user-rating">Your Rating:</label>
-                <select id="user-rating" onchange="setMovieRating(<?php echo $movie_id; ?>, <?php echo $_SESSION['userID']; ?>, this.value)">
+                <select id="user-rating"
+                    onchange="setMovieRating(<?php echo $movie_id; ?>, <?php echo $_SESSION['userID']; ?>, this.value)">
                     <option value="">Rate</option>
                     <option value="1">1 Star</option>
                     <option value="2">2 Stars</option>
@@ -137,7 +152,8 @@ if ($movie_id) {
                 <?php foreach ($recommendations as $recMovie): ?>
                     <div class="carousel-item">
                         <a href="moviePage.php?id=<?php echo $recMovie['id']; ?>">
-                            <img src="https://image.tmdb.org/t/p/w200<?php echo $recMovie['poster_path']; ?>" alt="<?php echo $recMovie['title']; ?> Poster">
+                            <img src="https://image.tmdb.org/t/p/w200<?php echo $recMovie['poster_path']; ?>"
+                                alt="<?php echo $recMovie['title']; ?> Poster">
                         </a>
                         <p><?php echo $recMovie['title']; ?></p>
                     </div>

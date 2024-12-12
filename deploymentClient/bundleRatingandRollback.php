@@ -1,7 +1,7 @@
 <?php
 
-require_once '../webserver/vendor/autoload.php';
-require_once '../webserver/rabbitmq_connection.php'; // how I connect to RabbitMQ
+require_once '../vendor/autoload.php';
+require_once '../rabbitmq_connection.php'; // how I connect to RabbitMQ
 
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -18,23 +18,23 @@ $machine = $argv[3];
 function rollbackFunction($bundleName, $versionNumber, $machine, $user)
 {
     try {
-        // if (strpos($machine, 'fe') === 0) {
-        //     $repoPath = "var/www/it490";
-        // } else {
-        //     $repoPath = "home/{$user}/git/IT490";
-        // }
-        $repoPath = "var/log/current/{$bundleName}";
+        if (strpos($machine, 'fe') === 0) {
+            $repoPath = "var/www/it490";
+            $bundlePath = "var/www/it490/{$bundleName}";
+        } else {
+            $repoPath = "home/{$user}/git/IT490/{$bundleName}";
+            $bundlePath = "home/{$user}/git/IT490/{$bundleName}";
+        }
         $badBundle = "var/log/current/{$bundleName}_" . ($versionNumber + 1);
         $rollbackPath = "var/log/current/{$bundleName}_{$versionNumber}.zip";
-        if (!file_exists($repoPath)) {
-            throw new Exception("Current path does not exist");
-        }
+        exec("rm -rf $badBundle");
 
         // Remove current files
         if (file_exists($repoPath)) {
-            exec("rm -rf $repoPath");
+            exec("rm -rf $bundlePath");
+        } else {
+            echo "Repo path does not exist\n";
         }
-
         // Unzip the archived version to the current path
         exec("unzip $rollbackPath -d $repoPath");
 

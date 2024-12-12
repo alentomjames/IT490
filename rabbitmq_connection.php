@@ -47,14 +47,21 @@ function closeRabbit($connection, $channel)
     }
 }
 
-function sendRequest($type, $parameter, $queue)
+function sendRequest($type, $parameter, $queue, $cluster)
 {
-    list($connection, $channel) = getRabbit();
+    if ($cluster == 'QA') {
+        list($connection, $channel) = getQARabbit();
+    } else if ($cluster == 'PROD') {
+        list($connection, $channel) = getProdRabbit();
+    } else {
+        list($connection, $channel) = getRabbit();
+    }
+
     // Declaring the channel its being sent on
     $channel->queue_declare('frontendForDMZ', false, true, false, false);
     $channel->queue_declare('frontendForDB', false, true, false, false);
     $data = json_encode([
-        'type'     => $type,
+        'type' => $type,
         'parameter' => $parameter
     ]);
 
@@ -63,9 +70,15 @@ function sendRequest($type, $parameter, $queue)
     closeRabbit($connection, $channel);
 }
 
-function recieveDMZ()
+function recieveDMZ($cluster)
 {
-    list($connection, $channel) = getRabbit();
+    if ($cluster == 'QA') {
+        list($connection, $channel) = getQARabbit();
+    } else if ($cluster == 'PROD') {
+        list($connection, $channel) = getProdRabbit();
+    } else {
+        list($connection, $channel) = getRabbit();
+    }
     $data = null;
     // Declare the response channel
     $channel->queue_declare('dmzForFrontend', false, true, false, false);
@@ -97,13 +110,19 @@ function recieveDMZ()
 
     return $data;
 }
-function recieveDB()
+function recieveDB($cluster)
 {
 
     if (ob_get_length()) {
         ob_clean();
     }
-    list($connection, $channel) = getRabbit();
+    if ($cluster == 'QA') {
+        list($connection, $channel) = getQARabbit();
+    } else if ($cluster == 'PROD') {
+        list($connection, $channel) = getProdRabbit();
+    } else {
+        list($connection, $channel) = getRabbit();
+    }
     $data = null;
     // Declare the response channel
     $channel->queue_declare('databaseForFrontend', false, true, false, false);

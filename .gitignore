@@ -10,3 +10,4 @@ schemas.sql
 vendor
 *.swp
 *.zip
+.env

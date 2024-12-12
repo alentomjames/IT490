@@ -5,15 +5,28 @@ $loggedIn = isset($_SESSION['userID']);
 
 require_once('../vendor/autoload.php');
 require_once '../rabbitmq_connection.php';
+$getenv = parse_ini_file('../.env');
 
+if ($getenv === false) {
+    error_log('Failed to parse .env file');
+    exit;
+}
+
+$cluster = isset($getenv['CLUSTER']) ? $getenv['CLUSTER'] : null;
+
+if ($cluster === null) {
+    error_log('CLUSTER not set in .env file');
+    exit;
+}
 $client = new \GuzzleHttp\Client();
 
 $trending = fetchTrending();
 function fetchTrending()
 {
+    global $cluster;
     $type = 'trending_movies';
-    sendRequest($type, 'day', 'frontendForDMZ');
-    return recieveDMZ();
+    sendRequest($type, 'day', 'frontendForDMZ', $cluster);
+    return recieveDMZ($cluster);
 }
 ?>
 

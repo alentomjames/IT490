@@ -13,10 +13,27 @@ require_once '../moviesDB/watchlist.php';
 require_once '../moviesDB/rating.php';
 require_once '../moviesDB/topTen.php';
 require_once '../moviesDB/likedMovies.php';
+$getenv = parse_ini_file('../.env');
 
+if ($getenv === false) {
+    error_log('Failed to parse .env file');
+    exit;
+}
+
+$cluster = isset($getenv['CLUSTER']) ? $getenv['CLUSTER'] : null;
+
+if ($cluster === null) {
+    error_log('CLUSTER not set in .env file');
+    exit;
+}
 // get the rabbitmq connection
-list($connection, $channel) = getRabbit();
-
+if ($cluster == 'QA') {
+    list($connection, $channel) = getQARabbit();
+} else if ($cluster == 'PROD') {
+    list($connection, $channel) = getProdRabbit();
+} else {
+    list($connection, $channel) = getRabbit();
+}
 // queue where i'll consume login/register requests
 $channel->queue_declare('frontendForDB', false, true, false, false);
 

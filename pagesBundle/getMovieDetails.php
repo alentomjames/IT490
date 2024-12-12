@@ -1,7 +1,19 @@
 <?php
 require_once '../vendor/autoload.php';
 require '../rabbitmq_connection.php';
+$getenv = parse_ini_file('../.env');
 
+if ($getenv === false) {
+    error_log('Failed to parse .env file');
+    exit;
+}
+
+$cluster = isset($getenv['CLUSTER']) ? $getenv['CLUSTER'] : null;
+
+if ($cluster === null) {
+    error_log('CLUSTER not set in .env file');
+    exit;
+}
 // Setting page parameter
 $movieId = isset($_GET['movieId']) ? (int)$_GET['movieId'] : 1;
 
@@ -9,9 +21,9 @@ $movieId = isset($_GET['movieId']) ? (int)$_GET['movieId'] : 1;
 $type = 'movie_details';
 
 // Sending request
-sendRequest($type, $movieId, 'frontendForDMZ');
+sendRequest($type, $movieId, 'frontendForDMZ', $cluster);
 
-$moviesData = recieveDMZ();
+$moviesData = recieveDMZ($cluster);
 
 if ($moviesData){
     header('Content-Type: application/json');
