@@ -22,11 +22,11 @@ function rollbackFunction($bundleName, $versionNumber, $machine, $user)
             $repoPath = "var/www/it490";
             $bundlePath = "var/www/it490/{$bundleName}";
         } else {
-            $repoPath = "home/{$user}/git/IT490/{$bundleName}";
+            $repoPath = "home/{$user}/git/IT490";
             $bundlePath = "home/{$user}/git/IT490/{$bundleName}";
         }
         $badBundle = "var/log/current/{$bundleName}_" . ($versionNumber + 1);
-        $rollbackPath = "var/log/current/{$bundleName}_{$versionNumber}.zip";
+        $rollbackPath = "var/log/current/{$bundleName}_{$versionNumber}";
         exec("rm -rf $badBundle");
 
         // Remove current files
@@ -36,7 +36,7 @@ function rollbackFunction($bundleName, $versionNumber, $machine, $user)
             echo "Repo path does not exist\n";
         }
         // Unzip the archived version to the current path
-        exec("unzip $rollbackPath -d $repoPath");
+        exec(command: "unzip $rollbackPath -d $repoPath");
 
         return json_encode([
             'status' => 'success',
