@@ -2,7 +2,8 @@
 session_start();
 require_once '../rabbitmq_connection.php';
 require_once '../vendor/autoload.php';
-$getenv = parse_ini_file('../.env');
+$envFilePath = __DIR__ . '/../.env';
+$getenv = parse_ini_file($envFilePath);
 
 if ($getenv === false) {
     error_log('Failed to parse .env file');
@@ -33,9 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $channel->queue_declare('frontendForDB', false, true, false, false);
 
     $data = json_encode([
-        'type'     => $type,
+        'type' => $type,
         'movie_id' => $movieId,
-        'user_id'  => $userId
+        'user_id' => $userId
     ]);
 
     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);

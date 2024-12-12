@@ -4,7 +4,8 @@ session_start();
 header('Content-Type: application/json');
 require_once '../vendor/autoload.php';
 require_once '../rabbitmq_connection.php';
-$getenv = parse_ini_file('../.env');
+$envFilePath = __DIR__ . '/../.env';
+$getenv = parse_ini_file($envFilePath);
 
 if ($getenv === false) {
     error_log('Failed to parse .env file');

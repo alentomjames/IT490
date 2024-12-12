@@ -2,11 +2,12 @@
 require_once '../vendor/autoload.php';
 require '../rabbitmq_connection.php';
 
-$movieid= isset($_GET['movieid']) ? (int)$_GET['movieid'] : 1;
+$movieid = isset($_GET['movieid']) ? (int) $_GET['movieid'] : 1;
 
 // Setting type thats being sent to the DMZ
 $type = 'recommendations';
-$getenv = parse_ini_file('../.env');
+$envFilePath = __DIR__ . '/../.env';
+$getenv = parse_ini_file($envFilePath);
 
 if ($getenv === false) {
     error_log('Failed to parse .env file');

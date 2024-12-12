@@ -9,7 +9,8 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 $client = new \GuzzleHttp\Client();
-$getenv = parse_ini_file('../.env');
+$envFilePath = __DIR__ . '/../.env';
+$getenv = parse_ini_file($envFilePath);
 
 if ($getenv === false) {
     error_log('Failed to parse .env file');
@@ -67,7 +68,7 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
 </head>
 
 <body>
-<nav class="navbar">
+    <nav class="navbar">
         <a href="index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
@@ -81,14 +82,16 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
                 <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
                 <li><button onclick="location.href='topTenPage.php'">Top Movies</button></li>
                 <!-- If they are logged in then display a "Welcome [user]" text at the top where the buttons would usually be and a logout button --->
-                <p class="nav-title">Welcome, <?php echo $_SESSION['name']; ?>!</p>
-                <!-- Logout button that calls logout.php to delete the userID from session and redirects them to the login page --->
-                <li><button onclick="location.href='../loginBundle/logout.php'">Logout</button></li>
+            <p class="nav-title">Welcome,
+                <?php echo $_SESSION['name']; ?>!
+            </p>
+            <!-- Logout button that calls logout.php to delete the userID from session and redirects them to the login page --->
+            <li><button onclick="location.href='../loginBundle/logout.php'">Logout</button></li>
             <?php else: ?>
-                <!-- If they aren't logged in then display the buttons for login or sign up on the navbar --->
+            <!-- If they aren't logged in then display the buttons for login or sign up on the navbar --->
 
-                <li><button onclick="location.href='../loginBundle/login.php'">Login</button></li>
-                <li><button onclick="location.href='../loginBundle/sign_up.php'">Sign Up</button></li>
+            <li><button onclick="location.href='../loginBundle/login.php'">Login</button></li>
+            <li><button onclick="location.href='../loginBundle/sign_up.php'">Sign Up</button></li>
             <?php endif; ?>
         </ul>
     </nav>
@@ -124,29 +127,33 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
 
     <div id="trivia-container" class="trivia-container">
         <?php foreach ($selectedTrivia as $question): ?>
-            <?php
-            $movieDetails = fetchMoviePoster($question['movie']);
-            $posterUrl = isset($movieDetails['results'][0]['poster_path']) ? 'https://image.tmdb.org/t/p/w200' . $movieDetails['results'][0]['poster_path'] : '';
-            ?>
-            <div class="trivia-question">
-                <img src="<?php echo $posterUrl; ?>" alt="<?php echo $question['movie']; ?> Poster">
-                <p><?php echo $question['question']; ?></p>
-                <ul>
-                    <?php foreach ($question['options'] as $option): ?>
-                        <li <?php if ($option === $question['correctAnswer']) echo 'data-correct-answer="true"'; ?> onclick="selectAnswer(this)">
-                            <?php echo htmlspecialchars($option, ENT_QUOTES); ?>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
+        <?php
+        $movieDetails = fetchMoviePoster($question['movie']);
+        $posterUrl = isset($movieDetails['results'][0]['poster_path']) ? 'https://image.tmdb.org/t/p/w200' . $movieDetails['results'][0]['poster_path'] : '';
+        ?>
+        <div class="trivia-question">
+            <img src="<?php echo $posterUrl; ?>" alt="<?php echo $question['movie']; ?> Poster">
+            <p>
+                <?php echo $question['question']; ?>
+            </p>
+            <ul>
+                <?php foreach ($question['options'] as $option): ?>
+                <li <?php if ($option === $question['correctAnswer'])
+                    echo 'data-correct-answer="true"'; ?>
+                    onclick="selectAnswer(this)">
+                    <?php echo htmlspecialchars($option, ENT_QUOTES); ?>
+                </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
         <?php endforeach; ?>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const options = document.querySelectorAll('.trivia-question li');
             options.forEach(option => {
-                option.addEventListener('click', function() {
+                option.addEventListener('click', function () {
                     selectAnswer(this);
                 });
             });

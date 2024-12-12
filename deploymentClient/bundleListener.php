@@ -1,6 +1,7 @@
 <?php
 
-$getenv = parse_ini_file('../.env');
+$envFilePath = __DIR__ . '/../.env';
+$getenv = parse_ini_file($envFilePath);
 
 if ($getenv === false) {
     error_log('Failed to parse .env file');
@@ -117,7 +118,8 @@ while (true) {
 }
 
 // Helper function to build ini string to add to the config file
-function build_ini_string($assoc_arr) {
+function build_ini_string($assoc_arr)
+{
     $content = '';
     foreach ($assoc_arr as $sectionName => $sectionData) {
         $content .= "[$sectionName]\n";
@@ -136,7 +138,8 @@ function build_ini_string($assoc_arr) {
 }
 
 // Helper function to see if a file should be skipped
-function should_skip_file($filename) {
+function should_skip_file($filename)
+{
     if ($filename[0] === '.') {
         return true;
     }

@@ -6,7 +6,8 @@ require_once '../vendor/autoload.php';
 require_once '../rabbitmq_connection.php';
 
 use PhpAmqpLib\Message\AMQPMessage;
-$getenv = parse_ini_file('../.env');
+$envFilePath = __DIR__ . '/../.env';
+$getenv = parse_ini_file($envFilePath);
 
 if ($getenv === false) {
     error_log('Failed to parse .env file');

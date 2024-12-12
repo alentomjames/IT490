@@ -5,7 +5,8 @@ session_start();
 // Script to conenct to RabbitMQ
 require_once '../rabbitmq_connection.php';
 require_once __DIR__ . '../vendor/autoload.php';
-$getenv = parse_ini_file('../.env');
+$envFilePath = __DIR__ . '/../.env';
+$getenv = parse_ini_file($envFilePath);
 
 if ($getenv === false) {
     error_log('Failed to parse .env file');
@@ -40,8 +41,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $channel->queue_declare('frontendForDB', false, true, false, false);
 
     $data = json_encode([
-        'type'     => $type,
-        'name'     => $name,
+        'type' => $type,
+        'name' => $name,
         'username' => $username,
         'password' => $password
     ]);
@@ -58,7 +59,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     receiveRabbitMQResponse();
 }
 
-function receiveRabbitMQResponse(){
+function receiveRabbitMQResponse()
+{
     global $cluster;
     if ($cluster == 'QA') {
         list($connection, $channel) = getQARabbit();
@@ -71,11 +73,11 @@ function receiveRabbitMQResponse(){
     $channel->queue_declare('databaseForFrontend', false, true, false, false);
 
     // Function waiting for the response from RabbitMQ
-    $callback = function($msg) {
+    $callback = function ($msg) {
         $response = json_decode($msg->body, true);
 
         // Checks the status variable in the message to see if it's a success or failure
-        if ($response['type'] === 'success'){
+        if ($response['type'] === 'success') {
             // Retrieves the userID from the $msg and stores it in the sessionID to login user
             $_SESSION['userID'] = $response['userID'];
             $_SESSION['name'] = $response['name'];
@@ -92,13 +94,12 @@ function receiveRabbitMQResponse(){
     // https://www.rabbitmq.com/tutorials/tutorial-six-php
     $channel->basic_consume('databaseForFrontend', '', false, true, false, false, $callback);
 
-      // Wait for the response
-      while ($channel->is_consuming()) {
+    // Wait for the response
+    while ($channel->is_consuming()) {
         $channel->wait();
     }
-        // Close the channel and connection
-        closeRabbit($connection, $channel);
+    // Close the channel and connection
+    closeRabbit($connection, $channel);
 
 }
 ?>
-

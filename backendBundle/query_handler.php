@@ -13,7 +13,8 @@ require_once '../moviesDB/watchlist.php';
 require_once '../moviesDB/rating.php';
 require_once '../moviesDB/topTen.php';
 require_once '../moviesDB/likedMovies.php';
-$getenv = parse_ini_file('../.env');
+$envFilePath = __DIR__ . '/../.env';
+$getenv = parse_ini_file($envFilePath);
 
 if ($getenv === false) {
     error_log('Failed to parse .env file');
@@ -77,7 +78,7 @@ $callback = function ($msg) use ($channel) {
         echo "Get watchlist request received for user ID: $userId\n";
     } elseif ($type === "set_rating") {
         $movieId = (int) $data['movie_id'];
-        $userId = (int)$data['user_id'];
+        $userId = (int) $data['user_id'];
         $rating = (int) $data['rating'];
         $response = rateMovie($movieId, $userId, $rating);
         echo "Set rating request received for movie ID: $movieId, user ID: $userId, rating: $rating\n";

@@ -5,7 +5,8 @@ session_start();
 // Script to conenct to RabbitMQ
 require_once '../rabbitmq_connection.php';
 require_once '../vendor/autoload.php';
-$getenv = parse_ini_file('../.env');
+$envFilePath = __DIR__ . '/../.env';
+$getenv = parse_ini_file($envFilePath);
 
 if ($getenv === false) {
     error_log('Failed to parse .env file');
@@ -39,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $channel->queue_declare('frontendForDB', false, true, false, false);
 
     $data = json_encode([
-        'type'     => $type,
+        'type' => $type,
         'username' => $username,
         'password' => $password
     ]);
@@ -57,7 +58,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     receiveRabbitMQResponse();
 }
 
-function receiveRabbitMQResponse(){
+function receiveRabbitMQResponse()
+{
     global $cluster;
     if ($cluster == 'QA') {
         list($connection, $channel) = getQARabbit();
@@ -73,10 +75,10 @@ function receiveRabbitMQResponse(){
     $is_consuming = true;
 
     // Function waiting for the response from RabbitMQ
-    $callback = function($msg) {
+    $callback = function ($msg) {
         $response = json_decode($msg->body, true);
         // Checks the status variable in the message to see if it's a success or failure
-        if ($response['type'] === 'success'){
+        if ($response['type'] === 'success') {
             // Retrieves the userID from the $msg and stores it in the sessionID to login user
             $_SESSION['name'] = $response['name'];
             $_SESSION['userID'] = $response['userID'];
@@ -95,19 +97,20 @@ function receiveRabbitMQResponse(){
     debug_to_console("Waiting for response");
 
 
-      // Wait for the response
-      while ($is_consuming && $channel->is_consuming()) {
+    // Wait for the response
+    while ($is_consuming && $channel->is_consuming()) {
         $channel->wait();
 
     }
     debug_to_console("Response Recieved");
 
-        // Close the channel and connection
-        closeRabbit($connection, $channel);
+    // Close the channel and connection
+    closeRabbit($connection, $channel);
 
 }
 
-function debug_to_console($data) {
+function debug_to_console($data)
+{
     $output = $data;
     if (is_array($output))
         $output = implode(',', $output);

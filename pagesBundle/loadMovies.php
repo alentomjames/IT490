@@ -3,11 +3,12 @@ require_once '../vendor/autoload.php';
 require '../rabbitmq_connection.php';
 
 // Setting page parameter
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
 // Setting type thats being sent to the DMZ
 $type = 'discover_movies';
-$getenv = parse_ini_file('../.env');
+$envFilePath = __DIR__ . '/../.env';
+$getenv = parse_ini_file($envFilePath);
 
 if ($getenv === false) {
     error_log('Failed to parse .env file');
@@ -25,7 +26,7 @@ sendRequest($type, $page, 'frontendForDMZ', $cluster);
 
 $moviesData = recieveDMZ($cluster);
 
-if ($moviesData){
+if ($moviesData) {
     header('Content-Type: application/json');
     echo json_encode($moviesData);
 } else {

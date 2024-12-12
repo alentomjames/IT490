@@ -6,7 +6,8 @@ require_once '../vendor/autoload.php';
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use GuzzleHttp\Exception\RequestException;
-$getenv = parse_ini_file('../.env');
+$envFilePath = __DIR__ . '/../.env';
+$getenv = parse_ini_file($envFilePath);
 
 if ($getenv === false) {
     error_log('Failed to parse .env file');
@@ -95,7 +96,8 @@ while ($channel->is_consuming()) {
 closeRabbit($connection, $channel);
 echo "RabbitMQ connection closed\n";
 
-function fetchDetails($type, $parameter, $url) {
+function fetchDetails($type, $parameter, $url)
+{
     echo "Starting fetchDetails for $type with parameter $parameter\n";
 
     try {

@@ -5,7 +5,8 @@ $loggedIn = isset($_SESSION['userID']);
 
 require_once('../vendor/autoload.php');
 require_once '../rabbitmq_connection.php';
-$getenv = parse_ini_file('../.env');
+$envFilePath = __DIR__ . '/../.env';
+$getenv = parse_ini_file($envFilePath);
 
 if ($getenv === false) {
     error_log('Failed to parse .env file');
@@ -51,36 +52,43 @@ function fetchTrending()
                         <img src="smoothie.png" alt="Movie Smoothie" class="smoothie-icon">
                     </button>
                 </li>
-               <li><button onclick="location.href='recBasedonLikesPage.php'">Recommended Movies</button></li>
+                <li><button onclick="location.href='recBasedonLikesPage.php'">Recommended Movies</button></li>
                 <li><button onclick="location.href='MovieTrivia.php'">Movie Trivia</button></li>
                 <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
                 <li><button onclick="location.href='topTenPage.php'">Top Movies</button></li>
                 <!-- If they are logged in then display a "Welcome [user]" text at the top where the buttons would usually be and a logout button --->
-                <p class="nav-title">Welcome, <?php echo $_SESSION['name']; ?>!</p>
-                <!-- Logout button that calls logout.php to delete the userID from session and redirects them to the login page --->
-                <li><button onclick="location.href='../loginBundle/logout.php'">Logout</button></li>
+            <p class="nav-title">Welcome,
+                <?php echo $_SESSION['name']; ?>!
+            </p>
+            <!-- Logout button that calls logout.php to delete the userID from session and redirects them to the login page --->
+            <li><button onclick="location.href='../loginBundle/logout.php'">Logout</button></li>
             <?php else: ?>
-                <!-- If they aren't logged in then display the buttons for login or sign up on the navbar --->
+            <!-- If they aren't logged in then display the buttons for login or sign up on the navbar --->
 
-                <li><button onclick="location.href='../loginBundle/login.php'">Login</button></li>
-                <li><button onclick="location.href='../loginBundle/sign_up.php'">Sign Up</button></li>
+            <li><button onclick="location.href='../loginBundle/login.php'">Login</button></li>
+            <li><button onclick="location.href='../loginBundle/sign_up.php'">Sign Up</button></li>
             <?php endif; ?>
         </ul>
     </nav>
 
     <div class="welcome-message">
-        <h1>Hello, <?php echo $_SESSION['name']; ?></h1>
+        <h1>Hello,
+            <?php echo $_SESSION['name']; ?>
+        </h1>
         <p>Welcome to BreadWinners. Here are the top 10 trending movies:</p>
     </div>
 
     <div class="trending-movies">
         <?php foreach (array_slice($trending['results'], 0, 10) as $movie): ?>
-            <div class="movie-item">
-                <a href="moviePage.php?id=<?php echo $movie['id']; ?>">
-                    <img src="https://image.tmdb.org/t/p/w200<?php echo $movie['poster_path']; ?>" alt="<?php echo $movie['title']; ?> Poster">
-                    <p><?php echo $movie['title']; ?></p>
-                </a>
-            </div>
+        <div class="movie-item">
+            <a href="moviePage.php?id=<?php echo $movie['id']; ?>">
+                <img src="https://image.tmdb.org/t/p/w200<?php echo $movie['poster_path']; ?>"
+                    alt="<?php echo $movie['title']; ?> Poster">
+                <p>
+                    <?php echo $movie['title']; ?>
+                </p>
+            </a>
+        </div>
         <?php endforeach; ?>
     </div>
 

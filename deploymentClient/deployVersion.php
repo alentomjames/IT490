@@ -10,7 +10,8 @@ if ($argc < 3) {
     echo "Please type it in the following format: php deployVersion.php [bundle] [machine]\n";
     exit(1);
 }
-$getenv = parse_ini_file('../.env');
+$envFilePath = __DIR__ . '/../.env';
+$getenv = parse_ini_file($envFilePath);
 
 if ($getenv === false) {
     error_log('Failed to parse .env file');
