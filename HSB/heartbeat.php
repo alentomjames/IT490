@@ -9,11 +9,14 @@
         $response = curl_exec($ch);
         curl_close($ch);
 
-        if ($response == "OK") {
+        if ($response == "OK\n") {
             echo "PROD Server is still active.\n";
         } else {
             echo "PROD Server is down.\n";
-            exec('php ~/git/alen/IT490/HSB/hotstandby.php');
+            exec('php ~/git/IT490/HSB/hotstandby.php', $output, $return_var);
+            echo "Output: " . implode("\n", $output) . "\n";
+            echo "Return Value: $return_var\n";
+
             break;
         }
 

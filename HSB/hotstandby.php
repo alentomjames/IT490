@@ -1,6 +1,6 @@
 #!/usr/bin/php
 <?php
-$ip = '172.29.244.200/24';
+$ip = '172.29.244.200/16';
 $networkInterface = 'ztosimf46d';
 $switchIP = "sudo ip addr add $ip dev $networkInterface";
 $restartApache = "sudo systemctl restart apache2";
