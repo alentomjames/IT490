@@ -10,13 +10,12 @@ echo "Starting IP switch\n";
 
 // Switch IP to the PROD Server's IP
 exec($switchIP, $output, $return_var);
-echo "Switch IP Output: \n" . implode("\n", $output) . "\n";
 if ($return_var == 0) {
     echo "Switched to Hot Standby Server.\n";
     // Verify IP was added
     exec("ip addr show $networkInterface", $ipOutput, $ipReturnVar);
     if (strpos(implode("\n", $ipOutput), "172.29.244.200") !== false) {
-        echo "Verified: VIP was successfully added\n";
+        echo "Verified: VIP $ipOutput was successfully added\n";
     } else {
         echo "Error: VIP was not added successfully\n";
         exit(1);
@@ -39,7 +38,7 @@ if ($return_var == 0) {
     curl_close($ch);
     
     if ($response == "OK\n") {
-        echo "Verified: Successfully curled okay.php\n";
+        echo "Verified: Successfully curled okay.php and got the response $response\n";
     } else {
         echo "Error: Could not curl okay.php successfully\n";
         exit(1);
