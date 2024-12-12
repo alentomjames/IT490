@@ -1,8 +1,7 @@
 <?php
-require_once '../webserver/rabbitmq_connection.php'; // RabbitMQ connection
+require_once '../rabbitmq_connection.php'; // RabbitMQ connection
 
-require_once '../webserver/vendor/autoload.php';
-//require_once '/var/www/it490/vendor/autoload.php';
+require_once '../vendor/autoload.php';
 
 use PhpAmpqLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -11,13 +10,25 @@ if ($argc < 3) {
     echo "Please type it in the following format: php deployVersion.php [bundle] [machine]\n";
     exit(1);
 }
+$getenv = parse_ini_file('../.env');
 
+if ($getenv === false) {
+    error_log('Failed to parse .env file');
+    exit;
+}
+
+$user = isset($getenv['USER']) ? $getenv['USER'] : null;
+
+if ($user === null) {
+    error_log('USER not set in .env file');
+    exit;
+}
 $bundleName = $argv[1];
 $machineName = $argv[2];
 // Initializing the paths for deployment
 $currentPath = '/var/log/current';
 $archivePath = '/var/log/archive';
-$sourcePath = '/home/alen/git/IT490';
+$sourcePath = "/home/{$user}/git/IT490";
 
 // Path to the config.ini file
 $configIniPath = '/var/log/config.ini';
