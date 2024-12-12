@@ -16,7 +16,19 @@ function getRabbit()
 function getDeployRabbit()
 {
     // Connect to RABBITMQ HERE and add better error handling
-    $connection = new AMQPStreamConnection('172.29.82.171', 5672, 'dm692', 'password', 'it490');
+    $retries = 5;
+    while ($retries > 0) {
+        try {
+            $connection = new AMQPStreamConnection('172.29.82.171', 5672, 'dm692', 'password', 'it490');
+            break; // Exit loop if connection is successful
+        } catch (Exception $e) {
+            $retries--;
+            if ($retries == 0) {
+                throw new Exception("Failed to connect to RabbitMQ after multiple attempts: " . $e->getMessage());
+            }
+            sleep(2); // Wait for 2 seconds before retrying
+        }
+    }
     $channel = $connection->channel();
 
     return [$connection, $channel];
