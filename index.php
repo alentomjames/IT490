@@ -29,8 +29,8 @@ function fetchTrending()
 {
     global $cluster;
     $type = 'trending_movies';
-    sendRequest($type, 'day', 'frontendForDMZ', $cluster);
-    return recieveDMZ($cluster);
+    // sendRequest($type, 'day', 'frontendForDMZ', $cluster);
+    // return recieveDMZ($cluster);
 }
 ?>
 
