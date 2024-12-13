@@ -1,7 +1,8 @@
 #!/usr/bin/php
 <?php
+$envFilePath = __DIR__ . 'db_config.env';
 
-$getenv = parse_ini_file('db_config.env');
+$getenv = parse_ini_file($envFilePath);
 
 function getDbConnection()
 {
