@@ -1,10 +1,10 @@
 <?php
 session_start();
 $loggedIn = isset($_SESSION['userID']);
-if (!$loggedIn) {
-    header("Location: /loginBundle/login.php");
-    exit; 
-}
+// if (!$loggedIn) {
+//     header("Location: /loginBundle/login.php");
+//     exit; 
+// }
 
 require_once('vendor/autoload.php');
 require_once 'rabbitmq_connection.php';
