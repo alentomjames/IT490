@@ -197,7 +197,7 @@ function setMovieRating(movieId, userId, rating) {
 // Add this script to your script.js or inline within topTenPage.php
 
 function loadTopTenMovies() {
-    fetch('fetchTopTen.php', {
+    fetch('/pagesBundle/fetchTopTen.php', {
         method: 'GET',
     })
         .then(response => response.json())

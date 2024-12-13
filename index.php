@@ -6,9 +6,9 @@ if (!$loggedIn) {
     exit; 
 }
 
-require_once('../vendor/autoload.php');
-require_once '../rabbitmq_connection.php';
-$envFilePath = __DIR__ . '/../.env';
+require_once('/vendor/autoload.php');
+require_once '/rabbitmq_connection.php';
+$envFilePath = __DIR__ . '.env';
 $getenv = parse_ini_file($envFilePath);
 
 if ($getenv === false) {
@@ -41,8 +41,8 @@ function fetchTrending()
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BreadWinners</title>
-    <link rel="stylesheet" href="../styles.css">
-    <script src="../script.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
 
 <body>
@@ -51,25 +51,25 @@ function fetchTrending()
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
                 <li>
-                    <button onclick="location.href='Reccomend.php'" class="smoothie-button">
+                    <button onclick="location.href='/pagesBundle/Reccomend.php'" class="smoothie-button">
                         <img src="smoothie.png" alt="Movie Smoothie" class="smoothie-icon">
                     </button>
                 </li>
-                <li><button onclick="location.href='recBasedonLikesPage.php'">Recommended Movies</button></li>
-                <li><button onclick="location.href='MovieTrivia.php'">Movie Trivia</button></li>
-                <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
-                <li><button onclick="location.href='topTenPage.php'">Top Movies</button></li>
+                <li><button onclick="location.href='/pagesBundle/recBasedonLikesPage.php'">Recommended Movies</button></li>
+                <li><button onclick="location.href='/pagesBundle/MovieTrivia.php'">Movie Trivia</button></li>
+                <li><button onclick="location.href='/pagesBundle/watchlistPage.php'">Watch Later</button></li>
+                <li><button onclick="location.href='/pagesBundle/topTenPage.php'">Top Movies</button></li>
                 <!-- If they are logged in then display a "Welcome [user]" text at the top where the buttons would usually be and a logout button --->
             <p class="nav-title">Welcome,
                 <?php echo $_SESSION['name']; ?>!
             </p>
             <!-- Logout button that calls logout.php to delete the userID from session and redirects them to the login page --->
-            <li><button onclick="location.href='../loginBundle/logout.php'">Logout</button></li>
+            <li><button onclick="location.href='/loginBundle/logout.php'">Logout</button></li>
             <?php else: ?>
             <!-- If they aren't logged in then display the buttons for login or sign up on the navbar --->
 
-            <li><button onclick="location.href='../loginBundle/login.php'">Login</button></li>
-            <li><button onclick="location.href='../loginBundle/sign_up.php'">Sign Up</button></li>
+            <li><button onclick="location.href='/loginBundle/login.php'">Login</button></li>
+            <li><button onclick="location.href='/loginBundle/sign_up.php'">Sign Up</button></li>
             <?php endif; ?>
         </ul>
     </nav>
@@ -84,7 +84,7 @@ function fetchTrending()
     <div class="trending-movies">
         <?php foreach (array_slice($trending['results'], 0, 10) as $movie): ?>
         <div class="movie-item">
-            <a href="moviePage.php?id=<?php echo $movie['id']; ?>">
+            <a href="/pagesBundle/moviePage.php?id=<?php echo $movie['id']; ?>">
                 <img src="https://image.tmdb.org/t/p/w200<?php echo $movie['poster_path']; ?>"
                     alt="<?php echo $movie['title']; ?> Poster">
                 <p>
@@ -144,7 +144,7 @@ function fetchTrending()
         });
 
         function loadMovies(page) {
-            fetch(`loadMovies.php?page=${page}`)
+            fetch(`/pagesBundle/loadMovies.php?page=${page}`)
                 .then(response => response.json())
                 .then(data => {
                     totalPages = data.total_pages;
@@ -196,7 +196,7 @@ function fetchTrending()
 
 
         function searchMovies(query, genreFilter) {
-            fetch(`searchMovies.php?query=${encodeURIComponent(query)}`)
+            fetch(`/pagesBundle/searchMovies.php?query=${encodeURIComponent(query)}`)
                 .then(response => response.json())
                 .then(data => {
                     let filteredMovies = data.results;

@@ -4,7 +4,7 @@ ob_start();
 session_start();
 // Script to conenct to RabbitMQ
 require_once '../rabbitmq_connection.php';
-require_once __DIR__ . '../vendor/autoload.php';
+require_once '../vendor/autoload.php';
 $envFilePath = __DIR__ . '/../.env';
 $getenv = parse_ini_file($envFilePath);
 
