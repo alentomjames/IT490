@@ -79,12 +79,14 @@ function receiveRabbitMQResponse()
     $callback = function ($msg) {
         $response = json_decode($msg->body, true);
         echo 'Response variale: $response';
+        echo "<script>console.log('$response');</script>";
         // Checks the status variable in the message to see if it's a success or failure
         if ($response['type'] === 'success') {
             // Retrieves the userID from the $msg and stores it in the sessionID to login user
             $_SESSION['name'] = $response['name'];
             $_SESSION['userID'] = $response['userID'];
             echo "<script>console.log('Response Success');</script>";
+            $is_consuming = false;
             header(header: "Location: ../index.php");
             exit();
         } else {
