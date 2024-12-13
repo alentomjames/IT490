@@ -82,12 +82,12 @@ function receiveRabbitMQResponse()
             // Retrieves the userID from the $msg and stores it in the sessionID to login user
             $_SESSION['name'] = $response['name'];
             $_SESSION['userID'] = $response['userID'];
-            header(header: "Location: ../pagesBundle/index.php");
+            header(header: "Location: ../index.php");
             exit();
         } else {
             echo 'Login Failed';
             $is_consuming = false;
-            header("Location: ../pagesBundle/login.php");
+            header("Location: login.php");
             exit();
         }
     };
