@@ -76,7 +76,7 @@ function receiveRabbitMQResponse()
     $is_consuming = true;
 
     // Function waiting for the response from RabbitMQ
-    $callback = function ($msg) {
+    $callback = function ($msg) use (&is_consuming) {
         $response = json_decode($msg->body, true);
         echo 'Response variale: $response';
         // Checks the status variable in the message to see if it's a success or failure
