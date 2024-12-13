@@ -86,7 +86,7 @@ function receiveRabbitMQResponse()
             $_SESSION['userID'] = $response['userID'];
             echo "<script>console.log('Response Success');</script>";
             $is_consuming = false;
-            header(header: "Location: ../index.php");
+            header("Location: ../index.php");
             exit();
         } else {
             echo 'Login Failed';
