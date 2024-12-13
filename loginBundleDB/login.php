@@ -2,7 +2,7 @@
 
 require_once '../vendor/autoload.php';
 require_once '../backendBundle/db_connection.php'; // file has db connection
-require_once './rabbitmq_connection.php'; // how I connect to RabbitMQ
+require_once '../rabbitmq_connection.php'; // how I connect to RabbitMQ
 require_once 'session.php';
 require_once 'constraints.php';
 
