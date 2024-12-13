@@ -32,7 +32,6 @@
         "/pagesBundle/fetchWatchlist.php",
         "/pagesBundle/getMovieDetails.php",
         "/pagesBundle/getRecommendations.php",
-        "/pagesBundle/index.php",
         "/pagesBundle/loadMovieDetails.php",
         "/pagesBundle/loadMovies.php",
         "/pagesBundle/loadReccomendations.php",

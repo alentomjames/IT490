@@ -2,7 +2,7 @@
 session_start();
 $loggedIn = isset($_SESSION['userID']);
 if (!$loggedIn) {
-    header("Location: ../loginBundle/login.php");
+    header("Location: /loginBundle/login.php");
     exit; 
 }
 

@@ -23,7 +23,7 @@ $userName = $loggedIn ? $_SESSION['name'] : null;
 
 <body>
     <nav class="navbar">
-        <a href="index.php" class="nav-title">BreadWinners</a>
+        <a href="../index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
                 <li><button onclick="location.href='Reccomend.php'" class="smoothie-button">

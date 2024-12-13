@@ -21,7 +21,7 @@ require '../rabbitmq_connection.php';
 
 <body>
     <nav class="navbar">
-        <a href="index.php" class="nav-title">BreadWinners</a>
+        <a href="../index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
                 <li>

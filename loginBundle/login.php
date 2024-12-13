@@ -5,7 +5,7 @@ session_start();
 // Check if the user is logged in by checking if they have a user id stored in the session storage
 // If they are logged in then redirect them to the index.php page
 if (isset($_SESSION['userID'])) {
-    header("Location: ../pagesBundle/index.php");
+    header("Location: ../index.php");
 }
 
 // If they aren't logged in then use RabbitMQ to access the database and find a matching userID and password
