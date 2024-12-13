@@ -7,10 +7,10 @@ $getenv = parse_ini_file($envFilePath);
 function getDbConnection()
 {
 	global $getenv;
-	$host = $getenv['DB_HOST'];
-	$username = $getenv['DB_USER'];
-	$password = $getenv['DB_PASSWORD'];
-	$database = $getenv['DB_NAME'];
+	$host = '172.29.4.30';
+	$username = 'rabbitVM';
+	$password = 'tetra2345';
+	$database = 'it490db';
 
 	$mydb = new mysqli($host, $username, $password, $database);
 
