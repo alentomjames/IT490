@@ -49,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // meaning it won't be lost from the queue even if RabbitMQ restarts
     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
     $channel->basic_publish($msg, 'directExchange', 'frontendForDB');
+    echo "<script>console.log('Frontend Message Sent');</script>";
     debug_to_console("Frontend Message Sent");
 
 
@@ -82,6 +83,7 @@ function receiveRabbitMQResponse()
             // Retrieves the userID from the $msg and stores it in the sessionID to login user
             $_SESSION['name'] = $response['name'];
             $_SESSION['userID'] = $response['userID'];
+            echo "<script>console.log('Response Success');</script>";
             header(header: "Location: ../index.php");
             exit();
         } else {
