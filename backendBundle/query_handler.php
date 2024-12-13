@@ -52,6 +52,7 @@ $callback = function ($msg) use ($channel) {
         $password = $data['password'];
         $response = login($username, $password);
         echo "Login request received for username: $username\n";
+        echo "Response: $response\n";
     } elseif ($type === 'register') {
         // register request
         $username = $data['username'];
