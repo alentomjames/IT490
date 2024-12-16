@@ -67,6 +67,11 @@ $callback = function ($msg) use ($channel) {
             echo "Fetching reccomendations: $url\n";
             $response = fetchDetails($type, $parameter, $url);
             break;
+        case 'movie_gallery':
+            $url = "https://api.themoviedb.org/3/movie/{$parameter}/images?language=en-US";
+            echo "Fetching movie gallery: $url\n";
+            $response = fetchDetails($type, $parameter, $url);
+            break;
         default:
             echo "Unrecognized type: $type\n";
             return;
