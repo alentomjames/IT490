@@ -37,7 +37,7 @@ function rollbackFunction($bundleName, $versionNumber, $machine, $user)
             echo "Repo path does not exist\n";
         }
         // Unzip the archived version to the current path
-        exec("unzip $rollbackPath -d .");
+        exec("unzip $rollbackPath.'zip' -d .");
         echo "Unzipped rollback bundle '$bundleName' successfully.\n";
         $unzipPath = "/var/log/current/{$bundleName}_{$versionNumber}";
 
