@@ -161,7 +161,7 @@ $callback = function ($msg) use ($bundleName, $channel, $bundlePath, $machineNam
             echo "Expected zip file '$zipFilePath' not found.\n";
             exit(1);
         }
-        $unzipPath = $bundlePath . $bundleName;
+        $unzipPath = $bundlePath . $bundleName.'_*';
 
         if (strpos($machineName, 'fe') === 0) {
             $repoPath = "/var/www/it490";
