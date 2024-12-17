@@ -37,12 +37,32 @@ function rollbackFunction($bundleName, $versionNumber, $machine, $user)
             echo "Repo path does not exist\n";
         }
         // Unzip the archived version to the current path
-        exec("unzip {$rollbackPath}.zip -d .");
+        // Unzip the archived version to the current path
+        exec("unzip {$rollbackPath}.zip -d /var/log/current");
         echo "Unzipped rollback bundle '$bundleName' successfully.\n";
-        $unzipPath = "/var/log/current/{$bundleName}_{$versionNumber}";
 
-        exec("cp -r $unzipPath/* $repoPath");
+        $unzipPath = "/var/log/current/{$bundleName}_{$versionNumber}";
+        if (!file_exists($unzipPath)) {
+            echo "Unzip path does not exist: $unzipPath\n";
+            return json_encode([
+                'status' => 'failure',
+                'message' => "Unzip path does not exist: $unzipPath"
+            ]);
+        }
+
+        // Copy the unzipped files to the repo path
+        exec("cp -r $unzipPath/* $repoPath", $output, $return_var);
+        if ($return_var !== 0) {
+            echo "Failed to copy files from $unzipPath to $repoPath\n";
+            print_r($output);
+            return json_encode([
+                'status' => 'failure',
+                'message' => "Failed to copy files from $unzipPath to $repoPath"
+            ]);
+        }
+
         echo "Rolled back bundle '$bundleName' to version $versionNumber successfully.\n";
+
 
         return json_encode([
             'status' => 'success',
