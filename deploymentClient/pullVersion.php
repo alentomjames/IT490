@@ -20,30 +20,54 @@ switch ($machineName) {
     case 'beDev':
         $queueName = 'toDeploy';
         $responseQueue = 'deployToBeDev';
+        $user = 'ppetroski';
+
         break;
     case 'beQA':
         $queueName = 'toDeploy';
         $responseQueue = 'deployToBeQA';
+        $user = 'ppetroski';
+        break;
+    case 'beProd':
+        $queueName = 'toDeploy';
+        $responseQueue = 'deployToBeProd';
+        $user = 'ppetroski';
         break;
     case 'feDev':
         $queueName = 'toDeploy';
         $responseQueue = 'deployToFeDev';
+        $user = 'alen';
+
         break;
     case 'feQA':
         $queueName = 'toDeploy';
         $responseQueue = 'deployToFeQA';
+        $user = 'alen';
+
         break;
-    case 'fePROD':
+    case 'feProd':
         $queueName = 'toDeploy';
         $responseQueue = 'deployToFeProd';
+        $user = 'alen';
+
         break;
     case 'dmzDev':
         $queueName = 'toDeploy';
+        $user = 'al643';
+
         $responseQueue = 'deployToDmzDev';
         break;
     case 'dmzQA':
         $queueName = 'toDeploy';
+        $user = 'al643';
+
         $responseQueue = 'deployToDmzQA';
+        break;
+    case 'dmzProd':
+        $queueName = 'toDeploy';
+        $responseQueue = 'deployToDmzProd';
+        $user = 'al643';
+
         break;
     default:
         echo "Invalid machine name '$machineName'.\n";
@@ -88,7 +112,7 @@ foreach (glob($bundlePath . $bundleName . '_*') as $file) {
 $channel->queue_declare($responseQueue, false, true, false, false);
 
 // Callback function to wait for the 'sent' message from deployment
-$callback = function ($msg) use ($bundleName, $channel, $bundlePath) {
+$callback = function ($msg) use ($bundleName, $channel, $bundlePath, $machineName, $user) {
     $data = json_decode($msg->body, true);
 
 
@@ -137,7 +161,24 @@ $callback = function ($msg) use ($bundleName, $channel, $bundlePath) {
             echo "Expected zip file '$zipFilePath' not found.\n";
             exit(1);
         }
+        $unzipPath = $bundlePath . $bundleName;
 
+        if (strpos($machineName, 'fe') === 0) {
+            $repoPath = "/var/www/it490";
+            $bundlePath = "/var/www/it490/{$bundleName}";
+        } else {
+            $repoPath = "/home/{$user}/git/IT490";
+            $bundlePath = "/home/{$user}/git/IT490/{$bundleName}";
+        }
+        // Remove current files
+        if (file_exists($repoPath)) {
+            exec("rm -rf $bundlePath");
+        } else {
+            echo "Repo path does not exist\n";
+        }
+
+        // Copy the contents of the unzipped folder to the repository path
+        exec("cp -r $unzipPath/* $repoPath");
         $msg->ack();
         $channel->basic_cancel($msg->delivery_info['consumer_tag']);
     } else {
