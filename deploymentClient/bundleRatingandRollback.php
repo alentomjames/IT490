@@ -105,7 +105,7 @@ switch ($machine) {
         break;
     case 'beProd':
         $returnQueue = 'deployToBeProd';
-        $target_vm = '172.29.87.41';
+        $target_vm = '172.29.123.139';
         $user = 'ppetroski';
         break;
     case 'dmzProd':
