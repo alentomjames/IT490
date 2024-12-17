@@ -72,6 +72,29 @@ $callback = function ($msg) use ($channel) {
             echo "Fetching movie gallery: $url\n";
             $response = fetchDetails($type, $parameter, $url);
             break;
+        case 'search_actors':
+            $url = "https://api.themoviedb.org/3/search/person?query={$parameter}&include_adult=false&language=en-US&page=1";
+            echo "Searching actors: $url\n";
+            $response = fetchDetails($type, $parameter, $url);
+            break;
+        case 'movie_credits':
+            $url = "https://api.themoviedb.org/3/person/{$parameter}/movie_credits?language=en-US&page=1";
+            echo "Fetching movie credits: $url\n";
+            $response = fetchDetails($type, $parameter, $url);
+            break;
+        case 'search_movie':
+            $url = "https://api.themoviedb.org/3/search/movie?query={$parameter}&include_adult=false&language=en-US&page=1";
+            $type = 'search_movie';
+            // parameter = movieTitle , aka movie name
+            // no path parameters, only query parameters available
+            echo "Fetching search details for URL: $url\n";
+            $response = fetchDetails($type, $parameter, $url);
+            break;
+        case 'trending_movies':
+            $url = "https://api.themoviedb.org/3/trending/movie/{$parameter}?language=en-US'";
+            echo "Fetching trending movie details for URL: $url\n";
+            $response = fetchDetails($type, $parameter, $url);
+            break;
         default:
             echo "Unrecognized type: $type\n";
             return;
