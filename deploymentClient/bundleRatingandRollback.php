@@ -28,6 +28,7 @@ function rollbackFunction($bundleName, $versionNumber, $machine, $user)
         $badBundle = "/var/log/current/{$bundleName}_" . ($versionNumber + 1);
         $rollbackPath = "/var/log/current/{$bundleName}_{$versionNumber}";
         exec("rm -rf $badBundle");
+        exec("rm -rf $badBundle.zip");
 
         // Remove current files
         if (file_exists($repoPath)) {
@@ -36,10 +37,12 @@ function rollbackFunction($bundleName, $versionNumber, $machine, $user)
             echo "Repo path does not exist\n";
         }
         // Unzip the archived version to the current path
-        exec(command: "unzip $rollbackPath -d .");
+        exec("unzip $rollbackPath -d .");
+        echo "Unzipped rollback bundle '$bundleName' successfully.\n";
         $unzipPath = "/var/log/current/{$bundleName}_{$versionNumber}";
 
         exec("cp -r $unzipPath/* $repoPath");
+        echo "Rolled back bundle '$bundleName' to version $versionNumber successfully.\n";
 
         return json_encode([
             'status' => 'success',
@@ -120,7 +123,7 @@ if ($status === 'fail') {
         $bundleName = $data['bundle'];
         $previousVersion = $data['previous_version'];
         echo " [x] Received previous good version: $previousVersion\n";
-        
+
 
         if ($sendStatus === 'sent') {
             echo " [x] Received '$bundleName' with status '$sendStatus'\n";
