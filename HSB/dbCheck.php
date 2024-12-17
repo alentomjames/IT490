@@ -9,25 +9,21 @@ $database = 'it490db';
 function isDatabaseUp($host, $username, $password, $database)
 {
     try {
+
+        mysqli_report(MYSQLI_REPORT_STRICT | MYSQLI_REPORT_ERROR);
+
+
         $conn = new mysqli($host, $username, $password, $database);
-        if ($conn->connect_error) {
-            echo "Connection failed: " . $conn->connect_error . "\n";
-            return false;
-        }
         $conn->close();
         return true;
+    } catch (mysqli_sql_exception $e) {
+
+        echo "Connection failed: " . $e->getMessage() . "\n";
+        return false;
     } catch (Exception $e) {
+
         echo "Exception: " . $e->getMessage() . "\n";
         return false;
     }
-}
-
-// Return status
-if (isDatabaseUp($host, $username, $password, $database)) {
-    echo "Database UP\n";
-    exit(0);
-} else {
-    echo "Database DOWN\n";
-    exit(1);
 }
 ?>
