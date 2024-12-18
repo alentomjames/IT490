@@ -5,12 +5,14 @@ require_once '../vendor/autoload.php';
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-function isDatabaseUp() {
+function isDatabaseUp()
+{
     $response = exec('php dbCheck.php');
     return trim($response) === "OK";
 }
 
-function isRabbitMQUp() {
+function isRabbitMQUp()
+{
     try {
         list($connection, $channel) = getProdRabbit();
         $channel->close();
@@ -22,7 +24,7 @@ function isRabbitMQUp() {
 }
 
 list($connection, $channel) = getDeployRabbit();
-$channel->queue_declare('prodForHSB', false, true, false, false);
+$channel->queue_declare('prodForBeHSB', false, true, false, false);
 
 while (true) {
     $dbStatus = isDatabaseUp();
@@ -35,7 +37,7 @@ while (true) {
             'status' => 'up'
         ]);
         $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
-        $channel->basic_publish($msg, 'directExchange', 'prodForHSB');
+        $channel->basic_publish($msg, 'directExchange', 'prodForBeHSB');
     } else {
         echo "PROD Server is down.\n";
         $data = json_encode([
@@ -43,7 +45,7 @@ while (true) {
             'status' => 'down'
         ]);
         $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
-        $channel->basic_publish($msg, 'directExchange', 'prodForHSB');
+        $channel->basic_publish($msg, 'directExchange', 'prodForBeHSB');
 
         // Stop the other service if one is down
         if (!$dbStatus) {

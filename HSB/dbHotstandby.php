@@ -14,7 +14,7 @@ echo "Starting Hot Standby Listener\n";
 
 list($connection, $channel) = getDeployRabbit();
 
-$channel->queue_declare('prodForHSB', false, true, false, false);
+$channel->queue_declare('prodForBeHSB', false, true, false, false);
 
 $callback = function ($msg) use ($switchIP, $restartMySQL, $networkInterface) {
     $data = json_decode($msg->body, true);
@@ -63,7 +63,7 @@ $callback = function ($msg) use ($switchIP, $restartMySQL, $networkInterface) {
     }
 };
 
-$channel->basic_consume('prodForHSB', '', false, true, false, false, $callback);
+$channel->basic_consume('prodForBeHSB', '', false, true, false, false, $callback);
 
 while ($channel->is_consuming()) {
     $channel->wait();
