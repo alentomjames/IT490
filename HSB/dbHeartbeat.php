@@ -10,6 +10,7 @@ $channel->queue_declare( 'prodForHSB', false, true, false, false);
 
 while (true) {
     $response = exec('php dbCheck.php');
+    echo "Response: $response\n";
 
     if ($response == "OK\n") {
         echo "PROD Server is still active.\n";
