@@ -24,10 +24,10 @@ function isDatabaseUp($host, $username, $password, $database)
 
 // Return status
 if (isDatabaseUp($host, $username, $password, $database)) {
-    echo "Database UP\n";
+    echo "OK";
     exit(0);
 } else {
-    echo "Database DOWN\n";
+    echo "DOWN";
     exit(1);
 }
 ?>
