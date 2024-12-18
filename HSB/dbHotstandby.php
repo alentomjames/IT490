@@ -18,7 +18,7 @@ $channel->queue_declare('prodForBeHSB', false, true, false, false);
 
 $callback = function ($msg) use ($switchIP, $restartMySQL, $networkInterface) {
     $data = json_decode($msg->body, true);
-    echo "Received message: " . $data;
+    echo "Received message: " . $data['status'] . "\n";
     if ($data['status'] === 'down') {
         echo "PROD Server is down. Initiating failover...\n";
 
