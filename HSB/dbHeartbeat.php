@@ -12,7 +12,7 @@ while (true) {
     $response = exec('php dbCheck.php');
     echo "Response: $response\n";
 
-    if ($response == "OK\n") {
+    if ($response == "OK") {
         echo "PROD Server is still active.\n";
         $data = json_encode([
             'type' => 'hotstandby',
