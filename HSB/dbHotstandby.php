@@ -12,7 +12,7 @@ $restartMySQL = "sudo systemctl restart mysql.service";
 
 echo "Starting Hot Standby Listener\n";
 
-list($connection, $channel) = getProdRabbit();
+list($connection, $channel) = getDeployRabbit();
 
 $channel->queue_declare('prodForHSB', false, true, false, false);
 
@@ -28,7 +28,7 @@ $callback = function ($msg) use ($switchIP, $restartMySQL, $networkInterface) {
             echo "Switched to Hot Standby Server.\n";
             // Verify IP was added
             exec("ip addr show $networkInterface", $ipOutput, $ipReturnVar);
-            if (strpos(implode("\n", $ipOutput), "172.29.244.200") !== false) {
+            if (strpos(implode("\n", $ipOutput), "172.29.244.201") !== false) {
                 $ipLine = trim($ipOutput[4]);
                 echo "Verified: VIP $ipLine was successfully added\n";
             } else {
@@ -47,6 +47,15 @@ $callback = function ($msg) use ($switchIP, $restartMySQL, $networkInterface) {
             echo "MySQL restarted successfully.\n";
         } else {
             echo "Failed to restart MySQL.\n";
+            exit(1);
+        }
+
+        echo "Restaring RabbitMQ\n";
+        exec('sudo systemctl restart rabbitmq-server');
+        if ($return_var == 0) {
+            echo "RabbitMQ restarted successfully.\n";
+        } else {
+            echo "Failed to restart RabbitMQ.\n";
             exit(1);
         }
     } else {
