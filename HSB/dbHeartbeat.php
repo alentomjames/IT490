@@ -27,6 +27,7 @@ list($connection, $channel) = getDeployRabbit();
 $channel->queue_declare('prodForBeHSB', false, true, false, false);
 
 while (true) {
+    echo "Checking PROD Server status...\n";
     $dbStatus = isDatabaseUp();
     $rabbitStatus = isRabbitMQUp();
 
