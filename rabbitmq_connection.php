@@ -44,7 +44,7 @@ function getQARabbit()
 function getProdRabbit()
 {
     // Connect to RABBITMQ HERE and add better error handling
-    $connection = new AMQPStreamConnection('172.29.4.30', 5672, 'admin', 'admin', 'IT490_Host');
+    $connection = new AMQPStreamConnection('172.29.123.139', 5672, 'admin', 'admin', 'IT490_Host');
     $channel = $connection->channel();
 
     return [$connection, $channel];
