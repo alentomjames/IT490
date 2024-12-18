@@ -6,7 +6,7 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 list($connection, $channel) = getProdRabbit();
 
-$channel->queue_declare( 'prodForHSB', false, true, false, false);
+$channel->queue_declare('prodForHSB', false, true, false, false);
 
 while (true) {
     $response = exec('php dbCheck.php');
@@ -18,6 +18,8 @@ while (true) {
             'type' => 'hotstandby',
             'status' => 'up'
         ]);
+        $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
+        $channel->basic_publish($msg, 'directExchange', 'prodForHSB');
     } else {
         echo "PROD Server is down.\n";
         $data = json_encode([
