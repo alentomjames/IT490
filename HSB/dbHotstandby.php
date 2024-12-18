@@ -16,7 +16,7 @@ list($connection, $channel) = getDeployRabbit();
 
 $channel->queue_declare('prodForBeHSB', false, true, false, false);
 
-$callback = function ($msg) use ($switchIP, $restartMySQL, $networkInterface) {
+$callback = function ($msg) use ($switchIP, $restartMySQL, $networkInterface, $channel) {
     $data = json_decode($msg->body, true);
     echo "Received message: " . $data['status'] . "\n";
     if ($data['status'] === 'down') {
@@ -58,6 +58,8 @@ $callback = function ($msg) use ($switchIP, $restartMySQL, $networkInterface) {
             echo "Failed to restart RabbitMQ.\n";
             exit(1);
         }
+        // Stop consuming messages
+        $channel->basic_cancel($msg->delivery_info['consumer_tag']);
     } else {
         echo "PROD Server is up. No action required.\n";
     }
