@@ -96,6 +96,8 @@ function recieveDMZ($cluster)
     // Declare the response channel
     $channel->queue_declare('dmzForFrontend', false, true, false, false);
     error_log("Declared DMZ response channel");
+    $channel->queue_bind('dmzForFrontend', 'directExchange', 'dmzForFrontend');
+    error_log("Bound DMZ response channel");
     // Function waiting for the response from RabbitMQ
     $callback = function ($msg) use (&$data) {
         $response = json_decode($msg->body, true);

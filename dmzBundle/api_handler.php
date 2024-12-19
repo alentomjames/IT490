@@ -112,6 +112,7 @@ $callback = function ($msg) use ($channel) {
         echo "Sending response back to client: $response\n";
         $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
         $channel->basic_publish($responseMsg, 'directExchange', 'dmzForFrontend');
+        echo "Response sent\n";
     } else {
         echo "No response generated to send\n";
     }
