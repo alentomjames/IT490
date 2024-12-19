@@ -107,12 +107,12 @@ function recieveDMZ($cluster)
         error_log("Getting Rabbit for DEV DMZ");
     }
     $data = null;
-
+    $received = false;
     // Declare the response channel
     $channel->queue_declare('dmzForFrontend', false, true, false, false);
     error_log("Declared DMZ response channel");
     // Function waiting for the response from RabbitMQ
-    $callback = function ($msg) use (&$data) {
+    $callback = function ($msg) use (&$data, &$received) {
         error_log("Received raw message: " . $msg->body);
         $response = json_decode($msg->body, true);
         if ($response === null) {
@@ -122,10 +122,12 @@ function recieveDMZ($cluster)
         }
         // Check if the response type is 'success' and data is present
         error_log("RESPONSE FROM RMQ_CONNECT: $response");
-        error_log("MSG FROM RMQ_CONNECT: $msg");
+        error_log("MSG FROM RMQ_CONNECT");
         error_log("DATA FROM RMQ_CONNECT: $data");
+
         if (isset($response['type']) && $response['type'] === 'success') {
             $data = $response['data'];
+            $received = true;
             echo "Data received from DMZ: {$data}";
             error_log("Successfully parsed DMZ response data: {$data}");
             error_log("Successfully parsed DMZ response data");
