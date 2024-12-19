@@ -37,7 +37,7 @@ function fetchTrending()
     error_log("Type: $type");
     sendRequest($type, 'day', 'frontendForDMZ', $cluster);
     error_log("Sent request");
-    error_log('Sent message to RabbitMQ: ' . $data);
+    error_log('Sent message to RabbitMQ');
     $recieveDmz = recieveDMZ($cluster);
     error_log("Recieved DMZ in index.php");
     return $recieveDmz;
