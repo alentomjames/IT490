@@ -270,10 +270,12 @@ function fetchDetails($type, $parameter, $url)
         $responseBody = json_decode($response->getBody(), true);
         echo "API response body: ";
         print_r($responseBody);
-        return json_encode([
+        $messageData = [
             'type' => 'success',
-            'data' => $responseBody,
-        ]);
+            'data' => $responseBody
+        ];
+
+        return $messageData;
 
     } catch (RequestException $e) {
         // Handle exceptions, especially if the resource is not found (404)
