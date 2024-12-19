@@ -8,7 +8,7 @@ if (!$loggedIn) {
 
 require_once('vendor/autoload.php');
 require_once 'rabbitmq_connection.php';
-$envFilePath = '.env';
+$envFilePath = __DIR__ . '.env';
 $getenv = parse_ini_file($envFilePath);
 
 if ($getenv === false) {
