@@ -23,7 +23,7 @@ if (isset($_SESSION['userID'])) {
 </head>
 <body>
 	<nav class="navbar">
-		<a href="index.php" class="nav-title">BreadWinners</a>
+		<a href="../index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
             <li><button onclick="location.href='login.php'">Login</button></li>
             <li><button onclick="location.href='sign_up.php'">Sign Up</button></li>

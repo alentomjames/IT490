@@ -25,7 +25,7 @@ $apiKey = 'YOUR_API_KEY'; // Replace with your TMDB API key
 
 <body>
     <nav class="navbar">
-        <a href="index.php" class="nav-title">BreadWinners</a>
+        <a href="../index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
                 <li><button onclick="location.href='Reccomend.php'" class="smoothie-button"><img src="smoothie.png" alt="Movie Smoothie" class="smoothie-icon"></button></li>
