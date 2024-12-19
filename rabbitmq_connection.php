@@ -110,7 +110,6 @@ function recieveDMZ($cluster)
     // Declare the exchange
     $channel->exchange_declare('directExchange', 'direct', false, true, false);
     
-    error_log("Decoded response: " . print_r($response, true));
     // Declare the response channel
     $channel->queue_declare('dmzForFrontend', false, true, false, false);
     error_log("Declared DMZ response channel");
