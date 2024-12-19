@@ -3,7 +3,7 @@ session_start();
 $loggedIn = isset($_SESSION['userID']);
 if (!$loggedIn) {
     header("Location: /loginBundle/login.php");
-    exit; 
+    exit;
 }
 
 require_once('vendor/autoload.php');
@@ -147,6 +147,7 @@ function fetchTrending()
             fetch(`/pagesBundle/loadMovies.php?page=${page}`)
                 .then(response => response.json())
                 .then(data => {
+                    console.log("data", data);
                     totalPages = data.total_pages;
                     allMovies = data.results.filter(movie => movie.poster_path);
                     displayMovies(allMovies);
@@ -157,7 +158,7 @@ function fetchTrending()
         function displayMovies(movies) {
             const moviesContainer = document.getElementById('movies-container');
             moviesContainer.innerHTML = '';
-
+            console.log("movies", movies);
             movies.forEach(movie => {
                 if (movie.poster_path) {
                     const movieItem = document.createElement('div');
