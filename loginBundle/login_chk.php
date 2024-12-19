@@ -49,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // meaning it won't be lost from the queue even if RabbitMQ restarts
     $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
     $channel->basic_publish($msg, 'directExchange', 'frontendForDB');
+    echo "<script>console.log('Frontend Message Sent');</script>";
     debug_to_console("Frontend Message Sent");
 
 
@@ -75,19 +76,22 @@ function receiveRabbitMQResponse()
     $is_consuming = true;
 
     // Function waiting for the response from RabbitMQ
-    $callback = function ($msg) {
+    $callback = function ($msg) use (&$is_consuming) {
         $response = json_decode($msg->body, true);
+        echo 'Response variale: $response';
         // Checks the status variable in the message to see if it's a success or failure
         if ($response['type'] === 'success') {
             // Retrieves the userID from the $msg and stores it in the sessionID to login user
             $_SESSION['name'] = $response['name'];
             $_SESSION['userID'] = $response['userID'];
-            header(header: "Location: ../pagesBundle/index.php");
+            echo "<script>console.log('Response Success');</script>";
+            $is_consuming = false;
+            header("Location: ../index.php");
             exit();
         } else {
             echo 'Login Failed';
             $is_consuming = false;
-            header("Location: ../pagesBundle/login.php");
+            header("Location: login.php");
             exit();
         }
     };
