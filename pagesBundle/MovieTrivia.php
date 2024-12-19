@@ -32,6 +32,7 @@ function fetchMoviePoster($movieTitle)
 
     $type = 'search_movie';
     sendRequest($type, $movieTitle, 'frontendForDMZ', $cluster);
+    echo "Sent request to DMZ\n";
     return recieveDMZ($cluster);
 }
 
@@ -129,6 +130,7 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
         <?php foreach ($selectedTrivia as $question): ?>
         <?php
         $movieDetails = fetchMoviePoster($question['movie']);
+        echo "Movie Details: {$movieDetails}\n";
         $posterUrl = isset($movieDetails['results'][0]['poster_path']) ? 'https://image.tmdb.org/t/p/w200' . $movieDetails['results'][0]['poster_path'] : '';
         ?>
         <div class="trivia-question">
