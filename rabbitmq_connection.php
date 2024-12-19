@@ -13,7 +13,7 @@ function getRabbit()
             error_log("Attempting to connect to RabbitMQ: $retries attempts remaining");
             try {
                 $connection = new AMQPStreamConnection('172.29.4.30', 5672, 'admin', 'admin', 'IT490_Host');
-                error_log("Connected to RabbitMQ");
+                error_log("Connected to RabbitM for getRabbit");
                 break; // Exit loop if connection is successful
             } catch (Exception $e) {
                 $retries--;
@@ -109,7 +109,15 @@ function recieveDMZ($cluster)
     $data = null;
     // Declare the exchange
     $channel->exchange_declare('directExchange', 'direct', false, true, false);
-    error_log("Declared DMZ exchange");
+    error_log("Raw message received: " . $msg->body);
+
+    $response = json_decode($msg->body, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        error_log("JSON decode error: " . json_last_error_msg());
+        return;
+    }
+    
+    error_log("Decoded response: " . print_r($response, true));
     // Declare the response channel
     $channel->queue_declare('dmzForFrontend', false, true, false, false);
     error_log("Declared DMZ response channel");
@@ -143,11 +151,11 @@ function recieveDMZ($cluster)
     // Wait for the response
     while ($channel->is_consuming()) {
         $channel->wait(null, false, 30); // timeout
-        if ($data !== null) {
-            break;
-        } else {
-            error_log("Data is null");
-        }
+        // if ($data !== null) {
+        //     break;
+        // } else {
+        //     error_log("Data is null");
+        // }
     }
 
     // Close the channel and connection
