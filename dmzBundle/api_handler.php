@@ -103,44 +103,6 @@ $callback = function ($msg) use ($channel) {
                     'imdb_id' => 'tt1234567',
                     'original_language' => 'en',
                     'original_title' => 'Original Movie Title',
-                    'additional_info' => 'Some additional information',
-                    'director' => 'Director Name',
-                    'cast' => [
-                        ['id' => 1, 'name' => 'Actor A'],
-                        ['id' => 2, 'name' => 'Actor B'],
-                    ],
-                    'reviews' => [
-                        ['id' => 1, 'content' => 'Review 1'],
-                        ['id' => 2, 'content' => 'Review 2'],
-                    ],
-                    'awards' => [
-                        ['id' => 1, 'name' => 'Award A'],
-                        ['id' => 2, 'name' => 'Award B'],
-                    ],
-                    'box_office' => [
-                        'domestic' => 200000000,
-                        'international' => 300000000,
-                    ],
-                    'soundtrack' => [
-                        ['id' => 1, 'title' => 'Song A'],
-                        ['id' => 2, 'title' => 'Song B'],
-                    ],
-                    'trailers' => [
-                        ['id' => 1, 'url' => 'https://www.example.com/trailer1'],
-                        ['id' => 2, 'url' => 'https://www.example.com/trailer2'],
-                    ],
-                    'related_movies' => [
-                        ['id' => 1, 'title' => 'Related Movie A'],
-                        ['id' => 2, 'title' => 'Related Movie B'],
-                    ],
-                    'user_ratings' => [
-                        ['id' => 1, 'rating' => 8.0],
-                        ['id' => 2, 'rating' => 7.0],
-                    ],
-                    'release_dates' => [
-                        ['country' => 'US', 'date' => '2021-01-01'],
-                        ['country' => 'CA', 'date' => '2021-01-02'],
-                    ],
                 ],
             ]);
             break;
@@ -192,7 +154,8 @@ $callback = function ($msg) use ($channel) {
     // Send the response back to the client
     if ($response) {
         echo "Sending response back to client: $response\n";
-        $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
+        $compressedResponse = base64_encode(gzencode($response));
+        $responseMsg = new AMQPMessage($compressedResponse, ['delivery_mode' => 2]);
         error_log("DMZ about to send: " . $response);
         $channel->basic_publish($responseMsg, 'directExchange', 'dmzForFrontend');
         echo "Response sent\n";
