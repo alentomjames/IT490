@@ -120,7 +120,7 @@ function fetchTrending()
         <?php endforeach; ?>
     </div>
 
-    <div class="filters">
+    <!-- <div class="filters">
         <input type="text" id="search-bar" placeholder="Search for movies..." oninput="filterMovies()">
         <select id="genre-filter" onchange="filterMovies()">
             <option value="">All Genres</option>
@@ -156,93 +156,93 @@ function fetchTrending()
         <button id="prev-page" onclick="changePage(-1)">Previous</button>
         <span id="current-page">1</span>
         <button id="next-page" onclick="changePage(1)">Next</button>
-    </div>
+    </div> -->
 
     <script>
-        let currentPage = 1;
-        let totalPages = 1;
-        let allMovies = [];
-        let searchQuery = '';
+        // let currentPage = 1;
+        // let totalPages = 1;
+        // let allMovies = [];
+        // let searchQuery = '';
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadMovies(currentPage);
-        });
+        // document.addEventListener('DOMContentLoaded', () => {
+        //     loadMovies(currentPage);
+        // });
 
-        function loadMovies(page) {
-            fetch(`/pagesBundle/loadMovies.php?page=${page}`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log("data", data);
-                    totalPages = data.total_pages;
-                    allMovies = data.results.filter(movie => movie.poster_path);
-                    displayMovies(allMovies);
-                    document.getElementById('current-page').textContent = currentPage;
-                });
-        }
+        // function loadMovies(page) {
+        //     fetch(`/pagesBundle/loadMovies.php?page=${page}`)
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             console.log("data", data);
+        //             totalPages = data.total_pages;
+        //             allMovies = data.results.filter(movie => movie.poster_path);
+        //             displayMovies(allMovies);
+        //             document.getElementById('current-page').textContent = currentPage;
+        //         });
+        // }
 
-        function displayMovies(movies) {
-            const moviesContainer = document.getElementById('movies-container');
-            moviesContainer.innerHTML = '';
-            console.log("movies", movies);
-            movies.forEach(movie => {
-                if (movie.poster_path) {
-                    const movieItem = document.createElement('div');
-                    movieItem.classList.add('favorite-item');
-                    movieItem.setAttribute('data-id', movie.id);
-                    movieItem.setAttribute('data-title', movie.title.toLowerCase());
-                    movieItem.setAttribute('data-genres', movie.genre_ids.join(','));
-                    movieItem.onclick = () => addFavorite(movie.id, movie.title);
+        // function displayMovies(movies) {
+        //     const moviesContainer = document.getElementById('movies-container');
+        //     moviesContainer.innerHTML = '';
+        //     console.log("movies", movies);
+        //     movies.forEach(movie => {
+        //         if (movie.poster_path) {
+        //             const movieItem = document.createElement('div');
+        //             movieItem.classList.add('favorite-item');
+        //             movieItem.setAttribute('data-id', movie.id);
+        //             movieItem.setAttribute('data-title', movie.title.toLowerCase());
+        //             movieItem.setAttribute('data-genres', movie.genre_ids.join(','));
+        //             movieItem.onclick = () => addFavorite(movie.id, movie.title);
 
-                    movieItem.innerHTML = `
-                    <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title} Poster">
-                    <p>${movie.title}</p>
-                `;
+        //             movieItem.innerHTML = `
+        //             <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title} Poster">
+        //             <p>${movie.title}</p>
+        //         `;
 
-                    moviesContainer.appendChild(movieItem);
-                }
-            });
-        }
+        //             moviesContainer.appendChild(movieItem);
+        //         }
+        //     });
+        // }
 
-        function filterMovies() {
-            searchQuery = document.getElementById('search-bar').value.toLowerCase();
-            const genreFilter = document.getElementById('genre-filter').value;
+        // function filterMovies() {
+        //     searchQuery = document.getElementById('search-bar').value.toLowerCase();
+        //     const genreFilter = document.getElementById('genre-filter').value;
 
-            if (searchQuery) {
-                searchMovies(searchQuery, genreFilter);
-            } else {
-                let filteredMovies = allMovies;
+        //     if (searchQuery) {
+        //         searchMovies(searchQuery, genreFilter);
+        //     } else {
+        //         let filteredMovies = allMovies;
 
-                if (genreFilter) {
-                    filteredMovies = filteredMovies.filter(movie => movie.genre_ids.includes(parseInt(genreFilter)));
-                }
+        //         if (genreFilter) {
+        //             filteredMovies = filteredMovies.filter(movie => movie.genre_ids.includes(parseInt(genreFilter)));
+        //         }
 
-                displayMovies(filteredMovies);
-            }
-        }
+        //         displayMovies(filteredMovies);
+        //     }
+        // }
 
 
-        function searchMovies(query, genreFilter) {
-            fetch(`/pagesBundle/searchMovies.php?query=${encodeURIComponent(query)}`)
-                .then(response => response.json())
-                .then(data => {
-                    let filteredMovies = data.results;
+        // function searchMovies(query, genreFilter) {
+        //     fetch(`/pagesBundle/searchMovies.php?query=${encodeURIComponent(query)}`)
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             let filteredMovies = data.results;
 
-                    if (genreFilter) {
-                        filteredMovies = filteredMovies.filter(movie => movie.genre_ids.includes(parseInt(genreFilter)));
-                    }
+        //             if (genreFilter) {
+        //                 filteredMovies = filteredMovies.filter(movie => movie.genre_ids.includes(parseInt(genreFilter)));
+        //             }
 
-                    displayMovies(filteredMovies);
-                });
-        }
+        //             displayMovies(filteredMovies);
+        //         });
+        // }
 
-        function changePage(direction) {
-            if (direction === -1 && currentPage > 1) {
-                currentPage--;
-            } else if (direction === 1 && currentPage < totalPages) {
-                currentPage++;
-            }
-            loadMovies(currentPage);
-        }
+        // function changePage(direction) {
+        //     if (direction === -1 && currentPage > 1) {
+        //         currentPage--;
+        //     } else if (direction === 1 && currentPage < totalPages) {
+        //         currentPage++;
+        //     }
+        //     loadMovies(currentPage);
+        // }
     </script>
 </body>
 
