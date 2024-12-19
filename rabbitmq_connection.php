@@ -131,6 +131,7 @@ function recieveDMZ($cluster)
             echo "Data received from DMZ: {$data}";
             error_log("Successfully parsed DMZ response data: {$data}");
             error_log("Successfully parsed DMZ response data");
+            return $response;
         } else {
             echo 'Error: Failed to retrieve data or invalid response format received from DMZ.';
         }
