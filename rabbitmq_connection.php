@@ -106,15 +106,10 @@ function recieveDMZ($cluster)
         list($connection, $channel) = getRabbit();
         error_log("Getting Rabbit for DEV DMZ");
     }
-    $data = null;
-    // Declare the exchange
-    $channel->exchange_declare('directExchange', 'direct', false, true, false);
-    
+    $data = null;    
     // Declare the response channel
     $channel->queue_declare('dmzForFrontend', false, true, false, false);
     error_log("Declared DMZ response channel");
-    $channel->queue_bind('dmzForFrontend', 'directExchange', 'dmzForFrontend');
-    error_log("Bound DMZ response channel");
     // Function waiting for the response from RabbitMQ
     $callback = function ($msg) use (&$data) {
         error_log("Received raw message: " . $msg->body);
