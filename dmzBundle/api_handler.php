@@ -65,6 +65,7 @@ $callback = function ($msg) use ($channel) {
             $url = "https://api.themoviedb.org/3/movie/{$parameter}?language=en-US";
             echo "Fetching movie details for URL: $url\n";
             $response = fetchDetails($type, $parameter, $url);
+
             break;
         case 'reccomendations':
             $url = "https://api.themoviedb.org/3/movie/{$parameter}/recommendations?language=en-US&page=1";
@@ -137,9 +138,10 @@ while ($channel->is_consuming()) {
 closeRabbit($connection, $channel);
 echo "RabbitMQ connection closed\n";
 
-function fetchDetails($type, $parameter, $url) {
+function fetchDetails($type, $parameter, $url)
+{
     echo "Starting fetchDetails for $type with parameter $parameter\n";
-    
+
     try {
         // Call the API to get a response
         $client = new \GuzzleHttp\Client();
@@ -149,23 +151,18 @@ function fetchDetails($type, $parameter, $url) {
                 'accept' => 'application/json',
             ],
         ]);
+        echo "API request successful\n";
+        $responseBody = json_decode($response->getBody(), true);
+        echo "API response body: ";
+        print_r($responseBody);
 
-        // Get the response body as a string
-        $responseBody = $response->getBody()->getContents();
-        
-        // Decode it to check the structure
-        $decodedResponse = json_decode($responseBody, true);
-        
-        error_log("API Response Body: " . print_r($decodedResponse, true));
-        
-        // Return the properly structured response
         return json_encode([
             'type' => 'success',
-            'data' => $decodedResponse
+            'data' => $responseBody,
         ]);
-        
+
     } catch (RequestException $e) {
-        // Rest of error handling remains the same
+        // Handle exceptions, especially if the resource is not found (404)
         echo "API request failed\n";
         if ($e->hasResponse()) {
             $statusCode = $e->getResponse()->getStatusCode();
@@ -178,11 +175,14 @@ function fetchDetails($type, $parameter, $url) {
                 ]);
             }
         }
-        
+
+        // Log other exceptions or handle them accordingly
         error_log("Error fetching details: " . $e->getMessage());
+        echo "Error message: " . $e->getMessage() . "\n";
         return json_encode([
             'type' => 'failure',
-            'message' => 'An error occurred while fetching details'
+            'message' => 'An error occurred while fetching details',
         ]);
     }
 }
+
