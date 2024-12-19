@@ -64,13 +64,8 @@ $callback = function ($msg) use ($channel) {
         case 'movie_details':
             $url = "https://api.themoviedb.org/3/movie/{$parameter}?language=en-US";
             echo "Fetching movie details for URL: $url\n";
-            //$response = fetchDetails($type, $parameter, $url);
-            $response = json_encode([
-                'type' => 'success',
-                'data' => [
-                    'hello' => 'hello',
-                ]
-            ]);
+            $response = fetchDetails($type, $parameter, $url);
+
             break;
         case 'reccomendations':
             $url = "https://api.themoviedb.org/3/movie/{$parameter}/recommendations?language=en-US&page=1";
@@ -163,7 +158,9 @@ function fetchDetails($type, $parameter, $url)
 
         return json_encode([
             'type' => 'success',
-            'data' => $response,
+            'data' => [
+                'results' => $responseBody['results'] 
+            ],
         ]);
 
     } catch (RequestException $e) {
