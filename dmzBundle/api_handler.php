@@ -36,6 +36,8 @@ echo "Connected to RabbitMQ\n";
 $channel->queue_declare('frontendForDMZ', false, true, false, false);
 echo "Declared queue 'frontendForDMZ'\n";
 
+$channel->queue_declare('dmzForFrontend', false, true, false, false);
+echo "Declared queue 'dmzForFrontend'\n";
 
 // Process the login/register requests
 $callback = function ($msg) use ($channel) {
