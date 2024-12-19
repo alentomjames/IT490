@@ -1,0 +1,12 @@
+[Unit]
+Description= Frontend Check to see if a server is ACTIVE
+After=network-online.target
+Wants=network-online.target 
+
+[Service]
+type=oneshot
+ExecStart=/usr/bin/php /var/www/feCheck.php
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
