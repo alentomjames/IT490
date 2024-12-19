@@ -24,7 +24,7 @@ if ($cluster === null) {
 error_log("Cluster detected: $cluster");
 
 // Declare a random movie ID to test
-$testMovieId = 550; 
+$testMovieId = 550;
 
 try {
     // Send a request for movie details

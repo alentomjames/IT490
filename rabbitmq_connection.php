@@ -109,7 +109,10 @@ function recieveDMZ($cluster)
 
     $finalResponse = null;
 
+    $channel->exchange_declare('directExchange', 'direct', false, true, false);
     $channel->queue_declare('dmzForFrontend', false, true, false, false);
+    $channel->queue_bind('dmzForFrontend', 'directExchange', 'dmzForFrontend');  
+      
     error_log("Declared DMZ response channel");
 
     $callback = function ($msg) use (&$finalResponse) {
