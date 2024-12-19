@@ -57,8 +57,12 @@ $finalResponse = null;
 
 // Define the callback for when a message arrives
 $callback = function($msg) use (&$finalResponse) {
-    error_log("Received raw message: ".$msg->body);
-    $response = json_decode($msg->body, true);
+    $decodedResponse = gzdecode(base64_decode($msg->body));
+
+    error_log("Received raw message: " . $msg->body);
+    error_log("Decoded message: " . $decodedResponse);
+
+    $response = json_decode($decodedResponse, true);
     if ($response === null) {
         error_log("JSON decode failed. Message body: ".$msg->body);
         return;
