@@ -1,6 +1,6 @@
 #!/usr/bin/php
 <?php
-    $url = 'http://172.29.244.200/HSB/okay.php';
+    $url = 'https://172.29.244.200/HSB/okay.php';
     
     while (true) {
         // Send a curl request to check the response from url 

@@ -63,7 +63,7 @@ function moveCarousel(direction) {
 
 // load watchlist and display
 function loadWatchlist() {
-    fetch('fetchWatchlist.php', {
+    fetch('/pagesBundle/fetchWatchlist.php', {
         method: 'GET',
     })
         .then(response => response.json())
@@ -98,7 +98,7 @@ function loadWatchlist() {
 
 // Function to add a movie to the watchlist
 function addToWatchlist(movieId) {
-    fetch('addToWatchlist.php', {
+    fetch('/pagesBundle/addToWatchlist.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ movie_id: movieId })
@@ -117,7 +117,7 @@ function addToWatchlist(movieId) {
 
 // Function to remove a movie from the watchlist
 function removeFromWatchlist(movieId) {
-    fetch('removeFromWatchlist.php', {
+    fetch('/pagesBundle/removeFromWatchlist.php', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ movie_id: movieId })
@@ -177,7 +177,7 @@ function setMovieRating(movieId, userId, rating) {
         return;
     }
 
-    fetch('setRating.php', {
+    fetch('/pagesBundle/setRating.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ movie_id: movieId, user_id: userId, rating: rating })
@@ -237,7 +237,7 @@ function setMovieRating(movieId, userId, rating) {
 
 
 function loadRecommendations() {
-    fetch('getRecommendations.php', {
+    fetch('/pagesBundle/getRecommendations.php', {
         method: 'GET',
     })
         .then(response => response.json())
@@ -285,7 +285,7 @@ function loadRecommendations() {
 }
 
 function loadLikedMovies() {
-    fetch('getRecommendations.php', {
+    fetch('/pagesBundle/getRecommendations.php', {
         method: 'GET',
     })
         .then(response => response.json())
@@ -320,4 +320,68 @@ function loadLikedMovies() {
         })
         .catch(error => console.error('Error fetching liked movies:', error));
 }
+// Function to search for actors
+function searchActors() {
+    const query = document.getElementById('actor-search-bar').value;
+    if (query.length > 2) {
+        fetch(`/pagesBundle/searchActors.php?query=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                const resultsContainer = document.getElementById('actor-search-results');
+                resultsContainer.innerHTML = '';
+                data.results.forEach(actor => {
+                    const actorItem = document.createElement('div');
+                    actorItem.classList.add('actor-item');
+                    const profilePath = actor.profile_path ? `https://image.tmdb.org/t/p/w200${actor.profile_path}` : 'https://placehold.co/200x300';
+                    actorItem.innerHTML = `
+                        <img src="${profilePath}" alt="${actor.name}">
+                        <p>${actor.name}</p>
+                    `;
+                    actorItem.onclick = () => {
+                        // Remove 'selected' class from all actor items
+                        document.querySelectorAll('.actor-item').forEach(item => {
+                            item.classList.remove('selected');
+                            item.classList.add('not-selected');
+                        });
 
+                        // Add 'selected' class to the clicked actor item
+                        actorItem.classList.remove('not-selected');
+                        actorItem.classList.add('selected');
+
+                        fetchActorMovies(actor.id);
+                        window.scrollTo({
+                            top: document.getElementById('movie-recommendation-results').offsetTop - 0,
+                            behavior: 'smooth'
+                        });
+                    };
+
+                    resultsContainer.appendChild(actorItem);
+                });
+            });
+    }
+}
+
+// Function to fetch and display the first three movies of the selected actor
+function fetchActorMovies(actorId) {
+    fetch(`/pagesBundle/fetchActorMovies.php?actorId=${actorId}`)
+        .then(response => response.json())
+        .then(data => {
+            const recommendationResults = document.getElementById('movie-recommendation-results');
+            recommendationResults.innerHTML = '';
+            data.cast.slice(0, 10).forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-recommendation-item');
+                movie.poster_path = movie.poster_path ?`https://image.tmdb.org/t/p/w200${movie.poster_path}` : 'https://placehold.co/200x300';
+                movieItem.innerHTML = `
+                    <a href="moviePage.php?id=${movie.id}">
+                        <img src=${movie.poster_path} alt="${movie.title} Poster">
+                    </a>
+                    <p>${movie.title}</p>
+                `;
+                recommendationResults.appendChild(movieItem);
+            });
+        });
+}
+
+// Event listener for the search bar
+document.getElementById('actor-search-bar').addEventListener('input', searchActors);

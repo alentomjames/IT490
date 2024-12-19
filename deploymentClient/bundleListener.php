@@ -27,6 +27,7 @@ $directories = [
     "/home/{$user}/git/IT490/logBundle",
     "/home/{$user}/git/IT490/deploymentClient",
     "/home/{$user}/git/IT490/deploymentServer",
+    "/home/{$user}/git/IT490/HSB",
 ]; // Add directories as needed
 
 // Path to the ini file

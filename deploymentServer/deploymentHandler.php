@@ -1,13 +1,13 @@
 <?php
 
-require_once 'db_connection.php';
-require_once 'webserver/rabbitmq_connection.php';
-require_once 'vendor/autoload.php';
+require_once '../backendBundle/db_connection.php';
+require_once '../rabbitmq_connection.php';
+require_once '../vendor/autoload.php';
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-require_once 'deployment/deployment_functions.php';
+require_once 'deployment_functions.php';
 
 list($connection, $channel) = getDeployRabbit();
 

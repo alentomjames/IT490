@@ -29,7 +29,7 @@ $movie_id = isset($_GET['id']) ? $_GET['id'] : null;
 if ($movie_id) {
     $type = 'movie_details';
     //Sends request to rabbitMQ_connection.php to call API
-    sendRequest($type, $movie_id, 'frontendForDMZ', $cluster);
+    sendRequest($type,  $movie_id, 'frontendForDMZ', $cluster);
 
 
     //Sends request to rabbitMQ_connection.php to recieve API movie data
@@ -137,6 +137,9 @@ if ($movie_id) {
                 Add to Watchlist <i class="fa-solid fa-check"></i>
             </button>
         </h1>
+        <button onclick="location.href='movieGalleryPage.php?id=<?php echo $movie_id; ?>'" class="view-gallery-button">
+            View Gallery
+        </button>
         <p><strong>Overview:</strong> <?php echo $overview; ?></p>
         <p><strong>Genres:</strong> <?php echo $genres; ?></p>
         <p><strong>Spoken Languages:</strong> <?php echo $languages; ?></p>
