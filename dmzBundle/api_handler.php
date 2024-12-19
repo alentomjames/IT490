@@ -151,13 +151,15 @@ function fetchDetails($type, $parameter, $url)
             ],
         ]);
         echo "API request successful\n";
-        $responseBody = json_decode($response->getBody(), true);
-        echo "API response body: ";
+        $responseBody = $response->getBody()->getContents();
+        $decodedResponse = json_decode($responseBody, true);
+        error("API RESPONSE: " . print_r($decodedResponse, true)); 
+      
         print_r($responseBody);
 
         return json_encode([
             'type' => 'success',
-            'data' => $responseBody,
+            'data' => $decodedResponse,
         ]);
 
     } catch (RequestException $e) {
