@@ -95,7 +95,7 @@ function recieveDMZ($cluster)
     $data = null;
     // Declare the response channel
     $channel->queue_declare('dmzForFrontend', false, true, false, false);
-
+    error_log("Declared DMZ response channel");
     // Function waiting for the response from RabbitMQ
     $callback = function ($msg) use (&$data) {
         $response = json_decode($msg->body, true);
@@ -114,18 +114,20 @@ function recieveDMZ($cluster)
     };
 
     $channel->basic_consume('dmzForFrontend', '', false, true, false, false, $callback);
-
+    error_log("Consuming DMZ response channel and called callback");
     // Wait for the response
     while ($channel->is_consuming()) {
         $channel->wait();
         if ($data !== null) {
             break;
+        } else {
+            error_log("Data is null");
         }
     }
 
     // Close the channel and connection
     closeRabbit($connection, $channel);
-
+    error_log("Closed Rabbit connection");
     return $data;
 }
 function recieveDB($cluster)
