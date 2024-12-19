@@ -64,47 +64,47 @@ $callback = function ($msg) use ($channel) {
         case 'movie_details':
             $url = "https://api.themoviedb.org/3/movie/{$parameter}?language=en-US";
             echo "Fetching movie details for URL: $url\n";
-            //$response = fetchDetails($type, $parameter, $url);
-            $response = json_encode([
-                'type' => 'success',
-                'data' => [
-                    'title' => 'Movie Title',
-                    'overview' => 'Movie overview',
-                    'release_date' => '2021-01-01',
-                    'runtime' => 120,
-                    'vote_average' => 7.5,
-                    'genres' => [
-                        ['id' => 1, 'name' => 'Action'],
-                        ['id' => 2, 'name' => 'Adventure'],
-                    ],
-                    'budget' => 150000000,
-                    'revenue' => 500000000,
-                    'production_companies' => [
-                        ['id' => 1, 'name' => 'Company A'],
-                        ['id' => 2, 'name' => 'Company B'],
-                    ],
-                    'production_countries' => [
-                        ['iso_3166_1' => 'US', 'name' => 'United States of America'],
-                        ['iso_3166_1' => 'CA', 'name' => 'Canada'],
-                    ],
-                    'spoken_languages' => [
-                        ['iso_639_1' => 'en', 'name' => 'English'],
-                        ['iso_639_1' => 'fr', 'name' => 'French'],
-                    ],
-                    'status' => 'Released',
-                    'tagline' => 'An epic movie',
-                    'popularity' => 100.0,
-                    'vote_count' => 2000,
-                    'video' => false,
-                    'adult' => false,
-                    'backdrop_path' => '/path/to/backdrop.jpg',
-                    'poster_path' => '/path/to/poster.jpg',
-                    'homepage' => 'https://www.example.com',
-                    'imdb_id' => 'tt1234567',
-                    'original_language' => 'en',
-                    'original_title' => 'Original Movie Title',
-                ],
-            ]);
+            $response = fetchDetails($type, $parameter, $url);
+            // $response = json_encode([
+            //     'type' => 'success',
+            //     'data' => [
+            //         'title' => 'Movie Title',
+            //         'overview' => 'Movie overview',
+            //         'release_date' => '2021-01-01',
+            //         'runtime' => 120,
+            //         'vote_average' => 7.5,
+            //         'genres' => [
+            //             ['id' => 1, 'name' => 'Action'],
+            //             ['id' => 2, 'name' => 'Adventure'],
+            //         ],
+            //         'budget' => 150000000,
+            //         'revenue' => 500000000,
+            //         'production_companies' => [
+            //             ['id' => 1, 'name' => 'Company A'],
+            //             ['id' => 2, 'name' => 'Company B'],
+            //         ],
+            //         'production_countries' => [
+            //             ['iso_3166_1' => 'US', 'name' => 'United States of America'],
+            //             ['iso_3166_1' => 'CA', 'name' => 'Canada'],
+            //         ],
+            //         'spoken_languages' => [
+            //             ['iso_639_1' => 'en', 'name' => 'English'],
+            //             ['iso_639_1' => 'fr', 'name' => 'French'],
+            //         ],
+            //         'status' => 'Released',
+            //         'tagline' => 'An epic movie',
+            //         'popularity' => 100.0,
+            //         'vote_count' => 2000,
+            //         'video' => false,
+            //         'adult' => false,
+            //         'backdrop_path' => '/path/to/backdrop.jpg',
+            //         'poster_path' => '/path/to/poster.jpg',
+            //         'homepage' => 'https://www.example.com',
+            //         'imdb_id' => 'tt1234567',
+            //         'original_language' => 'en',
+            //         'original_title' => 'Original Movie Title',
+            //     ],
+            // ]);
             break;
         case 'reccomendations':
             $url = "https://api.themoviedb.org/3/movie/{$parameter}/recommendations?language=en-US&page=1";
@@ -154,6 +154,7 @@ $callback = function ($msg) use ($channel) {
     // Send the response back to the client
     if ($response) {
         echo "Sending response back to client: $response\n";
+        $response = json_encode($response);
         $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
         error_log("DMZ about to send: " . $response);
         $channel->basic_publish($responseMsg, 'directExchange', 'dmzForFrontend');
