@@ -7,11 +7,25 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 function getRabbit()
 {
-    // Connect to RABBITMQ HERE and add better error handling
-    $connection = new AMQPStreamConnection('172.29.4.30', 5672, 'admin', 'admin', 'IT490_Host');
-    $channel = $connection->channel();
-
-    return [$connection, $channel];
+        // Connect to RABBITMQ HERE and add better error handling
+        $retries = 5;
+        while ($retries > 0) {
+            error_log("Attempting to connect to RabbitMQ: $retries attempts remaining");
+            try {
+                $connection = new AMQPStreamConnection('172.29.4.30', 5672, 'admin', 'admin', 'IT490_Host');
+                error_log("Connected to RabbitMQ");
+                break; // Exit loop if connection is successful
+            } catch (Exception $e) {
+                $retries--;
+                if ($retries == 0) {
+                    throw new Exception("Failed to connect to RabbitMQ after multiple attempts: " . $e->getMessage());
+                }
+                sleep(2); // Wait for 2 seconds before retrying
+            }
+        }
+        $channel = $connection->channel();
+        error_log("Created RabbitMQ channel: $channel");
+        return [$connection, $channel];
 }
 function getDeployRabbit()
 {
