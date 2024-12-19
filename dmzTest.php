@@ -57,19 +57,24 @@ $finalResponse = null;
 
 // Define the callback for when a message arrives
 $callback = function($msg) use (&$finalResponse) {
-    $decodedResponse = gzdecode(base64_decode($msg->body));
-
-    error_log("Received raw message: " . $msg->body);
-    error_log("Decoded message: " . $decodedResponse);
-
-    $response = json_decode($decodedResponse, true);
-    if ($response === null) {
-        error_log("JSON decode failed. Message body: ".$msg->body);
+    $decodedResponse = base64_decode($msg->body);
+    if ($decodedResponse === false) {
+        error_log("Base64 decoding failed. Message body: " . $msg->body);
         return;
     }
-
-    error_log("Decoded response: ".print_r($response, true));
-
+    
+    $decompressedResponse = gzdecode($decodedResponse);
+    if ($decompressedResponse === false) {
+        error_log("Gzip decompression failed. Decoded message: " . $decodedResponse);
+        return;
+    }
+    
+    $response = json_decode($decompressedResponse, true);
+    if ($response === null) {
+        error_log("JSON decode failed. Decompressed message: " . $decompressedResponse);
+        return;
+    }
+    
     if (isset($response['type']) && $response['type'] === 'success') {
         $finalResponse = $response;
 	return $finalResponse;
