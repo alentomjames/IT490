@@ -106,7 +106,8 @@ function recieveDMZ($cluster)
         list($connection, $channel) = getRabbit();
         error_log("Getting Rabbit for DEV DMZ");
     }
-    $data = null;    
+    $data = null;
+
     // Declare the response channel
     $channel->queue_declare('dmzForFrontend', false, true, false, false);
     error_log("Declared DMZ response channel");
@@ -136,13 +137,16 @@ function recieveDMZ($cluster)
     $channel->basic_consume('dmzForFrontend', '', false, true, false, false, $callback);
     error_log("Consuming DMZ response channel and called callback");
     // Wait for the response
-    while ($channel->is_consuming()) {
-        $channel->wait(null, false, 30); // timeout
-        // if ($data !== null) {
-        //     break;
-        // } else {
-        //     error_log("Data is null");
-        // }
+    // Set timeout start time
+    $timeout = time() + 30;  // 30 second timeout
+    
+    // Wait for the response with timeout
+    while ($channel->is_consuming() && !$received && time() < $timeout) {
+        try {
+            $channel->wait(null, true, 1);  // Wait for 1 second at a time
+        } catch (\PhpAmqpLib\Exception\AMQPTimeoutException $e) {
+            continue;  // Continue if timeout, will check conditions again
+        }
     }
 
     // Close the channel and connection

@@ -123,7 +123,7 @@ $callback = function ($msg) use ($channel) {
 
 // Consume the messages from the queue
 $channel->basic_consume('frontendForDMZ', '', false, true, false, false, $callback);
-echo "Waiting for messages on 'frontendQueue'\n";
+echo "Waiting for messages on 'frontendForDMZ'\n";
 
 // Wait for messages
 while ($channel->is_consuming()) {
