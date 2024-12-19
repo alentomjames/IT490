@@ -14,6 +14,8 @@ $getenv = parse_ini_file($envFilePath);
 if ($getenv === false) {
     error_log('Failed to parse .env file');
     exit;
+} else {
+    error_log('Here is the cluster: ' . $getenv['CLUSTER']);
 }
 
 $cluster = isset($getenv['CLUSTER']) ? $getenv['CLUSTER'] : null;
@@ -29,8 +31,8 @@ function fetchTrending()
 {
     global $cluster;
     $type = 'trending_movies';
-    // sendRequest($type, 'day', 'frontendForDMZ', $cluster);
-    // return recieveDMZ($cluster);
+    sendRequest($type, 'day', 'frontendForDMZ', $cluster);
+    return recieveDMZ($cluster);
 }
 ?>
 
