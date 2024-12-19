@@ -1030,6 +1030,7 @@ body {
 .actor-item.not-selected {
     opacity: .5;
 }
+<<<<<<< Updated upstream
 
 /* Hamburger Button */
 .hamburger {
@@ -1040,9 +1041,43 @@ body {
     height: 21px;
     background: none;
     border: none;
-    cursor: pointer;
+=======
+/* Base Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f0f2f5;
 }
 
+/* Navbar */
+.navbar {
+    background-color: #007BFF;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap; 
+}
+
+.nav-title {
+    text-decoration: none;
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+>>>>>>> Stashed changes
+    cursor: pointer;
+    flex-shrink: 0; 
+}
+
+<<<<<<< Updated upstream
 .hamburger .bar {
     height: 3px;
     width: 100%;
@@ -1092,9 +1127,87 @@ body {
 
 .menu.open .nav-title {
     display: none;
+=======
+.nav-title:hover {
+    color: #beddfe;
 }
 
+.welcome-message {
+    color: white;
+    font-size: 1rem;
+    margin-left: 20px;
+    flex-shrink: 0;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-left: auto; 
+    overflow-x: auto; 
+    white-space: nowrap; 
+}
+
+.nav-links::-webkit-scrollbar {
+    height: 6px;
+}
+
+.nav-links::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.nav-links {
+    scrollbar-width: none;     
+}
+
+.nav-links li {
+    flex: 0 0 auto; 
+}
+
+.nav-links button {
+    background-color: #fff;
+    color: #007BFF;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.nav-links button:hover {
+    background-color: #0056b3;
+    color: #fff;
+}
+
+.nav-links button.smoothie-button {
+    background-color: white;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+>>>>>>> Stashed changes
+}
+
+.nav-links button.smoothie-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.nav-links .smoothie-icon {
+    width: 40px;
+    height: auto;
+}
+
+/* Responsive Design */
 @media screen and (max-width: 768px) {
+<<<<<<< Updated upstream
     .hamburger {
         display: flex;
     }
@@ -1126,3 +1239,30 @@ body {
         display: none;
     }
 }
+=======
+    .navbar {
+        padding: 10px 20px;
+        flex-wrap: wrap; 
+    }
+
+    .nav-title {
+        font-size: 1.5rem;
+    }
+
+    .welcome-message {
+        width: 100%;
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    .nav-links {
+        gap: 10px;
+    }
+
+    .nav-links button {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+}
+
+>>>>>>> Stashed changes

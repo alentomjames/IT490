@@ -46,6 +46,7 @@ function fetchTrending()
 </head>
 
 <body>
+<<<<<<< Updated upstream
     <nav class="navbar">
         <!--  hamburger button for responsive website --->
         <button class="hamburger" onclick="toggleMenu()">
@@ -53,6 +54,14 @@ function fetchTrending()
             <div class="line"></div>
             <div class="line"></div>
         </button>
+=======
+<nav class="navbar">
+        <a href="index.php" class="nav-title">BreadWinners</a>
+
+        <?php if ($loggedIn): ?>
+            <p class="welcome-message">Welcome, <?php echo htmlspecialchars($_SESSION['name']); ?>!</p>
+        <?php endif; ?>
+>>>>>>> Stashed changes
 
         <a href="index.php" class="nav-title">BreadWinners</a>
         <div class = "menu" id = "menu">
@@ -67,17 +76,10 @@ function fetchTrending()
                 <li><button onclick="location.href='/pagesBundle/MovieTrivia.php'">Movie Trivia</button></li>
                 <li><button onclick="location.href='/pagesBundle/watchlistPage.php'">Watch Later</button></li>
                 <li><button onclick="location.href='/pagesBundle/topTenPage.php'">Top Movies</button></li>
-                <!-- If they are logged in then display a "Welcome [user]" text at the top where the buttons would usually be and a logout button --->
-            <p class="nav-title">Welcome,
-                <?php echo $_SESSION['name']; ?>!
-            </p>
-            <!-- Logout button that calls logout.php to delete the userID from session and redirects them to the login page --->
-            <li><button onclick="location.href='/loginBundle/logout.php'">Logout</button></li>
+                <li><button onclick="location.href='/loginBundle/logout.php'">Logout</button></li>
             <?php else: ?>
-            <!-- If they aren't logged in then display the buttons for login or sign up on the navbar --->
-
-            <li><button onclick="location.href='/loginBundle/login.php'">Login</button></li>
-            <li><button onclick="location.href='/loginBundle/sign_up.php'">Sign Up</button></li>
+                <li><button onclick="location.href='/loginBundle/login.php'">Login</button></li>
+                <li><button onclick="location.href='/loginBundle/sign_up.php'">Sign Up</button></li>
             <?php endif; ?>
         </ul>
         </div>
