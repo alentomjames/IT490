@@ -69,6 +69,14 @@ $callback = function ($msg) use ($channel) {
                 'type' => 'success',
                 'data' => [
                     'title' => 'Movie Title',
+                    'overview' => 'Movie overview',
+                    'release_date' => '2021-01-01',
+                    'runtime' => 120,
+                    'vote_average' => 7.5,
+                    'genres' => [
+                        ['id' => 1, 'name' => 'Action'],
+                        ['id' => 2, 'name' => 'Adventure'],
+                    ],
                 ],
             ]);
             break;
