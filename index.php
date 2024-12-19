@@ -31,9 +31,13 @@ error_log("TRENDING: $trending");
 function fetchTrending()
 {
     global $cluster;
+    error_log("Cluster: $cluster");
     $type = 'trending_movies';
+    error_log("Type: $type");
     sendRequest($type, 'day', 'frontendForDMZ', $cluster);
-    return recieveDMZ($cluster);
+    $recieveDmz = recieveDMZ($cluster);
+    error_log("Recieved DMZ: $recieveDmz");
+    return $recieveDmz;
 }
 ?>
 
