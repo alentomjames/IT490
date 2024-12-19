@@ -72,6 +72,13 @@ function fetchTrending()
 <body>
     <nav class="navbar">
         <a href="index.php" class="nav-title">BreadWinners</a>
+
+        <button class="hamburger" aria-label="Toggle navigation">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
                 <li>

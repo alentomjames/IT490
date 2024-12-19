@@ -385,3 +385,12 @@ function fetchActorMovies(actorId) {
 
 // Event listener for the search bar
 //document.getElementById('actor-search-bar').addEventListener('input', searchActors);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+
+    hamburger.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+    });
+});
