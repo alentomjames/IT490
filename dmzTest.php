@@ -68,18 +68,21 @@ $callback = function($msg) use (&$finalResponse) {
 
     if (isset($response['type']) && $response['type'] === 'success') {
         $finalResponse = $response;
+	return $finalResponse;
     } else {
         error_log("Error: Failed to retrieve data or invalid response format received from DMZ.");
     }
 };
 
-// Start consuming from dmzForFrontend
-$channel->basic_consume('dmzForFrontend', '', false, true, false, false, $callback);
+//Start consuming from dmzForFrontend
 
+$channel->basic_consume('dmzForFrontend', '', false, true, false, false, $callback);
+error_log("attempting basic_consume");
 // Wait up to 30 seconds for a response
 $start = time();
 while ($channel->is_consuming()) {
-    $channel->wait(null, false, 5); // wait with a small timeout so we can check elapsed time
+    error_log("inside the while consuming has been hit");
+    $channel->wait(null, false, 30); // wait with a small timeout so we can check elapsed time
     if ($finalResponse !== null) {
         break;
     }
@@ -105,3 +108,4 @@ if ($finalResponse) {
 }
 
 error_log("Finished DMZ Test.");
+
