@@ -24,7 +24,7 @@ function getRabbit()
             }
         }
         $channel = $connection->channel();
-        error_log("Created RabbitMQ channel: $channel");
+        error_log("Created RabbitMQ channel");
         return [$connection, $channel];
 }
 function getDeployRabbit()
@@ -109,13 +109,6 @@ function recieveDMZ($cluster)
     $data = null;
     // Declare the exchange
     $channel->exchange_declare('directExchange', 'direct', false, true, false);
-    error_log("Raw message received: " . $msg->body);
-
-    $response = json_decode($msg->body, true);
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        error_log("JSON decode error: " . json_last_error_msg());
-        return;
-    }
     
     error_log("Decoded response: " . print_r($response, true));
     // Declare the response channel

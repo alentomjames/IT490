@@ -27,7 +27,8 @@ if ($cluster === null) {
 $client = new \GuzzleHttp\Client();
 
 $trending = fetchTrending();
-error_log("TRENDING: $trending");
+$trendingOut = $trending['results'];
+error_log("TRENDING: $trendingOut");
 function fetchTrending()
 {
     global $cluster;
@@ -38,7 +39,7 @@ function fetchTrending()
     error_log("Sent request");
     error_log('Sent message to RabbitMQ: ' . $data);
     $recieveDmz = recieveDMZ($cluster);
-    error_log("Recieved DMZ: $recieveDmz");
+    error_log("Recieved DMZ in index.php");
     return $recieveDmz;
 }
 ?>
