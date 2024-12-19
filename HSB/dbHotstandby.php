@@ -9,6 +9,7 @@ $ip = '172.29.244.201/16';
 $networkInterface = 'ztosimf46d';
 $switchIP = "sudo ip addr add $ip dev $networkInterface";
 $restartMySQL = "sudo systemctl restart mysql.service";
+$promoteDB = "sudo mysql -u root -e \"STOP SLAVE; SET GLOBAL read_only = OFF;\"";
 
 echo "Starting Hot Standby Listener\n";
 
@@ -16,7 +17,7 @@ list($connection, $channel) = getDeployRabbit();
 
 $channel->queue_declare('prodForBeHSB', false, true, false, false);
 
-$callback = function ($msg) use ($switchIP, $restartMySQL, $networkInterface, $channel) {
+$callback = function ($msg) use ($switchIP, $restartMySQL, $networkInterface, $channel, $promoteDB) {
     $data = json_decode($msg->body, true);
     echo "Received message: " . $data['status'] . "\n";
     if ($data['status'] === 'down') {
@@ -49,6 +50,15 @@ $callback = function ($msg) use ($switchIP, $restartMySQL, $networkInterface, $c
             echo "Failed to restart MySQL.\n";
             exit(1);
         }
+        // Promote HSB to Master
+        echo "Promoting HSB to Master Database\n";
+        exec($promoteDB, $output, $return_var);
+        if ($return_var == 0) {
+            echo "HSB promoted to Master successfully.\n";
+        } else {
+            echo "Failed to promote HSB to Master.\n";
+            exit(1);
+        }
 
         echo "Restaring RabbitMQ\n";
         exec('sudo systemctl restart rabbitmq-server');
@@ -58,6 +68,8 @@ $callback = function ($msg) use ($switchIP, $restartMySQL, $networkInterface, $c
             echo "Failed to restart RabbitMQ.\n";
             exit(1);
         }
+
+
         // Stop consuming messages
         $channel->basic_cancel($msg->delivery_info['consumer_tag']);
     } else {
