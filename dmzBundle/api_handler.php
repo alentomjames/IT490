@@ -31,6 +31,9 @@ if ($cluster == 'QA') {
 }
 echo "Connected to RabbitMQ\n";
 
+// Declare the exchange
+$channel->exchange_declare('directExchange', 'direct', false, true, false);
+
 // Declare the queue to listen to
 $channel->queue_declare('frontendForDMZ', false, true, false, false);
 echo "Declared queue 'frontendQueue'\n";
@@ -111,6 +114,7 @@ $callback = function ($msg) use ($channel) {
     if ($response) {
         echo "Sending response back to client: $response\n";
         $responseMsg = new AMQPMessage($response, ['delivery_mode' => 2]);
+        error_log("DMZ about to send: " . $response);
         $channel->basic_publish($responseMsg, 'directExchange', 'dmzForFrontend');
         echo "Response sent\n";
     } else {

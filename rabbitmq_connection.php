@@ -103,7 +103,13 @@ function recieveDMZ($cluster)
     error_log("Bound DMZ response channel");
     // Function waiting for the response from RabbitMQ
     $callback = function ($msg) use (&$data) {
+        error_log("Received raw message: " . $msg->body);
         $response = json_decode($msg->body, true);
+        if ($response === null) {
+            error_log("JSON decode failed");
+        } else {
+            error_log("Decoded response: " . print_r($response, true));
+        }
         // Check if the response type is 'success' and data is present
         error_log("RESPONSE FROM RMQ_CONNECT: $response");
         error_log("MSG FROM RMQ_CONNECT: $msg");
@@ -122,7 +128,7 @@ function recieveDMZ($cluster)
     error_log("Consuming DMZ response channel and called callback");
     // Wait for the response
     while ($channel->is_consuming()) {
-        $channel->wait(null, false, 10); // 10-second timeout
+        $channel->wait(null, false, 30); // timeout
         if ($data !== null) {
             break;
         } else {
