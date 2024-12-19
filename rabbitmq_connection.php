@@ -90,6 +90,7 @@ function recieveDMZ($cluster)
         list($connection, $channel) = getProdRabbit();
     } else {
         list($connection, $channel) = getRabbit();
+        error_log("Getting Rabbit for DEV DMZ");
     }
     $data = null;
     // Declare the response channel
@@ -99,6 +100,9 @@ function recieveDMZ($cluster)
     $callback = function ($msg) use (&$data) {
         $response = json_decode($msg->body, true);
         // Check if the response type is 'success' and data is present
+        error_log("RESPONSE FROM RMQ_CONNECT: $response");
+        error_log("MSG FROM RMQ_CONNECT: $msg");
+        error_log("DATA FROM RMQ_CONNECT: $data");
         if (isset($response['type']) && $response['type'] === 'success') {
             $data = $response['data'];
             echo "Data received from DMZ: {$data}";
