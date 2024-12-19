@@ -41,20 +41,9 @@ $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
 $channel->basic_publish($msg, 'directExchange', $queue);
 error_log("Sent request for movie ID: $parameter to DMZ");
 
-// Close the publishing connection now that we're done sending
-$channel->close();
-$connection->close();
 
 // 2. Set up a new connection to consume the response from DMZ
 error_log("Setting up consumer for response...");
-
-$connectionConsume = new AMQPStreamConnection($rabbitHost, $rabbitPort, $rabbitUser, $rabbitPass, $rabbitVhost);
-$channelConsume = $connectionConsume->channel();
-
-// Ensure the declarations (idempotent - won't hurt to run again)
-$channelConsume->exchange_declare('directExchange', 'direct', false, true, false);
-$channelConsume->queue_declare('dmzForFrontend', false, true, false, false);
-$channelConsume->queue_bind('dmzForFrontend', 'directExchange', 'dmzForFrontend');
 
 $finalResponse = null;
 
