@@ -106,57 +106,50 @@ function recieveDMZ($cluster)
         list($connection, $channel) = getRabbit();
         error_log("Getting Rabbit for DEV DMZ");
     }
-    $data = null;
-    $received = false;
-    // Declare the response channel
+
+    $finalResponse = null;
+
     $channel->queue_declare('dmzForFrontend', false, true, false, false);
     error_log("Declared DMZ response channel");
-    // Function waiting for the response from RabbitMQ
-    $callback = function ($msg) use (&$data, &$received) {
+
+    $callback = function ($msg) use (&$finalResponse) {
         error_log("Received raw message: " . $msg->body);
         $response = json_decode($msg->body, true);
+
         if ($response === null) {
-            error_log("JSON decode failed");
-        } else {
-            error_log("Decoded response: " . print_r($response, true));
+            error_log("JSON decode failed. Message body: " . $msg->body);
+            return;
         }
-        // Check if the response type is 'success' and data is present
-        error_log("RESPONSE FROM RMQ_CONNECT: $response");
-        error_log("MSG FROM RMQ_CONNECT");
-        error_log("DATA FROM RMQ_CONNECT: $data");
+
+        error_log("Decoded response: " . print_r($response, true));
 
         if (isset($response['type']) && $response['type'] === 'success') {
-            $data = $response['data'];
-            $received = true;
-            echo "Data received from DMZ: {$data}";
-            error_log("Successfully parsed DMZ response data: {$data}");
-            error_log("Successfully parsed DMZ response data");
-            return $response;
+            $finalResponse = $response;
+            // Once we have the response, we can stop consuming
         } else {
-            echo 'Error: Failed to retrieve data or invalid response format received from DMZ.';
+            error_log('Error: Failed to retrieve data or invalid response format received from DMZ.');
         }
     };
 
     $channel->basic_consume('dmzForFrontend', '', false, true, false, false, $callback);
-    error_log("Consuming DMZ response channel and called callback");
-    // Wait for the response
-    // Set timeout start time
-    $timeout = time() + 30;  // 30 second timeout
-    
-    // Wait for the response with timeout
-    while ($channel->is_consuming() && !$received && time() < $timeout) {
-        try {
-            $channel->wait(null, true, 1);  // Wait for 1 second at a time
-        } catch (\PhpAmqpLib\Exception\AMQPTimeoutException $e) {
-            continue;  // Continue if timeout, will check conditions again
+
+    // Keep waiting until we have $finalResponse or timeout
+    $start = time();
+    while ($channel->is_consuming()) {
+        $channel->wait(null, false, 30);
+        if ($finalResponse !== null) {
+            break;
+        }
+        if ((time() - $start) > 30) {
+            error_log("Timed out waiting for DMZ response");
+            break;
         }
     }
 
-    // Close the channel and connection
     closeRabbit($connection, $channel);
-    error_log("Closed Rabbit connection");
-    return $data;
+    return $finalResponse;
 }
+
 function recieveDB($cluster)
 {
 

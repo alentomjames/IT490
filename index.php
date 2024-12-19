@@ -42,7 +42,6 @@ function fetchTrending()
 
     error_log("DMZ response structure: " . print_r($recieveDmz, true));
 
-    
     if ($recieveDmz === null || !isset($recieveDmz['type']) || $recieveDmz['type'] !== 'success') {
         error_log("Invalid response from DMZ");
         error_log("Response missing 'type' field. Response structure: " . json_encode($recieveDmz, JSON_PRETTY_PRINT));
