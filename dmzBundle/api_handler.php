@@ -141,30 +141,6 @@ $callback = function ($msg) use ($channel) {
                         ['country' => 'US', 'date' => '2021-01-01'],
                         ['country' => 'CA', 'date' => '2021-01-02'],
                     ],
-                    'box_office' => [
-                        'domestic' => 200000000,
-                        'international' => 300000000,
-                    ],
-                    'soundtrack' => [
-                        ['id' => 1, 'title' => 'Song A'],
-                        ['id' => 2, 'title' => 'Song B'],
-                    ],
-                    'trailers' => [
-                        ['id' => 1, 'url' => 'https://www.example.com/trailer1'],
-                        ['id' => 2, 'url' => 'https://www.example.com/trailer2'],
-                    ],
-                    'related_movies' => [
-                        ['id' => 1, 'title' => 'Related Movie A'],
-                        ['id' => 2, 'title' => 'Related Movie B'],
-                    ],
-                    'user_ratings' => [
-                        ['id' => 1, 'rating' => 8.0],
-                        ['id' => 2, 'rating' => 7.0],
-                    ],
-                    'release_dates' => [
-                        ['country' => 'US', 'date' => '2021-01-01'],
-                        ['country' => 'CA', 'date' => '2021-01-02'],
-                    ],
                 ],
             ]);
             break;
