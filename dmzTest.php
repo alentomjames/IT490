@@ -45,13 +45,13 @@ error_log("Sent request for movie ID: $parameter to DMZ");
 // 2. Set up a new connection to consume the response from DMZ
 error_log("Setting up consumer for response...");
 
-$connectionConsume = new AMQPStreamConnection($rabbitHost, $rabbitPort, $rabbitUser, $rabbitPass, $rabbitVhost);
-$channelConsume = $connectionConsume->channel();
+// $connectionConsume = new AMQPStreamConnection($rabbitHost, $rabbitPort, $rabbitUser, $rabbitPass, $rabbitVhost);
+// $channelConsume = $connectionConsume->channel();
 
-// Ensure the declarations (idempotent - won't hurt to run again)
-$channelConsume->exchange_declare('directExchange', 'direct', false, true, false);
-$channelConsume->queue_declare('dmzForFrontend', false, true, false, false);
-$channelConsume->queue_bind('dmzForFrontend', 'directExchange', 'dmzForFrontend');
+// // Ensure the declarations (idempotent - won't hurt to run again)
+// $channelConsume->exchange_declare('directExchange', 'direct', false, true, false);
+// $channelConsume->queue_declare('dmzForFrontend', false, true, false, false);
+// $channelConsume->queue_bind('dmzForFrontend', 'directExchange', 'dmzForFrontend');
 
 $finalResponse = null;
 
@@ -74,12 +74,12 @@ $callback = function($msg) use (&$finalResponse) {
 };
 
 // Start consuming from dmzForFrontend
-$channelConsume->basic_consume('dmzForFrontend', '', false, true, false, false, $callback);
+$channel->basic_consume('dmzForFrontend', '', false, true, false, false, $callback);
 
 // Wait up to 30 seconds for a response
 $start = time();
-while ($channelConsume->is_consuming()) {
-    $channelConsume->wait(null, false, 5); // wait with a small timeout so we can check elapsed time
+while ($channel->is_consuming()) {
+    $channel->wait(null, false, 5); // wait with a small timeout so we can check elapsed time
     if ($finalResponse !== null) {
         break;
     }
@@ -90,8 +90,8 @@ while ($channelConsume->is_consuming()) {
 }
 
 // Close the consuming connection
-$channelConsume->close();
-$connectionConsume->close();
+$channel->close();
+$connection->close();
 
 // Output the results
 if ($finalResponse) {
