@@ -40,12 +40,13 @@ function fetchTrending()
     $recieveDmz = recieveDMZ($cluster);
     error_log("Recieved DMZ in index.php");
 
+    error_log("DMZ response structure: " . print_r($recieveDmz, true));
+
+    
     if ($recieveDmz === null || !isset($recieveDmz['type']) || $recieveDmz['type'] !== 'success') {
         error_log("Invalid response from DMZ");
-        $resoponseType = $recieveDmz['type'] ?? 'unknown';
-        error_log("Response type: $resoponseType");
-        $resultsResponse = $recieveDmz['data'] ?? 'unknown';
-        error_log("Response data: $resultsResponse");
+        error_log("Response missing 'type' field. Response structure: " . json_encode($recieveDmz, JSON_PRETTY_PRINT));
+        error_log("Response type is not 'success'. Type is: " . $recieveDmz['type']);
         return ['results' => []];
     }
 
