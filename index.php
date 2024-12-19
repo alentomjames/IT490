@@ -47,7 +47,15 @@ function fetchTrending()
 
 <body>
     <nav class="navbar">
+        <!--  hamburger button for responsive website --->
+        <button class="hamburger" onclick="toggleMenu()">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </button>
+
         <a href="index.php" class="nav-title">BreadWinners</a>
+        <div class = "menu" id = "menu">
         <ul class="nav-links">
             <?php if ($loggedIn): ?>
                 <li>
@@ -72,6 +80,7 @@ function fetchTrending()
             <li><button onclick="location.href='/loginBundle/sign_up.php'">Sign Up</button></li>
             <?php endif; ?>
         </ul>
+        </div>
     </nav>
 
     <div class="welcome-message">
