@@ -384,4 +384,4 @@ function fetchActorMovies(actorId) {
 }
 
 // Event listener for the search bar
-document.getElementById('actor-search-bar').addEventListener('input', searchActors);
+//document.getElementById('actor-search-bar').addEventListener('input', searchActors);
