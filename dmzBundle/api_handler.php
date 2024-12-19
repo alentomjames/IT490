@@ -158,9 +158,7 @@ function fetchDetails($type, $parameter, $url)
 
         return json_encode([
             'type' => 'success',
-            'data' => [
-                'results' => $responseBody['results'] 
-            ],
+            'data' => $responseBody,
         ]);
 
     } catch (RequestException $e) {
