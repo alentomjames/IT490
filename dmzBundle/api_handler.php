@@ -31,16 +31,11 @@ if ($cluster == 'QA') {
 }
 echo "Connected to RabbitMQ\n";
 
-// Declare the exchange
-$channel->exchange_declare('directExchange', 'direct', false, true, false);
 
 // Declare the queue to listen to
 $channel->queue_declare('frontendForDMZ', false, true, false, false);
 echo "Declared queue 'frontendForDMZ'\n";
 
-
-$channel->queue_bind('frontendForDMZ', 'directExchange', 'frontendForDMZ');
-echo "Bound queue 'frontendForDMZ' to exchange 'directExchange'\n";
 
 // Process the login/register requests
 $callback = function ($msg) use ($channel) {
