@@ -77,6 +77,32 @@ $callback = function ($msg) use ($channel) {
                         ['id' => 1, 'name' => 'Action'],
                         ['id' => 2, 'name' => 'Adventure'],
                     ],
+                    'budget' => 150000000,
+                    'revenue' => 500000000,
+                    'production_companies' => [
+                        ['id' => 1, 'name' => 'Company A'],
+                        ['id' => 2, 'name' => 'Company B'],
+                    ],
+                    'production_countries' => [
+                        ['iso_3166_1' => 'US', 'name' => 'United States of America'],
+                        ['iso_3166_1' => 'CA', 'name' => 'Canada'],
+                    ],
+                    'spoken_languages' => [
+                        ['iso_639_1' => 'en', 'name' => 'English'],
+                        ['iso_639_1' => 'fr', 'name' => 'French'],
+                    ],
+                    'status' => 'Released',
+                    'tagline' => 'An epic movie',
+                    'popularity' => 100.0,
+                    'vote_count' => 2000,
+                    'video' => false,
+                    'adult' => false,
+                    'backdrop_path' => '/path/to/backdrop.jpg',
+                    'poster_path' => '/path/to/poster.jpg',
+                    'homepage' => 'https://www.example.com',
+                    'imdb_id' => 'tt1234567',
+                    'original_language' => 'en',
+                    'original_title' => 'Original Movie Title',
                 ],
             ]);
             break;
