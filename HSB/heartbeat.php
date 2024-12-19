@@ -19,7 +19,7 @@
             echo "ACTIVE Server is still active.\n";
         } else {
             echo "Active server is down or no response.\n";
-            exec('php ~/git/IT490/HSB/hotstandby.php', $output, $return_var);
+            exec('php /home/alen/git/IT490/HSB/hotstandby.php', $output, $return_var);
             echo "Output: " . implode("\n", $output) . "\n";
             echo "Return Value: $return_var\n";
 

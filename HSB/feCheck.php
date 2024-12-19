@@ -27,10 +27,12 @@ if ($response == "$standby ACTIVE") {
     // This machine becomes the standby machine and starts the heartbeat.php function
     echo "$standby is ACTIVE, activating heartbeat on $current\n";
     exec('php /home/alen/git/IT490/HSB/heartbeat.php', $output, $return_var);
-    echo "$current is now the STANDBY machine\n";
+    echo "heartbeat.php output: \n" . implode("\n", $output) . "\n";
+    echo "$current heartbeat stopped recieving a response\n";
 } else if (empty($response) || $responseCode != 200) {
     echo "No response from $standby\n, $current attempting to become the ACTIVE machine\n";
     exec ('php /home/alen/git/IT490/HSB/hotstandby.php', $output, $return_var);
+    echo "hotstandby.php output: \n" . implode("\n", $output) . "\n";
     echo "$current is now the ACTIVE machine\n";
     // Update the okay file 
     file_put_contents('/var/www/it490/HSB/okay.php', "<?php echo \"$current ACTIVE\\n\"; ?>");
