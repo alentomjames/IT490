@@ -42,6 +42,10 @@ function fetchTrending()
 
     if ($recieveDmz === null || !isset($recieveDmz['type']) || $recieveDmz['type'] !== 'success') {
         error_log("Invalid response from DMZ");
+        $resoponseType = $recieveDmz['type'] ?? 'unknown';
+        error_log("Response type: $resoponseType");
+        $resultsResponse = $recieveDmz['data'] ?? 'unknown';
+        error_log("Response data: $resultsResponse");
         return ['results' => []];
     }
 
