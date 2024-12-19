@@ -27,8 +27,7 @@ if ($cluster === null) {
 $client = new \GuzzleHttp\Client();
 
 $trending = fetchTrending();
-$trendingOut = $trending['results'];
-error_log("TRENDING: $trendingOut");
+error_log("TRENDING ");
 function fetchTrending()
 {
     global $cluster;
@@ -40,7 +39,18 @@ function fetchTrending()
     error_log('Sent message to RabbitMQ');
     $recieveDmz = recieveDMZ($cluster);
     error_log("Recieved DMZ in index.php");
-    return $recieveDmz;
+
+    if ($recieveDmz === null || !isset($recieveDmz['type']) || $recieveDmz['type'] !== 'success') {
+        error_log("Invalid response from DMZ");
+        return ['results' => []];
+    }
+
+    if (!isset($recieveDmz['data']) || !isset($recieveDmz['data']['results'])) {
+        error_log("Response doesn't contain expected data structure");
+        return ['results' => []];
+    }
+
+    return $recieveDmz['data'];
 }
 ?>
 
