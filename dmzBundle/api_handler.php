@@ -103,6 +103,25 @@ $callback = function ($msg) use ($channel) {
                     'imdb_id' => 'tt1234567',
                     'original_language' => 'en',
                     'original_title' => 'Original Movie Title',
+                    'reccomendations' => [
+                        ['id' => 1, 'title' => 'Reccomendation 1'],
+                        ['id' => 2, 'title' => 'Reccomendation 2'],
+                    ],
+                    'images' => [
+                        ['file_path' => '/path/to/image1.jpg'],
+                        ['file_path' => '/path/to/image2.jpg'],
+                    ],
+                    'credits' => [
+                        'cast' => [
+                            ['id' => 1, 'name' => 'Actor 1', 'character' => 'Character 1'],
+                            ['id' => 2, 'name' => 'Actor 2', 'character' => 'Character 2'],
+                        ],
+                        'crew' => [
+                            ['id' => 3, 'name' => 'Crew 1', 'job' => 'Job 1'],
+                            ['id' => 4, 'name' => 'Crew 2', 'job' => 'Job 2'],
+                        ],
+                    ],
+                    
                 ],
             ]);
             break;
