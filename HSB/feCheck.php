@@ -18,8 +18,10 @@ $response = trim($response);
 if ($response == "HSB ACTIVE") {
     // This machine becomes the standby machine and starts the heartbeat.php function
     exec('php /home/alen/git/IT490/HSB/heartbeat.php', $output, $return_var);
+    echo "$current is now the STANDBY machine\n";
 } else {
     exec ('php /home/alen/git/IT490/HSB/hotstandby.php', $output, $return_var);
+    echo "$current is now the ACTIVE machine\n";
     // Update the okay file 
     file_put_contents('/var/www/it490/HSB/okay.php', "<?php echo \"$current ACTIVE\\n\"; ?>");
 }
