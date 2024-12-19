@@ -117,7 +117,7 @@ function recieveDMZ($cluster)
     error_log("Consuming DMZ response channel and called callback");
     // Wait for the response
     while ($channel->is_consuming()) {
-        $channel->wait();
+        $channel->wait(null, false, 10); // 10-second timeout
         if ($data !== null) {
             break;
         } else {
