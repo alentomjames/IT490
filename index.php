@@ -27,6 +27,7 @@ if ($cluster === null) {
 $client = new \GuzzleHttp\Client();
 
 $trending = fetchTrending();
+error_log("TRENDING: $trending");
 function fetchTrending()
 {
     global $cluster;
