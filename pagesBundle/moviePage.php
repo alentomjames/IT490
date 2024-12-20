@@ -149,6 +149,26 @@ if ($movie_id) {
     </div>
     </div>
 
+    <div class="comments-section">
+        <h2>Comments</h2>
+
+        <!-- container for displaying comments -->
+        <div id="comments-container">
+            <p>Loading comments...</p> <!-- Placeholder while comments are loading -->
+        </div>
+
+        <!-- comment form for logged-in users -->
+        <?php if ($loggedIn): ?>
+            <div class="comment-form">
+                <textarea id="comment-content" placeholder="Write your comment here..." rows="4"></textarea>
+                <button onclick="addComment(<?php echo $movie_id; ?>)">Submit Comment</button>
+            </div>
+        <?php else: ?>
+            <!-- message for guests -->
+            <p>You must be logged in to leave a comment.</p>
+        <?php endif; ?>
+    </div>
+
     <script>
         // Load comments for the movie when the page loads
         document.addEventListener('DOMContentLoaded', function() {
