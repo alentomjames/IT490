@@ -25,22 +25,23 @@ $userName = $loggedIn ? $_SESSION['name'] : null;
     <nav class="navbar">
         <a href="../index.php" class="nav-title">BreadWinners</a>
         <ul class="nav-links">
-            <?php if ($loggedIn): ?>
-                <li><button onclick="location.href='Reccomend.php'" class="smoothie-button">
-                        <img src="smoothie.png" alt="Movie Smoothie" class="smoothie-icon">
-                    </button></li>
-                <li><button onclick="location.href='recBasedonLikesPage.php'">Recommended Movies</button></li>
-                <li><button onclick="location.href='MovieTrivia.php'">Movie Trivia</button></li>
-                <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
-                <li><button onclick="location.href='topTenPage.php'">Top Movies</button></li>
-                <p class="nav-title">Welcome, <?php echo $_SESSION['name']; ?>!</p>
-                <li><button onclick="location.href='../loginBundle/logout.php'">Logout</button></li>
-            <?php else: ?>
-                <li><button onclick="location.href='../loginBundle/login.php'">Login</button></li>
-                <li><button onclick="location.href='../loginBundle/sign_up.php'">Sign Up</button></li>
-            <?php endif; ?>
-        </ul>
-    </nav>
+        <?php if ($loggedIn): ?>
+            <li>
+                <button onclick="location.href='/pagesBundle/Reccomend.php'" class="smoothie-button">
+                    <img src="smoothie.png" alt="Movie Smoothie" class="smoothie-icon">
+                </button>
+            </li>
+            <li><button onclick="location.href='/pagesBundle/recBasedonLikesPage.php'">Recommended Movies</button></li>
+            <li><button onclick="location.href='/pagesBundle/MovieTrivia.php'">Movie Trivia</button></li>
+            <li><button onclick="location.href='/pagesBundle/watchlistPage.php'">Watch Later</button></li>
+            <li><button onclick="location.href='/pagesBundle/topTenPage.php'">Top Movies</button></li>
+            <li><button onclick="location.href='/loginBundle/logout.php'">Logout</button></li>
+        <?php else: ?>
+            <li><button onclick="location.href='/loginBundle/login.php'">Login</button></li>
+            <li><button onclick="location.href='/loginBundle/sign_up.php'">Sign Up</button></li>
+        <?php endif; ?>
+    </ul>
+</nav>
 
     <div class="welcome-message">
         <h1>Movies You Liked and Recommendations Based on Them</h1>
