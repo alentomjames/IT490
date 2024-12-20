@@ -28,7 +28,7 @@ $moviesData = recieveDMZ($cluster);
 
 if ($moviesData) {
     header('Content-Type: application/json');
-    echo json_encode($moviesData);
+    echo json_encode($moviesData['data']);
 } else {
     error_log('Failed to retrieve movie data!!!!!! RAAAAHHH');
     exit;
