@@ -20,7 +20,6 @@ if ($cluster === null) {
     error_log('CLUSTER not set in .env file');
     exit;
 }
-
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -34,14 +33,15 @@ if ($movie_id) {
 
 
     //Sends request to rabbitMQ_connection.php to recieve API movie data
-    $movie = recieveDMZ($cluster);
-
+    $movieStuff = recieveDMZ($cluster, $type, $movie_id);
+    $movie = $movieStuff['data'];
     // Movie data
     if ($movie) {
         $title = $movie['title'];
         $vote_average = round($movie['vote_average'] / 2, 1);
         $overview = $movie['overview'];
         $poster = 'https://image.tmdb.org/t/p/w500' . $movie['poster_path'];
+        error_log("POSTER URL: " . $poster);
         $genres = implode(', ', array_column($movie['genres'], 'name'));
         $languages = implode(', ', array_column($movie['spoken_languages'], 'english_name'));
         $production_companies = implode(', ', array_column($movie['production_companies'], 'name'));
@@ -53,11 +53,11 @@ if ($movie_id) {
     // Adding reccomendations
     $type = 'reccomendations';
     sendRequest($type, $movie_id, 'frontendForDMZ', $cluster);
-    $recommendationsData = recieveDMZ($cluster);
+    $recommendationsData = recieveDMZ($cluster, $type, $movie_id);
 
     error_log("Recommendations response: " . print_r($recommendationsData, true));
 
-    $recommendations = isset($recommendationsData['results']) ? array_slice($recommendationsData['results'], 0, 10) : [];
+    $recommendations = isset($recommendationsData['data']['results']) ? array_slice($recommendationsData['data']['results'], 0, 10) : [];
 
 
     error_log("Recommendations received: " . print_r($recommendations, true)); // Debug log
@@ -82,34 +82,28 @@ if ($movie_id) {
 </head>
 
 <body>
-    <nav class="navbar">
-        <a href="index.php" class="nav-title">BreadWinners</a>
+<nav class="navbar">
+        <a href="../index.php" class="nav-title">BreadWinners</a>
 
-        <button class="hamburger" aria-label="Toggle navigation">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </button>
-
-
-        <ul class="nav-links">
-            <?php if ($loggedIn): ?>
-                <li>
-                    <button onclick="location.href='/pagesBundle/Reccomend.php'" class="smoothie-button">
-                        <img src="smoothie.png" alt="Movie Smoothie" class="smoothie-icon">
-                    </button>
-                </li>
-                <li><button onclick="location.href='/pagesBundle/recBasedonLikesPage.php'">Recommended Movies</button></li>
-                <li><button onclick="location.href='/pagesBundle/MovieTrivia.php'">Movie Trivia</button></li>
-                <li><button onclick="location.href='/pagesBundle/watchlistPage.php'">Watch Later</button></li>
-                <li><button onclick="location.href='/pagesBundle/topTenPage.php'">Top Movies</button></li>
-                <li><button onclick="location.href='/loginBundle/logout.php'">Logout</button></li>
-            <?php else: ?>
-                <li><button onclick="location.href='/loginBundle/login.php'">Login</button></li>
-                <li><button onclick="location.href='/loginBundle/sign_up.php'">Sign Up</button></li>
-            <?php endif; ?>
-        </ul>
-    </nav>
+       
+      <ul class="nav-links">
+        <?php if ($loggedIn): ?>
+            <li>
+                <button onclick="location.href='/pagesBundle/Reccomend.php'" class="smoothie-button">
+                    <img src="smoothie.png" alt="Movie Smoothie" class="smoothie-icon">
+                </button>
+            </li>
+            <li><button onclick="location.href='/pagesBundle/recBasedonLikesPage.php'">Recommended Movies</button></li>
+            <li><button onclick="location.href='/pagesBundle/MovieTrivia.php'">Movie Trivia</button></li>
+            <li><button onclick="location.href='/pagesBundle/watchlistPage.php'">Watch Later</button></li>
+            <li><button onclick="location.href='/pagesBundle/topTenPage.php'">Top Movies</button></li>
+            <li><button onclick="location.href='/loginBundle/logout.php'">Logout</button></li>
+        <?php else: ?>
+            <li><button onclick="location.href='/loginBundle/login.php'">Login</button></li>
+            <li><button onclick="location.href='/loginBundle/sign_up.php'">Sign Up</button></li>
+        <?php endif; ?>
+    </ul>
+</nav>
 
     <!-- Movie Content -->
     <div class="movie-details">
@@ -148,8 +142,15 @@ if ($movie_id) {
         <p><strong>Production Companies:</strong> <?php echo $production_companies; ?></p>
     </div>
     </div>
+	<script>
+        // Load comments for the movie when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComments(<?php echo $movie_id; ?>);
+        });
+    </script>
 
-    <div class="comments-section">
+
+ <div class="comments-section">
         <h2>Comments</h2>
 
         <!-- container for displaying comments -->
@@ -169,12 +170,7 @@ if ($movie_id) {
         <?php endif; ?>
     </div>
 
-    <script>
-        // Load comments for the movie when the page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            loadComments(<?php echo $movie_id; ?>);
-        });
-    </script>
+
 
     <!-- Recommended Movies -->
     <div class="recommendations">

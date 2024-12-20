@@ -3,6 +3,9 @@ session_start();
 require_once '../rabbitmq_connection.php';
 require_once '../vendor/autoload.php';
 
+use PhpAmqpLib\Connection\AMQStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+
 $envFilePath = __DIR__ . '/../.env';
 $getenv = parse_ini_file($envFilePath);
 
@@ -41,12 +44,21 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
 function receiveRabbitMQResponse()
 {
+    if (ob_get_length()) {
+	ob_clean();
+    }
     list($connection, $channel) = getRabbit();
     $channel->queue_declare('databaseForFrontend', false, true, false, false);
 
     $callback = function ($msg) {
         $response = json_decode($msg->body, true);
-        echo json_encode($response);
+	$comment = json_encode($response);
+	error_log("RESPONSE:" .  $comment);
+        if ($response['type'] === 'success') {
+	  echo json_encode(['type' => 'success', 'comments' => $response['comments']]);	
+	} else {
+	  echo json_encode(['type' => 'failure', 'message' => 'Failed to retrieve comments']);
+	}
         exit();
     };
 

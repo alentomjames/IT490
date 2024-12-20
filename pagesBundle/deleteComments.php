@@ -3,6 +3,10 @@ session_start();
 require_once '../rabbitmq_connection.php';
 require_once '../vendor/autoload.php';
 
+use PhpAmqpLib\Connection\AMQStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+
+
 $envFilePath = __DIR__ . '/../.env';
 $getenv = parse_ini_file($envFilePath);
 
@@ -47,11 +51,17 @@ function receiveRabbitMQResponse()
     list($connection, $channel) = getRabbit();
     $channel->queue_declare('databaseForFrontend', false, true, false, false);
 
-    $callback = function ($msg) {
+        $callback = function ($msg) {
         $response = json_decode($msg->body, true);
-        echo json_encode($response);
-        exit();
-    };
+        $comment = json_encode($response);
+        error_log("RESPONSE:" .  $comment);
+        if ($response['type'] === 'success') {
+                        echo json_encode(['type' => 'success', 'message' => "Comment deleted successfully"]); 
+                } else {
+                        echo json_encode(['type' => 'failure', 'message' => 'Failed to delete comment']);
+       	}
+	exit;
+	};
 
     $channel->basic_consume('databaseForFrontend', '', false, true, false, false, $callback);
     while ($channel->is_consuming()) {
