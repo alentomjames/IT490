@@ -182,6 +182,8 @@ $callback = function ($msg) use ($bundleName, $channel, $bundlePath, $machineNam
         $msg->ack();
         $channel->basic_cancel($msg->delivery_info['consumer_tag']);
     } else {
+        echo "Received unknown message: " . $msg->body . "\n";
+        echo "Expected 'sent' confirmation for bundle '$bundleName'.\n";
         $msg->ack();
     }
 };
