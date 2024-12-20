@@ -3,7 +3,7 @@ session_start();
 $loggedIn = isset($_SESSION['userID']);
 if (!$loggedIn) {
     header("Location: /loginBundle/login.php");
-    exit; 
+    exit;
 }
 
 require_once('vendor/autoload.php');
@@ -14,6 +14,8 @@ $getenv = parse_ini_file($envFilePath);
 if ($getenv === false) {
     error_log('Failed to parse .env file');
     exit;
+} else {
+    error_log('Here is the cluster: ' . $getenv['CLUSTER']);
 }
 
 $cluster = isset($getenv['CLUSTER']) ? $getenv['CLUSTER'] : null;
@@ -25,12 +27,34 @@ if ($cluster === null) {
 $client = new \GuzzleHttp\Client();
 
 $trending = fetchTrending();
+error_log("TRENDING ");
 function fetchTrending()
 {
     global $cluster;
+    error_log("Cluster: $cluster");
     $type = 'trending_movies';
+    error_log("Type: $type");
     sendRequest($type, 'day', 'frontendForDMZ', $cluster);
-    return recieveDMZ($cluster);
+    error_log("Sent request");
+    error_log('Sent message to RabbitMQ');
+    $recieveDmz = recieveDMZ($cluster);
+    error_log("Recieved DMZ in index.php");
+
+    error_log("DMZ response structure: " . print_r($recieveDmz, true));
+
+    if ($recieveDmz === null || !isset($recieveDmz['type']) || $recieveDmz['type'] !== 'success') {
+        error_log("Invalid response from DMZ");
+        error_log("Response missing 'type' field. Response structure: " . json_encode($recieveDmz, JSON_PRETTY_PRINT));
+        error_log("Response type is not 'success'. Type is: " . $recieveDmz['type']);
+        return ['results' => []];
+    }
+
+    if (!isset($recieveDmz['data']) || !isset($recieveDmz['data']['results'])) {
+        error_log("Response doesn't contain expected data structure");
+        return ['results' => []];
+    }
+
+    return $recieveDmz['data'];
 }
 ?>
 
@@ -46,15 +70,17 @@ function fetchTrending()
 </head>
 
 <body>
+    <nav class="navbar">
+        <a href="index.php" class="nav-title">BreadWinners</a>
 
-<nav class="navbar">
-    <a href="index.php" class="nav-title">BreadWinners</a>
+        <button class="hamburger" aria-label="Toggle navigation">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
 
-    <?php if ($loggedIn): ?>
-        <p class="welcome-message">Welcome, <?php echo $_SESSION['name']; ?>!</p>
-    <?php endif; ?>
 
-    <ul class="nav-links">
+        <ul class="nav-links">
         <?php if ($loggedIn): ?>
             <li>
                 <button onclick="location.href='/pagesBundle/Reccomend.php'" class="smoothie-button">
@@ -72,7 +98,6 @@ function fetchTrending()
         <?php endif; ?>
     </ul>
 </nav>
-
 
     <div class="welcome-message">
         <h1>Hello,
@@ -95,7 +120,7 @@ function fetchTrending()
         <?php endforeach; ?>
     </div>
 
-    <div class="filters">
+    <!-- <div class="filters">
         <input type="text" id="search-bar" placeholder="Search for movies..." oninput="filterMovies()">
         <select id="genre-filter" onchange="filterMovies()">
             <option value="">All Genres</option>
@@ -131,92 +156,93 @@ function fetchTrending()
         <button id="prev-page" onclick="changePage(-1)">Previous</button>
         <span id="current-page">1</span>
         <button id="next-page" onclick="changePage(1)">Next</button>
-    </div>
+    </div> -->
 
     <script>
-        let currentPage = 1;
-        let totalPages = 1;
-        let allMovies = [];
-        let searchQuery = '';
+        // let currentPage = 1;
+        // let totalPages = 1;
+        // let allMovies = [];
+        // let searchQuery = '';
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadMovies(currentPage);
-        });
+        // document.addEventListener('DOMContentLoaded', () => {
+        //     loadMovies(currentPage);
+        // });
 
-        function loadMovies(page) {
-            fetch(`/pagesBundle/loadMovies.php?page=${page}`)
-                .then(response => response.json())
-                .then(data => {
-                    totalPages = data.total_pages;
-                    allMovies = data.results.filter(movie => movie.poster_path);
-                    displayMovies(allMovies);
-                    document.getElementById('current-page').textContent = currentPage;
-                });
-        }
+        // function loadMovies(page) {
+        //     fetch(`/pagesBundle/loadMovies.php?page=${page}`)
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             console.log("data", data);
+        //             totalPages = data.total_pages;
+        //             allMovies = data.results.filter(movie => movie.poster_path);
+        //             displayMovies(allMovies);
+        //             document.getElementById('current-page').textContent = currentPage;
+        //         });
+        // }
 
-        function displayMovies(movies) {
-            const moviesContainer = document.getElementById('movies-container');
-            moviesContainer.innerHTML = '';
+        // function displayMovies(movies) {
+        //     const moviesContainer = document.getElementById('movies-container');
+        //     moviesContainer.innerHTML = '';
+        //     console.log("movies", movies);
+        //     movies.forEach(movie => {
+        //         if (movie.poster_path) {
+        //             const movieItem = document.createElement('div');
+        //             movieItem.classList.add('favorite-item');
+        //             movieItem.setAttribute('data-id', movie.id);
+        //             movieItem.setAttribute('data-title', movie.title.toLowerCase());
+        //             movieItem.setAttribute('data-genres', movie.genre_ids.join(','));
+        //             movieItem.onclick = () => addFavorite(movie.id, movie.title);
 
-            movies.forEach(movie => {
-                if (movie.poster_path) {
-                    const movieItem = document.createElement('div');
-                    movieItem.classList.add('favorite-item');
-                    movieItem.setAttribute('data-id', movie.id);
-                    movieItem.setAttribute('data-title', movie.title.toLowerCase());
-                    movieItem.setAttribute('data-genres', movie.genre_ids.join(','));
-                    movieItem.onclick = () => addFavorite(movie.id, movie.title);
+        //             movieItem.innerHTML = `
+        //             <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title} Poster">
+        //             <p>${movie.title}</p>
+        //         `;
 
-                    movieItem.innerHTML = `
-                    <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title} Poster">
-                    <p>${movie.title}</p>
-                `;
+        //             moviesContainer.appendChild(movieItem);
+        //         }
+        //     });
+        // }
 
-                    moviesContainer.appendChild(movieItem);
-                }
-            });
-        }
+        // function filterMovies() {
+        //     searchQuery = document.getElementById('search-bar').value.toLowerCase();
+        //     const genreFilter = document.getElementById('genre-filter').value;
 
-        function filterMovies() {
-            searchQuery = document.getElementById('search-bar').value.toLowerCase();
-            const genreFilter = document.getElementById('genre-filter').value;
+        //     if (searchQuery) {
+        //         searchMovies(searchQuery, genreFilter);
+        //     } else {
+        //         let filteredMovies = allMovies;
 
-            if (searchQuery) {
-                searchMovies(searchQuery, genreFilter);
-            } else {
-                let filteredMovies = allMovies;
+        //         if (genreFilter) {
+        //             filteredMovies = filteredMovies.filter(movie => movie.genre_ids.includes(parseInt(genreFilter)));
+        //         }
 
-                if (genreFilter) {
-                    filteredMovies = filteredMovies.filter(movie => movie.genre_ids.includes(parseInt(genreFilter)));
-                }
-
-                displayMovies(filteredMovies);
-            }
-        }
+        //         displayMovies(filteredMovies);
+        //     }
+        // }
 
 
-        function searchMovies(query, genreFilter) {
-            fetch(`/pagesBundle/searchMovies.php?query=${encodeURIComponent(query)}`)
-                .then(response => response.json())
-                .then(data => {
-                    let filteredMovies = data.results;
+        // function searchMovies(query, genreFilter) {
+        //     fetch(`/pagesBundle/searchMovies.php?query=${encodeURIComponent(query)}`)
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             let filteredMovies = data.results;
 
-                    if (genreFilter) {
-                        filteredMovies = filteredMovies.filter(movie => movie.genre_ids.includes(parseInt(genreFilter)));
-                    }
+        //             if (genreFilter) {
+        //                 filteredMovies = filteredMovies.filter(movie => movie.genre_ids.includes(parseInt(genreFilter)));
+        //             }
 
-                    displayMovies(filteredMovies);
-                });
-        }
+        //             displayMovies(filteredMovies);
+        //         });
+        // }
 
-        function changePage(direction) {
-            if (direction === -1 && currentPage > 1) {
-                currentPage--;
-            } else if (direction === 1 && currentPage < totalPages) {
-                currentPage++;
-            }
-            loadMovies(currentPage);
-        }
+        // function changePage(direction) {
+        //     if (direction === -1 && currentPage > 1) {
+        //         currentPage--;
+        //     } else if (direction === 1 && currentPage < totalPages) {
+        //         currentPage++;
+        //     }
+        //     loadMovies(currentPage);ç
+        // }
     </script>
 </body>
 
