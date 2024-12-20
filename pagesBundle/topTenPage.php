@@ -13,13 +13,52 @@ require_once('../vendor/autoload.php');
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
+$envFilePath = '.env';
+$getenv = parse_ini_file($envFilePath);
 
+if ($getenv === false) {
+    error_log('Failed to parse .env file');
+    exit;
+} else {
+    error_log('Here is the cluster: ' . $getenv['CLUSTER']);
+}
 
-function getMovieDetails($movie_id) {
-     $type = 'movie_details';
-     sendRequest($type, $movie_id, "frontendForDMZ");
-     return recieveDMZ();
- }
+$cluster = isset($getenv['CLUSTER']) ? $getenv['CLUSTER'] : null;
+
+if ($cluster === null) {
+    error_log('CLUSTER not set in .env file');
+    exit;
+}
+$client = new \GuzzleHttp\Client();
+
+function getMovieDetails($movie_id){
+    global $cluster;
+    error_log("Cluster: $cluster");
+    $type = 'movie_details';
+    error_log("Type: $type");
+    sendRequest($type, 'day', 'frontendForDMZ', $cluster);
+    error_log("Sent request");
+    error_log('Sent message to RabbitMQ');
+    $recieveDmz = recieveDMZ($cluster);
+    error_log("Recieved DMZ in index.php");
+
+    error_log("DMZ response structure: " . print_r($recieveDmz, true));
+
+    if ($recieveDmz === null || !isset($recieveDmz['type']) || $recieveDmz['type'] !== 'success') {
+        error_log("Invalid response from DMZ");
+        error_log("Response missing 'type' field. Response structure: " . json_encode($recieveDmz, JSON_PRETTY_PRINT));
+        error_log("Response type is not 'success'. Type is: " . $recieveDmz['type']);
+        return ['results' => []];
+    }
+
+    if (!isset($recieveDmz['data']) || !isset($recieveDmz['data']['results'])) {
+        error_log("Response doesn't contain expected data structure");
+        return ['results' => []];
+    }
+
+    return $recieveDmz['data'];
+}
+
 
 $loggedIn = isset($_SESSION['userID']);
 $userName = $loggedIn ? $_SESSION['name'] : null;
@@ -43,13 +82,6 @@ $userName = $loggedIn ? $_SESSION['name'] : null;
 <body>
 <nav class="navbar">
         <a href="index.php" class="nav-title">BreadWinners</a>
-
-        <button class="hamburger" aria-label="Toggle navigation">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </button>
-
 
         <ul class="nav-links">
         <?php if ($loggedIn): ?>
