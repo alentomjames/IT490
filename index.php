@@ -46,22 +46,13 @@ function fetchTrending()
 </head>
 
 <body>
-<<<<<<< Updated upstream
-    <nav class="navbar">
-        <!--  hamburger button for responsive website --->
-        <button class="hamburger" onclick="toggleMenu()">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-        </button>
-=======
+
 <nav class="navbar">
         <a href="index.php" class="nav-title">BreadWinners</a>
 
         <?php if ($loggedIn): ?>
             <p class="welcome-message">Welcome, <?php echo htmlspecialchars($_SESSION['name']); ?>!</p>
         <?php endif; ?>
->>>>>>> Stashed changes
 
         <a href="index.php" class="nav-title">BreadWinners</a>
         <div class = "menu" id = "menu">
