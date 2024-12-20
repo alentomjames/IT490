@@ -236,7 +236,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// Carousel For Recommended Movies
 function loadRecommendations() {
     fetch('/pagesBundle/getRecommendations.php', {
         method: 'GET',
@@ -246,50 +245,44 @@ function loadRecommendations() {
             const recommendationsContainer = document.getElementById('recommendations-container');
             recommendationsContainer.innerHTML = '';
 
-            // Check if data is successfully retrieved and has recommendations
             if (data['type'] === 'success' && data.recommendations['liked'].length > 0) {
-                data.recommendations['liked'].forEach(movieId => {
-                    // Fetch movie details using getMovieDetails.php
-                    fetch(`getMovieDetails.php?movieId=${movieId}`)
+                data.recommendations['liked'].forEach(movie => {
+                    const item = document.createElement('div');
+                    item.className = 'recommendation-item';
+                    item.innerHTML = `
+                    <a href="moviePage.php?id=${movie.id}">
+                        <img src="https://image.tmdb.org/t/p/w200${movie.poster_path}" alt="${movie.title}">
+                        <p>${movie.title}</p>
+                        <p class="vote-average">${Math.round(movie.vote_average / 2 * 10) / 10} <i class="fa fa-star"></i></p>
+                    </a>
+                `;
+                    fetch(`fetchRecommendations.php?movieId=${movie}`)
                         .then(response => response.json())
-                        .then(movieDetails => {
-                            if (movieDetails && movieDetails.poster_path) {
-                                const recommendationItem = document.createElement('div');
-                                recommendationItem.className = 'recommendation-item';
-                                recommendationItem.innerHTML = `
-                                    <a href="moviePage.php?id=${movieDetails.id}">
-                                        <img src="https://image.tmdb.org/t/p/w200${movieDetails.poster_path}" alt="${movieDetails.title} Poster" loading="lazy">
-                                        <p>${movieDetails.title}</p>
-                                        <p class="vote-average">${Math.round(movieDetails.vote_average / 2 * 10) / 10} <i class="fa fa-star"></i></p>
-                                    </a>
-                                `;
-                                recommendationsContainer.appendChild(recommendationItem);
-                            } else {
-                                // Handle cases where poster_path is missing
-                                const recommendationItem = document.createElement('div');
-                                recommendationItem.className = 'recommendation-item';
-                                recommendationItem.innerHTML = `
-                                    <a href="moviePage.php?id=${movieId}">
-                                        <img src="/path/to/default/poster.jpg" alt="No Poster Available" loading="lazy">
-                                        <p>Title Unavailable</p>
-                                        <p class="vote-average">N/A <i class="fa fa-star"></i></p>
-                                    </a>
-                                `;
-                                recommendationsContainer.appendChild(recommendationItem);
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error fetching movie details:', error);
-                            // Optionally, display an error message or a fallback image
+                        .then(data => {
+                            const firstRecommendation = data.results[0];
+                            const recommendationItem = document.createElement('div');
+                            recommendationItem.classList.add('recommendation-item');
+                            recommendationItem.innerHTML = `
+                        <a href="moviePage.php?id=${firstRecommendation.id}">
+                            <img src="https://image.tmdb.org/t/p/w200${firstRecommendation.poster_path}" alt="${firstRecommendation.title} Poster">
+                        </a>
+                        <p>${firstRecommendation.title}</p>
+                    `;
+                            recommendationsContainer.appendChild(recommendationItem);
                         });
                 });
+
+
             } else {
                 recommendationsContainer.innerHTML = '<p>No recommendations found based on your liked movies.</p>';
             }
         })
         .catch(error => console.error('Error fetching recommendations:', error));
-}
 
+    const likedContainer = document.getElementById('liked-movies-container');
+    likedContainer.innerHTML = '';
+
+}
 
 function loadLikedMovies() {
     fetch('/pagesBundle/getRecommendations.php', {
