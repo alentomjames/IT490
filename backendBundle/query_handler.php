@@ -13,7 +13,7 @@ require_once '../moviesDB/watchlist.php';
 require_once '../moviesDB/rating.php';
 require_once '../moviesDB/topTen.php';
 require_once '../moviesDB/likedMovies.php';
-require_once '../moviesDB/movieCommentsTest.php';
+require_once '../moviesDB/movieComments.php';
 $envFilePath = __DIR__ . '/../.env';
 $getenv = parse_ini_file($envFilePath);
 
