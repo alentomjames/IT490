@@ -13,6 +13,7 @@ require_once '../moviesDB/watchlist.php';
 require_once '../moviesDB/rating.php';
 require_once '../moviesDB/topTen.php';
 require_once '../moviesDB/likedMovies.php';
+require_once '../moviesDB/movieComments.php';
 $envFilePath = __DIR__ . '/../.env';
 $getenv = parse_ini_file($envFilePath);
 
@@ -90,6 +91,21 @@ $callback = function ($msg) use ($channel) {
         $userId = (int) $data['user_id'];
         $response = getFromRatings($userId);
         echo "Get liked movies request received for user ID: $userId\n";
+    } elseif ($type === "add_comment") {
+        $movieId = (int) $data['movie_id'];
+        $userId = (int) $data['user_id'];
+        $content = $data['content'];
+        $response = addComment($movieId, $userId, $content);
+        echo "Add comment request received for movie ID: $movieId, user ID: $userId\n";
+    } elseif ($type === "delete_comment") {
+        $commentId = (int) $data['comment_id'];
+        $userId = (int) $data['user_id'];
+        $response = deleteComment($commentId, $userId);
+        echo "Delete comment request received for comment ID: $commentId, user ID: $userId\n";
+    } elseif ($type === "get_comments") {
+        $movieId = (int) $data['movie_id'];
+        $response = getCommentsForMovie($movieId);
+        echo "Get comments request received for movie ID: $movieId\n";
     } else {
         error_log("Received unknown command or missing required data fields\n", 3, '/var/log/database/error.log');
         return;

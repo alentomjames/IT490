@@ -371,7 +371,7 @@ function fetchActorMovies(actorId) {
             data.cast.slice(0, 10).forEach(movie => {
                 const movieItem = document.createElement('div');
                 movieItem.classList.add('movie-recommendation-item');
-                movie.poster_path = movie.poster_path ?`https://image.tmdb.org/t/p/w200${movie.poster_path}` : 'https://placehold.co/200x300';
+                movie.poster_path = movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` : 'https://placehold.co/200x300';
                 movieItem.innerHTML = `
                     <a href="moviePage.php?id=${movie.id}">
                         <img src=${movie.poster_path} alt="${movie.title} Poster">
@@ -381,6 +381,80 @@ function fetchActorMovies(actorId) {
                 recommendationResults.appendChild(movieItem);
             });
         });
+}
+
+function loadComments(movieId) {
+    fetch(`/pagesBundle/getComments.php?movie_id=${movieId}`, {
+        method: 'GET',
+    })
+        .then(response => response.json())
+        .then(data => {
+            const commentsContainer = document.querySelector('.comments-container');
+            commentsContainer.innerHTML = '';
+            if (data['type'] === 'success' && data['comments'].length > 0) {
+                data['comments'].forEach(comment => {
+                    const commentItem = document.createElement('div');
+                    commentItem.className = 'comment-item';
+                    commentItem.dataset.commentId = comment.comment_id;
+
+                    commentItem.innerHTML = `
+                        <p><strong>${comment.username}</strong> (${comment.created_at}):</p>
+                        <p>${comment.content}</p>
+                        <button onclick="deleteComment(${comment.comment_id})" class="delete-button">Delete</button>
+                    `;
+
+                    commentsContainer.appendChild(commentItem);
+                });
+            } else {
+                commentsContainer.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
+            }
+        })
+        .catch(error => console.error('Error fetching comments:', error));
+}
+
+function addComment(movieId) {
+    const contentInput = document.querySelector('#comment-content');
+    const content = contentInput.value.trim();
+
+    if (content === '') {
+        alert('Comment content cannot be empty.');
+        return;
+    }
+
+    fetch('/pagesBundle/addComment.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ movie_id: movieId, content: content })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data['type'] === 'success') {
+                alert('Comment added successfully!');
+                contentInput.value = ''; // Clear the input field
+                loadComments(movieId); // Refresh comments
+            } else {
+                alert('Failed to add comment.');
+            }
+        })
+        .catch(error => console.error('Error adding comment:', error));
+}
+
+function deleteComment(commentId) {
+    fetch('/pagesBundle/deleteComment.php', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ comment_id: commentId })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data['type'] === 'success') {
+                alert('Comment deleted successfully!');
+                document.querySelector(`.comment-item[data-comment-id="${commentId}"]`).remove();
+            } else {
+                alert('Failed to delete comment.');
+            }
+        })
+        .catch(error => console.error('Error deleting comment:', error));
 }
 
 // Event listener for the search bar
