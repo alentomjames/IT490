@@ -8,7 +8,7 @@ if (!$loggedIn) {
 
 require_once('vendor/autoload.php');
 require_once 'rabbitmq_connection.php';
-$envFilePath = __DIR__ . '.env';
+$envFilePath = '.env';
 $getenv = parse_ini_file($envFilePath);
 
 if ($getenv === false) {
@@ -48,33 +48,31 @@ function fetchTrending()
 <body>
 
 <nav class="navbar">
-        <a href="index.php" class="nav-title">BreadWinners</a>
+    <a href="index.php" class="nav-title">BreadWinners</a>
 
+    <?php if ($loggedIn): ?>
+        <p class="welcome-message">Welcome, <?php echo $_SESSION['name']; ?>!</p>
+    <?php endif; ?>
+
+    <ul class="nav-links">
         <?php if ($loggedIn): ?>
-            <p class="welcome-message">Welcome, <?php echo htmlspecialchars($_SESSION['name']); ?>!</p>
+            <li>
+                <button onclick="location.href='/pagesBundle/Reccomend.php'" class="smoothie-button">
+                    <img src="smoothie.png" alt="Movie Smoothie" class="smoothie-icon">
+                </button>
+            </li>
+            <li><button onclick="location.href='/pagesBundle/recBasedonLikesPage.php'">Recommended Movies</button></li>
+            <li><button onclick="location.href='/pagesBundle/MovieTrivia.php'">Movie Trivia</button></li>
+            <li><button onclick="location.href='/pagesBundle/watchlistPage.php'">Watch Later</button></li>
+            <li><button onclick="location.href='/pagesBundle/topTenPage.php'">Top Movies</button></li>
+            <li><button onclick="location.href='/loginBundle/logout.php'">Logout</button></li>
+        <?php else: ?>
+            <li><button onclick="location.href='/loginBundle/login.php'">Login</button></li>
+            <li><button onclick="location.href='/loginBundle/sign_up.php'">Sign Up</button></li>
         <?php endif; ?>
+    </ul>
+</nav>
 
-        <a href="index.php" class="nav-title">BreadWinners</a>
-        <div class = "menu" id = "menu">
-        <ul class="nav-links">
-            <?php if ($loggedIn): ?>
-                <li>
-                    <button onclick="location.href='/pagesBundle/Reccomend.php'" class="smoothie-button">
-                        <img src="smoothie.png" alt="Movie Smoothie" class="smoothie-icon">
-                    </button>
-                </li>
-                <li><button onclick="location.href='/pagesBundle/recBasedonLikesPage.php'">Recommended Movies</button></li>
-                <li><button onclick="location.href='/pagesBundle/MovieTrivia.php'">Movie Trivia</button></li>
-                <li><button onclick="location.href='/pagesBundle/watchlistPage.php'">Watch Later</button></li>
-                <li><button onclick="location.href='/pagesBundle/topTenPage.php'">Top Movies</button></li>
-                <li><button onclick="location.href='/loginBundle/logout.php'">Logout</button></li>
-            <?php else: ?>
-                <li><button onclick="location.href='/loginBundle/login.php'">Login</button></li>
-                <li><button onclick="location.href='/loginBundle/sign_up.php'">Sign Up</button></li>
-            <?php endif; ?>
-        </ul>
-        </div>
-    </nav>
 
     <div class="welcome-message">
         <h1>Hello,

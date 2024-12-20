@@ -1030,18 +1030,7 @@ body {
 .actor-item.not-selected {
     opacity: .5;
 }
-<<<<<<< Updated upstream
 
-/* Hamburger Button */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 30px;
-    height: 21px;
-    background: none;
-    border: none;
-=======
 /* Base Styles */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -1072,62 +1061,10 @@ body {
     color: white;
     font-size: 1.8rem;
     font-weight: bold;
->>>>>>> Stashed changes
     cursor: pointer;
     flex-shrink: 0; 
 }
 
-<<<<<<< Updated upstream
-.hamburger .bar {
-    height: 3px;
-    width: 100%;
-    background-color: #fff;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-}
-
-.menu {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.menu ul {
-    display: flex;
-    gap: 20px;
-}
-
-.menu.open ul {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    top: 70px;
-    left: 0;
-    width: 100%;
-    background-color: #007BFF;
-    padding: 20px 0;
-    z-index: 200;
-}
-
-.menu ul li {
-    margin: 10px 0;
-}
-
-.menu ul li button {
-    width: 100%;
-}
-
-.menu.open ul li {
-    text-align: center;
-}
-
-.menu.open ul li button {
-    width: auto;
-}
-
-.menu.open .nav-title {
-    display: none;
-=======
 .nav-title:hover {
     color: #beddfe;
 }
@@ -1144,9 +1081,8 @@ body {
     display: flex;
     gap: 20px;
     align-items: center;
-    margin-left: auto; 
-    overflow-x: auto; 
-    white-space: nowrap; 
+    margin-left: auto; /* Pushes nav-links to the right */
+    overflow-x: auto; /* Enables horizontal scrolling */
 }
 
 .nav-links::-webkit-scrollbar {
@@ -1156,10 +1092,6 @@ body {
 .nav-links::-webkit-scrollbar-thumb {
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 3px;
-}
-
-.nav-links {
-    scrollbar-width: none;     
 }
 
 .nav-links li {
@@ -1192,7 +1124,6 @@ body {
     align-items: center;
     justify-content: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
->>>>>>> Stashed changes
 }
 
 .nav-links button.smoothie-button:hover {
@@ -1207,39 +1138,6 @@ body {
 
 /* Responsive Design */
 @media screen and (max-width: 768px) {
-<<<<<<< Updated upstream
-    .hamburger {
-        display: flex;
-    }
-
-    .menu ul {
-        display: none;
-        flex-direction: column;
-    }
-
-    .menu.open ul {
-        display: flex;
-    }
-
-    .menu.open ul li {
-        text-align: center;
-    }
-
-    .menu ul li button {
-        width: 100%;
-    }
-
-    .navbar {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-
-    .navbar .nav-links {
-        display: none;
-    }
-}
-=======
     .navbar {
         padding: 10px 20px;
         flex-wrap: wrap; 
@@ -1265,4 +1163,7 @@ body {
     }
 }
 
->>>>>>> Stashed changes
+
+.nav-links {
+    scrollbar-width: none;     
+}
