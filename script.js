@@ -385,17 +385,3 @@ function fetchActorMovies(actorId) {
 
 // Event listener for the search bar
 document.getElementById('actor-search-bar').addEventListener('input', searchActors);
-
-<<<<<<< Updated upstream
-// Hamburger button code 
-document.addEventListener('DOMContentLoaded', () => {
-    const hamburger = document.querySelector('.hamburger');
-    const menu = document.querySelector('.menu');
-
-    hamburgerButton.addEventListener('click', () => {
-        menu.classList.toggle('open');
-        hamburger.classList.toggle('open');
-    });
-});
-=======
->>>>>>> Stashed changes
