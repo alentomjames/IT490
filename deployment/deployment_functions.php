@@ -94,7 +94,7 @@ function pullVersion($bundleName, $queueName)
                 break;
             case 'deployToBeProd':
                 $queueName = 'deployToBeProd';
-                $targetMachine = ''; //FILL THIS IN WHEN READY
+                $targetMachine = '172.29.123.139'; //FILL THIS IN WHEN READY
                 break;
             case 'deployToFeDev':
                 $queueName = 'deployToFeDev';
