@@ -68,33 +68,24 @@ $selectedTrivia = getTriviaQuestions($triviaData, $genre);
 </head>
 
 <body>
-    <nav class="navbar">
-        <a href="../index.php" class="nav-title">BreadWinners</a>
-        <ul class="nav-links">
-            <?php if ($loggedIn): ?>
-                <li>
-                    <button onclick="location.href='Reccomend.php'" class="smoothie-button">
-                        <img src="smoothie.png" alt="Movie Smoothie" class="smoothie-icon">
-                    </button>
-                </li>
-                <li><button onclick="location.href='recBasedonLikesPage.php'">Recommended Movies</button></li>
-                <li><button onclick="location.href='MovieTrivia.php'">Movie Trivia</button></li>
-                <li><button onclick="location.href='watchlistPage.php'">Watch Later</button></li>
-                <li><button onclick="location.href='topTenPage.php'">Top Movies</button></li>
-                <!-- If they are logged in then display a "Welcome [user]" text at the top where the buttons would usually be and a logout button --->
-            <p class="nav-title">Welcome,
-                <?php echo $_SESSION['name']; ?>!
-            </p>
-            <!-- Logout button that calls logout.php to delete the userID from session and redirects them to the login page --->
-            <li><button onclick="location.href='../loginBundle/logout.php'">Logout</button></li>
-            <?php else: ?>
-            <!-- If they aren't logged in then display the buttons for login or sign up on the navbar --->
-
-            <li><button onclick="location.href='../loginBundle/login.php'">Login</button></li>
-            <li><button onclick="location.href='../loginBundle/sign_up.php'">Sign Up</button></li>
-            <?php endif; ?>
-        </ul>
-    </nav>
+<ul class="nav-links">
+        <?php if ($loggedIn): ?>
+            <li>
+                <button onclick="location.href='/pagesBundle/Reccomend.php'" class="smoothie-button">
+                    <img src="smoothie.png" alt="Movie Smoothie" class="smoothie-icon">
+                </button>
+            </li>
+            <li><button onclick="location.href='/pagesBundle/recBasedonLikesPage.php'">Recommended Movies</button></li>
+            <li><button onclick="location.href='/pagesBundle/MovieTrivia.php'">Movie Trivia</button></li>
+            <li><button onclick="location.href='/pagesBundle/watchlistPage.php'">Watch Later</button></li>
+            <li><button onclick="location.href='/pagesBundle/topTenPage.php'">Top Movies</button></li>
+            <li><button onclick="location.href='/loginBundle/logout.php'">Logout</button></li>
+        <?php else: ?>
+            <li><button onclick="location.href='/loginBundle/login.php'">Login</button></li>
+            <li><button onclick="location.href='/loginBundle/sign_up.php'">Sign Up</button></li>
+        <?php endif; ?>
+    </ul>
+</nav>
 
     <div class="trivia-selection">
         <h2>Select Genre or Play with All Genres</h2>
